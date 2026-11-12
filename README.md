@@ -5,9 +5,9 @@ Engineered to take **full advantage of Apple Silicon M1 (Metal GPU & ARM64 CPU)*
 
 > OpenSlop II is an unofficial fan project. StarCraft is a trademark of Blizzard Entertainment; OpenSlop II is not affiliated with or endorsed by Blizzard.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ffp101fs%2Fopenslop2&project-name=openslop2&repository-name=openslop2&stores=%5B%7B%22type%22%3A%22integration%22%2C%22integrationSlug%22%3A%22upstash%22%2C%22productSlug%22%3A%22upstash-kv%22%7D%5D&skippable-integrations=1)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ffp101fs%2Fopenslop2&project-name=openslop2&repository-name=openslop2)
 
-One click gives you your own online server with a public URL (see [Deploy your own server](#-deploy-your-own-server-one-click-vercel)).
+One click gives you your own online server with a public URL. For the public game list too, use the [Upstash version](#-deploy-your-own-server-one-click-vercel).
 
 ### Names
 
@@ -83,13 +83,19 @@ Upload the generated `dist/` folder to your web host and anyone on the web can p
 
 ### 🚀 Deploy your own server (one click, Vercel)
 
+**Simple (default):** nothing to set up.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ffp101fs%2Fopenslop2&project-name=openslop2&repository-name=openslop2)
+
+Sign in to Vercel (it copies this repo into your GitHub account) and click **Deploy**. About a minute later you get a URL like `openslop2-xyz.vercel.app`; share it and play online. Online play uses the free PeerJS handshake server, and public games are found by the slot scan (up to 4 at a time).
+
+**With game list (Upstash):** adds the full public game list and our own handshake server.
+
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ffp101fs%2Fopenslop2&project-name=openslop2&repository-name=openslop2&stores=%5B%7B%22type%22%3A%22integration%22%2C%22integrationSlug%22%3A%22upstash%22%2C%22productSlug%22%3A%22upstash-kv%22%7D%5D&skippable-integrations=1)
 
-1. Click the button and sign in to Vercel (it copies this repo into your GitHub account).
-2. When it offers **Upstash for Redis**, accept the free plan. That gives you the public game list and our own handshake server. You can also skip it: online play still works, using the slot scan and the free PeerJS server.
-3. Click **Deploy**. About a minute later you get a URL like `openslop2-xyz.vercel.app`; share it and play online.
+Same steps, but when Vercel offers **Upstash for Redis**, accept the free plan. Vercel fills in its env vars (`KV_REST_API_URL` / `KV_REST_API_TOKEN`) for you. You can also add Upstash later to a simple deploy: Vercel dashboard -> project -> Storage -> Upstash Redis -> connect, then redeploy.
 
-No env vars to type: Vercel fills in the Upstash ones (`KV_REST_API_URL` / `KV_REST_API_TOKEN`). TURN is optional (see [`server/turn/README.md`](server/turn/README.md)). The button copies the public [openslop2](https://github.com/fp101fs/openslop2) repo into your GitHub account.
+TURN is optional for both (see [`server/turn/README.md`](server/turn/README.md)).
 
 ---
 
