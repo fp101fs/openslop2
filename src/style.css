@@ -1795,7 +1795,7 @@ body, html {
 .mm-lobby { text-align: center; padding: 8px 0; }
 .mm-lobby-label { font-size: 12px; letter-spacing: 3px; color: #94a3b8; }
 .mm-code { font-family: monospace; font-size: 74px; font-weight: 900; letter-spacing: 18px; color: #7dd3fc; text-shadow: 0 0 28px rgba(56, 189, 248, 0.5); margin: 4px 0 8px; padding-left: 18px; }
-.mm-invite { font-size: 12px; color: #64748b; margin: 4px 0 14px; word-break: break-all; }
+.mm-invite { font-size: 12px; color: #cbd5e1; user-select: all; margin: 4px 0 14px; word-break: break-all; }
 .mm-players { display: flex; flex-direction: column; gap: 8px; max-width: 480px; margin: 10px auto; }
 .mm-player { background: #0b1220; border: 1px dashed #334155; border-radius: 10px; padding: 12px; color: #64748b; font-weight: 700; }
 .mm-player.on { border: 1px solid #22c55e; color: #e2e8f0; }
