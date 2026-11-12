@@ -1,26 +1,30 @@
 import type { SaveData, SaveMeta } from './SaveState';
 
 /**
- * Save files. Every save is one standalone `<name>.opensc2save` file; names use only letters, digits, '_' and '-'.
+ * Save files. Every save is one standalone `<name>.openslop2save` file; names use only letters, digits, '_' and '-'.
  *
- * File layout: a text header line `OPENSC2SAVE 1 gz` (or `raw`), one line of JSON with the save's summary (what the Load screen lists),
+ * File layout: a text header line `OPENSLOP2SAVE 1 gz` (or `raw`), one line of JSON with the save's summary (what the Load screen lists),
  * then the match snapshot as JSON, gzip-compressed when the browser can.
  *
  * Where the files live:
  *  - local game server (bun run dev / play.sh): `saves/` in the project folder, through the /__saves endpoint (vite.config.ts);
  *  - anywhere else (the hosted site): the browser's private file system (OPFS), or IndexedDB if that is unavailable.
  * Export / Import on the Load screen copy a file out of / into either place.
+ * Saves from before the rename (`.opensc2save`, header `OPENSC2SAVE`) still load: listing renames them to `.openslop2save`.
  */
 
-export const SAVE_EXT = '.opensc2save';
-const MAGIC = 'OPENSC2SAVE';
+export const SAVE_EXT = '.openslop2save';
+/** Extension before the rename: such files are renamed to SAVE_EXT the first time the saves are listed. */
+export const OLD_SAVE_EXT = '.opensc2save';
+const MAGIC = 'OPENSLOP2SAVE';
+const OLD_MAGIC = 'OPENSC2SAVE';
 const NAME_MAX = 80;
 
 export interface SaveEntry { name: string; meta: SaveMeta; size: number }
 
 /** Letters, digits, '_' and '-' only: spaces become '_', anything else is dropped. */
 export function cleanSaveName(raw: string): string {
-  return raw.replace(/\.opensc2save$/i, '').trim().replace(/\s+/g, '_').replace(/[^A-Za-z0-9_-]/g, '').replace(/_{2,}/g, '_').slice(0, NAME_MAX);
+  return raw.replace(/\.(openslop2|opensc2)save$/i, '').trim().replace(/\s+/g, '_').replace(/[^A-Za-z0-9_-]/g, '').replace(/_{2,}/g, '_').slice(0, NAME_MAX);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -49,7 +53,7 @@ function readHeader(bytes: Uint8Array): { gz: boolean; meta: SaveMeta; bodyAt: n
   const nl1 = bytes.indexOf(10);
   if (nl1 < 0) return null;
   const first = td.decode(bytes.subarray(0, nl1)).split(' ');
-  if (first[0] !== MAGIC) return null;
+  if (first[0] !== MAGIC && first[0] !== OLD_MAGIC) return null;
   const nl2 = bytes.indexOf(10, nl1 + 1);
   if (nl2 < 0) return null;
   try { return { gz: first[2] === 'gz', meta: JSON.parse(td.decode(bytes.subarray(nl1 + 1, nl2))), bodyAt: nl2 + 1 }; } catch { return null; }
@@ -101,6 +105,26 @@ const serverBackend: Backend = {
   }
 };
 
+/** Rename saves from before the rename (`x.opensc2save` -> `x.openslop2save`) in the browser's file system. */
+async function migrateOpfs(d: FileSystemDirectoryHandle) {
+  const old: string[] = [];
+  for await (const [fname, h] of (d as any).entries() as AsyncIterable<[string, FileSystemHandle]>) {
+    if (h.kind === 'file' && fname.endsWith(OLD_SAVE_EXT)) old.push(fname);
+  }
+  for (const fname of old) {
+    try {
+      const target = fname.slice(0, -OLD_SAVE_EXT.length) + SAVE_EXT;
+      const exists = await d.getFileHandle(target).then(() => true, () => false);
+      if (!exists) {
+        const bytes = await (await (await d.getFileHandle(fname)).getFile()).arrayBuffer();
+        const w = await ((await d.getFileHandle(target, { create: true })) as any).createWritable();
+        await w.write(bytes); await w.close();
+      }
+      await d.removeEntry(fname);
+    } catch { /* leave it for next time */ }
+  }
+}
+
 /** Browser private file system: real files, kept per site by the browser. */
 function opfsBackend(): Backend {
   const dir = async () => (await navigator.storage.getDirectory()).getDirectoryHandle('saves', { create: true });
@@ -108,6 +132,7 @@ function opfsBackend(): Backend {
     where: 'browser storage',
     async list() {
       const d = await dir(), out: SaveEntry[] = [];
+      await migrateOpfs(d);
       for await (const [fname, h] of (d as any).entries() as AsyncIterable<[string, FileSystemHandle]>) {
         if (h.kind !== 'file' || !fname.endsWith(SAVE_EXT)) continue;
         const f = await (h as FileSystemFileHandle).getFile();
@@ -132,7 +157,7 @@ function opfsBackend(): Backend {
 /** Last resort (older Safari without writable OPFS files): each file's bytes in IndexedDB. */
 function idbBackend(): Backend {
   const db = () => new Promise<IDBDatabase>((res, rej) => {
-    const r = indexedDB.open('opensc2-saves', 1);
+    const r = indexedDB.open('opensc2-saves', 1); // old name kept on purpose: renaming the database would lose stored saves
     r.onupgradeneeded = () => r.result.createObjectStore('files');
     r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
   });
@@ -143,9 +168,21 @@ function idbBackend(): Backend {
   return {
     where: 'browser storage',
     async list() {
-      const keys = await tx('readonly', s => s.getAllKeys()) as string[];
+      let keys = await tx('readonly', s => s.getAllKeys()) as string[];
+      for (const k of keys.filter(k => k.endsWith(OLD_SAVE_EXT))) { // saves from before the rename
+        const target = k.slice(0, -OLD_SAVE_EXT.length) + SAVE_EXT;
+        try {
+          if (!keys.includes(target)) {
+            const b = await tx('readonly', s => s.get(k));
+            await tx('readwrite', s => s.put(b, target));
+          }
+          await tx('readwrite', s => s.delete(k));
+        } catch { /* leave it for next time */ }
+      }
+      keys = await tx('readonly', s => s.getAllKeys()) as string[];
       const out: SaveEntry[] = [];
       for (const k of keys) {
+        if (!k.endsWith(SAVE_EXT)) continue;
         const b = await tx('readonly', s => s.get(k)) as Uint8Array;
         const meta = b && readMeta(b);
         if (meta) out.push({ name: k.slice(0, -SAVE_EXT.length), meta, size: b.length });
@@ -203,7 +240,7 @@ export async function readSave(name: string): Promise<SaveData> {
 
 export async function deleteSave(name: string): Promise<void> { await (await backend()).remove(name); }
 
-/** Download a save as a standalone .opensc2save file. */
+/** Download a save as a standalone .openslop2save file. */
 export async function exportSave(name: string): Promise<void> {
   const bytes = await (await backend()).read(name);
   const a = document.createElement('a');
@@ -213,7 +250,7 @@ export async function exportSave(name: string): Promise<void> {
   setTimeout(() => URL.revokeObjectURL(a.href), 4000);
 }
 
-/** Copy an .opensc2save file into the saves list (renamed `_2`, `_3`, ... if that name is taken). Returns its name. */
+/** Copy an .openslop2save (or older .opensc2save) file into the saves list (renamed `_2`, `_3`, ... if that name is taken). Returns its name. */
 export async function importSave(file: File): Promise<string> {
   const bytes = new Uint8Array(await file.arrayBuffer());
   const meta = readMeta(bytes);

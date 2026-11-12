@@ -105,7 +105,7 @@ Achievements (reference for pacing): Quick Sign Off = all 6 holoboards in < 3:00
 - After: cinematic with Tychus, UNN report by Kate Lockwell (cut short) / Donny Vermillion; Mar Sara revolts.
 
 ## Status in our version (2026-11-12)
-Rebuilt as data: `src/campaign/campaigns/wol/missions/liberation_day.opensc2mission` (edit it in the Mission Builder, `bun run mission-builder`). The map frame is this doc's Liquipedia image placed at world x 15..128, y 6..138 on a 144-tile map (x = 15 + 113·nx, y = 6 + 132·ny).
+Rebuilt as data: `src/campaign/campaigns/wol/missions/liberation_day.openslop2mission` (edit it in the Mission Builder, `bun run mission-builder`). The map frame is this doc's Liquipedia image placed at world x 15..128, y 6..138 on a 144-tile map (x = 15 + 113·nx, y = 6 + 132·ny).
 - Done: the snake route and its terrain, enemy groups and counts per difficulty with upgrades, 6 holoboards with Mengsk lines, drop pods (9 Marines), the camp cutscene (the runner is shot), the Dominion transport, 61 civilians who follow and throw molotovs, Vikings landing at the HQ, every dialogue line on its trigger, tutorial popups, the point of no return, an autosave at the square, and civilians lost on the victory screen.
 - Remaining gaps:
   - Dialogue is paraphrased TTS.

@@ -54,5 +54,6 @@ test('campaign mission save restores objectives, timers and script state', async
 test('default save names have no spaces or special characters', () => {
   const n = defaultSaveName({ mode: 'campaign', playerFaction: 'terran' } as any, new Date(2026, 10, 11, 15, 42, 7));
   expect(n).toBe('Campaign_Terran_2026-11-11_15-42-07');
-  expect(cleanSaveName('My base: rush #2!.opensc2save')).toBe('My_base_rush_2');
+  expect(cleanSaveName('My base: rush #2!.openslop2save')).toBe('My_base_rush_2');
+  expect(cleanSaveName('old.opensc2save')).toBe('old');
 });

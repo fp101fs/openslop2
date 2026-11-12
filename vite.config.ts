@@ -4,16 +4,17 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 /**
- * Single-player save games as files: GET /__saves lists <project>/saves/*.opensc2save, GET / PUT / DELETE /__saves/<name> read,
+ * Single-player save games as files: GET /__saves lists <project>/saves/*.openslop2save (older *.opensc2save files are renamed on listing), GET / PUT / DELETE /__saves/<name> read,
  * write and delete one. Names are letters, digits, '_' and '-' only (see src/save/SaveFiles.ts).
  */
 function saveFiles(): Plugin {
   const dir = fileURLToPath(new URL('./saves/', import.meta.url));
-  const EXT = '.opensc2save';
+  const EXT = '.openslop2save';
+  const OLD_EXT = '.opensc2save'; // before the rename
   const okName = (n: string) => /^[A-Za-z0-9_-]{1,80}$/.test(n);
   const meta = (head: Buffer) => {
     const lines = head.toString('utf8').split('\n');
-    if (!lines[0]?.startsWith('OPENSC2SAVE') || lines.length < 3) return null;
+    if (!/^(OPENSLOP2SAVE|OPENSC2SAVE) /.test(lines[0] ?? '') || lines.length < 3) return null;
     try { return JSON.parse(lines[1]!); } catch { return null; }
   };
   const handler = async (req: any, res: any, next: () => void) => {
@@ -28,6 +29,11 @@ function saveFiles(): Plugin {
       if (url.pathname === '/__saves') {
         if (req.method !== 'GET') return send(405, { error: 'method' });
         const out: unknown[] = [];
+        for (const f of await fs.readdir(dir)) {
+          if (!f.endsWith(OLD_EXT)) continue;
+          const to = path.join(dir, f.slice(0, -OLD_EXT.length) + EXT);
+          await fs.access(to).then(() => fs.rm(path.join(dir, f)), () => fs.rename(path.join(dir, f), to)).catch(() => {});
+        }
         for (const f of await fs.readdir(dir)) {
           if (!f.endsWith(EXT)) continue;
           const fh = await fs.open(path.join(dir, f), 'r');
@@ -58,18 +64,18 @@ function saveFiles(): Plugin {
     } catch (e) { return send(500, { error: String(e) }); }
   };
   return {
-    name: 'opensc2-save-files',
+    name: 'openslop2-save-files',
     configureServer(server) { server.middlewares.use(handler); },
     configurePreviewServer(server) { server.middlewares.use(handler); }
   };
 }
 
-/** `.opensc2mission` files are JSON (missions as data, src/campaign/data): import them as modules. */
-function opensc2Json(): Plugin {
+/** `.openslop2mission` files are JSON (missions as data, src/campaign/data): import them as modules. */
+function openslop2Json(): Plugin {
   return {
-    name: 'opensc2-json', enforce: 'pre',
+    name: 'openslop2-json', enforce: 'pre',
     transform(code, id) {
-      if (!/\.opensc2mission$/.test(id)) return null;
+      if (!/\.openslop2mission$/.test(id)) return null;
       return { code: `export default ${JSON.stringify(JSON.parse(code))};`, map: null };
     }
   };
@@ -87,7 +93,7 @@ const quiet = (proxy: any) => {
 };
 
 export default defineConfig({
-  plugins: [saveFiles(), opensc2Json()],
+  plugins: [saveFiles(), openslop2Json()],
   server: {
     port: 5173,
     host: true,

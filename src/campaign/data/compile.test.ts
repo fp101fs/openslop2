@@ -1,7 +1,7 @@
 import { makeWorld } from '../../ai/headlessWorld';
 import { test, expect, beforeAll } from 'bun:test';
 import * as THREE from 'three';
-import fixture from './fixtures/fixture.opensc2mission';
+import fixture from './fixtures/fixture.openslop2mission';
 import type { MissionData } from './MissionData';
 
 let dataMission: typeof import('./compile').dataMission, pick: typeof import('./compile').pick;

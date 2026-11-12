@@ -37,7 +37,7 @@ function App() {
 
   const open = async (m: MissionInfo) => {
     if (store?.dirty && !confirm('Discard unsaved changes?')) return;
-    if (!m.data) { setStatus(`${m.title} is still hand-coded (no .opensc2mission yet): read-only`); }
+    if (!m.data) { setStatus(`${m.title} is still hand-coded (no .openslop2mission yet): read-only`); }
     const d: MissionData = m.data ? await (await fetch(`/api/mission/${m.campaign}/${m.key}`)).json() : codeMissionShell(m);
     const st = new MissionStore(d, !m.data);
     if (!m.data) { // show the hand-coded mission's real map from the game's level list
@@ -92,7 +92,7 @@ function App() {
     if (!store) return;
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([store.text()], { type: 'application/json' }));
-    a.download = `${store.doc.key}.opensc2mission`; a.click(); URL.revokeObjectURL(a.href);
+    a.download = `${store.doc.key}.openslop2mission`; a.click(); URL.revokeObjectURL(a.href);
   };
   const importFile = async (f: File) => {
     try { const d = JSON.parse(await f.text()) as MissionData; if (d.version !== 1) throw new Error('not a version 1 mission'); setStore(new MissionStore(d)); setStatus(`Imported ${f.name}: Save writes it to ${d.campaign}/${d.key}`); }
@@ -147,7 +147,7 @@ function App() {
           {list.map(m => <option key={`${m.campaign}/${m.key}`} value={`${m.campaign}/${m.key}`}>{m.campaign.toUpperCase()} {m.order}. {m.title}{m.data ? '' : ' (code, read-only)'}</option>)}
         </select>
         <button onClick={newMission}>New</button>
-        <label className="btn">Import<input type="file" accept=".opensc2mission,application/json" hidden onChange={e => e.target.files?.[0] && importFile(e.target.files[0])} /></label>
+        <label className="btn">Import<input type="file" accept=".openslop2mission,.opensc2mission,application/json" hidden onChange={e => e.target.files?.[0] && importFile(e.target.files[0])} /></label>
         <button onClick={exportFile} disabled={!store}>Export</button>
         <span className="sep" />
         <button onClick={() => store?.undo()} disabled={!store?.canUndo} title="Ctrl/Cmd+Z">↶ Undo</button>

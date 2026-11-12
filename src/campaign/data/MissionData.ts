@@ -1,5 +1,5 @@
 /**
- * Mission-as-data format. A `.opensc2mission` file is JSON of this shape; `compile.ts` turns it into a MissionDef the
+ * Mission-as-data format. A `.openslop2mission` file is JSON of this shape; `compile.ts` turns it into a MissionDef the
  * engine runs like any hand-coded mission, and the Mission Builder (tools/mission-builder) reads and writes it.
  * Everything is plain data: ids are strings, points are [x, y] in world tiles (same frame as the LevelDef).
  */

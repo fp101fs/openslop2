@@ -4,7 +4,7 @@ import { SAVE_VERSION } from './save/SaveState';
 import { SLOPMAP_VERSION } from '../tools/level/slopmap';
 import pkg from '../package.json';
 import studioPkg from '../tools/voice-studio/package.json';
-import fixture from './campaign/data/fixtures/fixture.opensc2mission' with { type: 'json' };
+import fixture from './campaign/data/fixtures/fixture.openslop2mission' with { type: 'json' };
 
 const SEMVER = /^\d+\.\d+\.\d+$/;
 

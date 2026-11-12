@@ -1,5 +1,5 @@
 import { test, expect } from 'bun:test';
-import ld from '../../src/campaign/campaigns/wol/missions/liberation_day.opensc2mission';
+import ld from '../../src/campaign/campaigns/wol/missions/liberation_day.openslop2mission';
 import { MissionStore, blankMission } from './src/store';
 import { stringifyMission } from '../../src/campaign/data/serialize';
 import { renameRefs } from './src/refs';
@@ -9,7 +9,7 @@ import { COND_KINDS, ACTION_KINDS } from '../../src/campaign/data/MissionData';
 const fresh = () => new MissionStore(JSON.parse(JSON.stringify(ld)));
 
 test('the mission file is in canonical form: load + serialise is byte-identical', async () => {
-  const text = await Bun.file('src/campaign/campaigns/wol/missions/liberation_day.opensc2mission').text();
+  const text = await Bun.file('src/campaign/campaigns/wol/missions/liberation_day.openslop2mission').text();
   expect(stringifyMission(JSON.parse(text))).toBe(text);
   expect(fresh().dirty).toBe(false);
 });

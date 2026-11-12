@@ -1,6 +1,6 @@
 # WoL 2 — The Outlaws: how it fits the mission data format
 
-Not research yet (for that, see `docs/campaign/wings-of-liberty.md` and, later, a deep-research section here like Mission 1's). This note checks that Mission 2's mechanics can be built as an `.opensc2mission` without new engine code. A tested skeleton is `src/campaign/data/fixtures/outlaws_skeleton.opensc2mission` (`src/campaign/data/outlaws.test.ts`).
+Not research yet (for that, see `docs/campaign/wings-of-liberty.md` and, later, a deep-research section here like Mission 1's). This note checks that Mission 2's mechanics can be built as an `.openslop2mission` without new engine code. A tested skeleton is `src/campaign/data/fixtures/outlaws_skeleton.openslop2mission` (`src/campaign/data/outlaws.test.ts`).
 
 | Mechanic | In the data format |
 |---|---|

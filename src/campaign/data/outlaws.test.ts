@@ -1,7 +1,7 @@
 import { makeWorld } from '../../ai/headlessWorld';
 import { test, expect, beforeAll } from 'bun:test';
 import * as THREE from 'three';
-import skeleton from './fixtures/outlaws_skeleton.opensc2mission';
+import skeleton from './fixtures/outlaws_skeleton.openslop2mission';
 
 /** Mission 2 readiness: The Outlaws' mechanics (base building, rescuing an allied base, raider waves, resource pallets) as data. */
 let captureGame: any, restoreGame: any, encodeSave: any, decodeSave: any;

@@ -1,5 +1,5 @@
 /**
- * Turns a `.opensc2mission` (MissionData) into a MissionDef: the engine runs it like any hand-coded mission.
+ * Turns a `.openslop2mission` (MissionData) into a MissionDef: the engine runs it like any hand-coded mission.
  *
  * Save / load: everything a trigger does runs through MissionRuntime events or timers, so a save's fireLog replays it and
  * spawned units get the same tags. The interpreter's own bookkeeping (which triggers fired, edge states, counted deaths)

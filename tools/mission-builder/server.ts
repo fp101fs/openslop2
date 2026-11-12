@@ -1,5 +1,5 @@
 /**
- * SC2 Mission Builder: standalone editor for `.opensc2mission` files.   bun run mission-builder  ->  http://localhost:5210
+ * SC2 Mission Builder: standalone editor for `.openslop2mission` files.   bun run mission-builder  ->  http://localhost:5210
  * The page (index.html, bundled by Bun) imports the game's own map builder, rasteriser, unit registry and validator from src/;
  * models, icons, portraits and audio are served straight from public/ (nothing is copied). The API reads and writes mission
  * files under src/campaign/campaigns/<campaign>/missions/ only, always in the canonical format (serialize.ts).
@@ -10,7 +10,7 @@ import { readdirSync, existsSync, mkdirSync } from 'node:fs';
 import { join, resolve, normalize } from 'node:path';
 import { stringifyMission } from '../../src/campaign/data/serialize';
 
-const EXT = '.opensc2mission';
+const EXT = '.openslop2mission';
 const okId = (s: string) => /^[a-z0-9_]{1,60}$/.test(s);
 
 export interface MissionInfo { campaign: string; key: string; title: string; order: number; data: boolean; file?: string }
@@ -43,7 +43,7 @@ export function makeApi(root: string, gameUrl: string) {
     '/api/config': () => json({ gameUrl }),
     '/api/missions': async () => {
       const files = await listMissionFiles(root);
-      // hand-coded missions (no .opensc2mission yet) are listed read-only, so the editor can show their maps
+      // hand-coded missions (no .openslop2mission yet) are listed read-only, so the editor can show their maps
       let code: MissionInfo[] = [];
       try {
         const { CAMPAIGNS } = await import('../../src/campaign/registry');

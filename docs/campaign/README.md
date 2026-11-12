@@ -17,8 +17,8 @@ src/campaign/
                       validate.ts (shared checks), serialize.ts (canonical file format), fixtures/ (test missions)
 ```
 
-## Missions as data (`.opensc2mission`)
-A mission can be a single JSON file next to its `.ts` file, e.g. `campaigns/wol/missions/liberation_day.opensc2mission`. The `.ts` file is then two lines (`export const liberationDay = dataMission(data, hooks)`), and the map file is `dataLevel(data)`.
+## Missions as data (`.openslop2mission`)
+A mission can be a single JSON file next to its `.ts` file, e.g. `campaigns/wol/missions/liberation_day.openslop2mission`. The `.ts` file is then two lines (`export const liberationDay = dataMission(data, hooks)`), and the map file is `dataLevel(data)`.
 - Edit the file in the **Mission Builder**: run `bun run mission-builder` and open http://localhost:5210. Save always writes the canonical format, so diffs stay small.
 - **Code escape hatch:** list hook names in `hooks` and pass functions to `dataMission(json, { name: (ctx, args) => ... })`. Use them as a `hook` condition (returns a boolean) or a `hook` action.
 - **Checks:** `bun tools/campaign/mapcheck.ts` validates data missions with `src/campaign/data/validate.ts`, the same checks the editor's Problems tab shows.

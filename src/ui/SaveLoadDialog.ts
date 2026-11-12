@@ -56,7 +56,7 @@ export class SaveLoadDialog {
         <button class="obig" data-act="cancel">Cancel</button>
       </div>
       <div class="slconfirm" style="display:none"><div class="slcbox"><p></p><div class="slcbtns"><button class="obig gold" data-act="yes">Yes</button><button class="obig" data-act="no">No</button></div></div></div>
-      <input class="slfile" type="file" accept=".opensc2save" style="display:none" />`;
+      <input class="slfile" type="file" accept=".openslop2save,.opensc2save" style="display:none" />`;
     host.appendChild(this.el);
 
     this.el.addEventListener('click', e => {

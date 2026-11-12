@@ -13,7 +13,7 @@ for (const c of CAMPAIGNS) {
   for (const m of c.missions) {
     const def: any = (LEVELS as any)[m.mapId]; const tag = `${c.id}/${m.key}`;
     if (!def) { console.log(`✗ ${tag}: no level ${m.mapId}`); problems++; continue; }
-    if (m.data) { // data mission: real points and references from the .opensc2mission, no source scraping
+    if (m.data) { // data mission: real points and references from the .openslop2mission, no source scraping
       const issues = validateMission(m.data, def);
       const errs = issues.filter(i => i.level === 'error'), warns = issues.filter(i => i.level === 'warn');
       if (errs.length) problems++;

@@ -56,7 +56,7 @@ export interface MissionDef {
   gaps?: string[];
   /** Real-mission spec: docs/campaign/<file>.md */
   spec: string;
-  /** Source data when the mission was built from a .opensc2mission file (src/campaign/data). */
+  /** Source data when the mission was built from a .openslop2mission file (src/campaign/data). */
   data?: import('./data/MissionData').MissionData;
 }
 

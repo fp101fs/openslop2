@@ -17,10 +17,10 @@ One click gives you your own online server with a public URL (see [Deploy your o
 | **OpenSlop II Web** | The game in a browser (hosted or run locally); the main build |
 | **OpenSlop II Desktop** | Standalone app for macOS (and later Windows) |
 | **OpenSlop II Server** | Self-hosted node for lobbies and the TURN relay (`/api/rooms`, `/api/turn`) |
-| **OpenSlop II Mission Builder** | Editor for `.opensc2mission` files (`bun run mission-builder`) |
+| **OpenSlop II Mission Builder** | Editor for `.openslop2mission` files (`bun run mission-builder`) |
 | **OpenSlop II Voice Studio** | Text-to-speech tool for unit voice lines (`tools/voice-studio`) |
 
-The project was called Slopcraft II and then opensc2. File formats keep their `.opensc2*` extensions (`.opensc2mission`, `.opensc2save`) so existing missions and saves still load.
+The project was called Slopcraft II and then opensc2. Files use `.openslop2mission` and `.openslop2save`.
 
 ### Public repo
 
@@ -37,7 +37,7 @@ Every app has its own [semver](https://semver.org) version, kept in [`src/versio
 | **OpenSlop II Server** (relay) | 0.1.0 | Startup log, `GET /` and the `X-OpenSlop-Server-Version` header on `/api/health` |
 | **OpenSlop II Voice Studio** (TTS) | 0.1.0 | Studio header, `tools/voice-studio/package.json` |
 
-File formats use a plain integer that goes up only when older files can no longer load as they are: `.opensc2mission` v1, save games v1, `.slopmap` v1. `src/version.test.ts` fails if any of these numbers drift out of sync with `package.json` or the file readers. There is no map editor yet, so it has no version.
+File formats use a plain integer that goes up only when older files can no longer load as they are: `.openslop2mission` v1, save games v1, `.slopmap` v1. `src/version.test.ts` fails if any of these numbers drift out of sync with `package.json` or the file readers. There is no map editor yet, so it has no version.
 
 ---
 
@@ -172,7 +172,7 @@ Detailed research for each real campaign mission lives in `docs/campaign/<campai
 - **Not known:** trigger distances, map size in tiles, exact hero stats. The doc ends with a list of gaps between the real mission and our version.
 
 ### Liberation Day, rebuilt from the research
-The mission is now one data file, `src/campaign/campaigns/wol/missions/liberation_day.opensc2mission`, edited in the Mission Builder (below).
+The mission is now one data file, `src/campaign/campaigns/wol/missions/liberation_day.openslop2mission`, edited in the Mission Builder (below).
 - **Map:** the snake route on a 144-tile map traced over the Liquipedia image. The town basin, the camp area and the west corridor sit on tier 1; the south and east roads run in a paved trench; the HQ compound is raised. It also has the west chasm and pond (blue-violet `marsara` theme), a scorched crater, the causeway and the north-west road. Props: Browder's gas station, 3 graffiti signs, the battlecruiser billboard, the "drill deep" sign, the RESTRICTED camp gate and the Mengsk statue (procedural stand-ins in `src/levels/CampaignProps.ts`).
 - **Roads:** cracked asphalt with a worn dashed centre line, flat red-brown dirt verges on both sides, then the cliffs. The look is the theme's `roadStyle: 'asphalt'` (only `marsara` uses it, so other maps keep their stone roads): `src/graphics/RoadSurface.ts` bakes the road lines into a texture (distance from the centre line, road height, dash phase) that the terrain shader reads. A road's new `shoulder` setting (also in the Mission Builder) flattens a verge that wide on each side of the paving; verges stop square at the road ends so they don't cut into a ramp that continues the road. A roadside civilian now stands ahead of the start for the "I wouldn't go up that road" line.
 - **Enemies** at their research positions with counts per difficulty, plus per-difficulty enemy upgrades (Casual half HP, Hard armour +1, Brutal armour and weapons +1).
@@ -184,7 +184,7 @@ The mission is now one data file, `src/campaign/campaigns/wol/missions/liberatio
 
 ## 🛠️ Missions as data + Mission Builder
 
-- **Format:** a mission can be a `.opensc2mission` file (JSON; types in `src/campaign/data/MissionData.ts`). It holds the map (tiers, ramps, rocks, pits, roads, placed props, a tracing image), regions, paths, unit groups with per-difficulty counts, resource pallets, objectives, speakers, dialogue and triggers. Conditions: start, time, every, enter region, near point, unit dies, group wiped, N killed, objective state, after another trigger, counter, pallet, code hook. Actions: spawn, drop pods, say / say in order, objective, camera, cutscene, attack-move, move, attack, follow, change owner, land, tutorial, block region, autosave, resources, counter, remove, win, lose, code hook.
+- **Format:** a mission can be a `.openslop2mission` file (JSON; types in `src/campaign/data/MissionData.ts`). It holds the map (tiers, ramps, rocks, pits, roads, placed props, a tracing image), regions, paths, unit groups with per-difficulty counts, resource pallets, objectives, speakers, dialogue and triggers. Conditions: start, time, every, enter region, near point, unit dies, group wiped, N killed, objective state, after another trigger, counter, pallet, code hook. Actions: spawn, drop pods, say / say in order, objective, camera, cutscene, attack-move, move, attack, follow, change owner, land, tutorial, block region, autosave, resources, counter, remove, win, lose, code hook.
 - **How it runs:** `dataMission(json, hooks)` in `src/campaign/data/compile.ts` turns the file into a normal `MissionDef`, so the menus, saves and progress work unchanged. The other missions stay hand-coded until they are rebuilt.
 - **Save / load:** trigger actions run as replayable `MissionRuntime` events, so loading a save rebuilds everything they spawned. The interpreter's own state is saved with the mission.
 - **Validation:** `src/campaign/data/validate.ts` (dangling ids, unknown units, points in walls or out of reach) is shared by `bun tools/campaign/mapcheck.ts` and the editor.
@@ -204,14 +204,14 @@ The mission is now one data file, `src/campaign/campaigns/wol/missions/liberatio
   - `bun test` covers the compiler, validator, save / load and editor store, forms and API.
   - `src/campaign/campaigns/wol/liberationDay.test.ts` plays Liberation Day headless to victory on Casual and Normal, including a mid-mission save / load check.
   - `bun tools/campaign/autoplay.ts wol liberation_day hard` plays it from the command line (`--saveAt 125` adds the save / load check).
-- **Mission 2:** `docs/campaign/wol/02-the-outlaws/README.md` maps The Outlaws onto the format. A tested skeleton is in `src/campaign/data/fixtures/outlaws_skeleton.opensc2mission`.
+- **Mission 2:** `docs/campaign/wol/02-the-outlaws/README.md` maps The Outlaws onto the format. A tested skeleton is in `src/campaign/data/fixtures/outlaws_skeleton.openslop2mission`.
 
 ## 💾 Save / Load Game (single player)
 
 - In-game MENU → **Save Game** / **Load Game** (campaign and skirmish; hidden in online games, greyed out after the match ends or during a cutscene). **LOAD GAME** on the home screen opens the same Load screen.
 - SC2-style screens: Recent / Campaign / Skirmish tabs, a NAME / DATE list (click a header to sort), details of the selected save, Delete (asks first), and on Save a name box that warns before overwriting. Double-click a save to load it; arrows, Enter, Delete and Esc work too.
 - Default name: game type, race and local time, e.g. `Campaign_Terran_2026-11-11_15-42-07`. Names keep only letters, digits, `_` and `-` (spaces become `_`).
-- Each save is one standalone `<name>.opensc2save` file (header line + summary line + gzip JSON). With the local server (`bun run dev` / `play.sh`) they are written to `saves/` in the project folder (git-ignored); on the hosted site they live in the browser's private file storage. **Export** downloads a save as a file and **Import** adds one.
+- Each save is one standalone `<name>.openslop2save` file (header line + summary line + gzip JSON). With the local server (`bun run dev` / `play.sh`) they are written to `saves/` in the project folder (git-ignored); on the hosted site they live in the browser's private file storage. **Export** downloads a save as a file and **Import** adds one.
 - A save holds every unit and structure (all their plain-data fields), resources, upgrades, the AI's state, creep, explored fog, camera and control groups. Loading rebuilds the same match and writes the saved state onto it; campaign scripts are fast-forwarded by re-running the timers that had fired, so objectives, waves and scripted units carry on (`src/save/SaveState.ts`, `MissionRuntime.replayFired`).
 - Not saved: short ability effects in flight (a nuke or Yamato on its way) and timers a mission starts from inside a per-frame watcher.
 - Tests: `bun test src/save` (skirmish round trip, every campaign mission saved at 6 minutes and reloaded).

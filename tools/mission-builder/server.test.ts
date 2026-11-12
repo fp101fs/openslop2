@@ -17,7 +17,7 @@ test('save, list and load a mission file (canonical format)', async () => {
   const d = blankMission('wol', 'test_mission', 'Test');
   const r = await api['/api/mission/:campaign/:key'].PUT(req('PUT', d, { campaign: 'wol', key: 'test_mission' }));
   expect(r.status).toBe(200);
-  const text = readFileSync(join(root, 'src/campaign/campaigns/wol/missions/test_mission.opensc2mission'), 'utf8');
+  const text = readFileSync(join(root, 'src/campaign/campaigns/wol/missions/test_mission.openslop2mission'), 'utf8');
   expect(JSON.parse(text)).toEqual(d);
   expect(text).toContain('"th": [20, 108]'); // points on one line
   expect((await listMissionFiles(root)).map(m => m.key)).toEqual(['test_mission']);

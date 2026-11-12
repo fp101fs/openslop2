@@ -1,5 +1,5 @@
 /**
- * The one way a `.opensc2mission` is written (Mission Builder, tools): 2-space JSON with points, number lists and other short
+ * The one way a `.openslop2mission` is written (Mission Builder, tools): 2-space JSON with points, number lists and other short
  * leaf arrays / objects on one line, so files stay small and diffs readable. Key order is kept as given.
  */
 const INLINE = 110;

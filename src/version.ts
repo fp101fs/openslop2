@@ -19,7 +19,7 @@ export const TOOL_VERSIONS = {
 
 /** Data file formats. */
 export const FORMAT_VERSIONS = {
-  mission: 1, // .opensc2mission (MissionData.version)
+  mission: 1, // .openslop2mission (MissionData.version)
   save: 1,    // save games (SAVE_VERSION)
   map: 1,     // .slopmap (SLOPMAP_VERSION)
 } as const;
