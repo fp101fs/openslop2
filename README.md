@@ -5,6 +5,18 @@ Engineered to take **full advantage of Apple Silicon M1 (Metal GPU & ARM64 CPU)*
 
 > OpenSlop II is an unofficial fan project. StarCraft is a trademark of Blizzard Entertainment; OpenSlop II is not affiliated with or endorsed by Blizzard.
 
+### Message from the Meat Proxy
+
+OpenSlop2 is..
+- **a work in progress** (unfinished), so cut me (and my robot overlord) some slack please (especially for unfinished parts / game inaccuracies). if something's broken/missing or if you wanna contribute, just [tell me](https://github.com/fp101fs/openslop2/issues). I'm hoping someone(s) willing to fork this and run with it (yes, the fork.. yes, in their hand) / fill in the gaps. until then I'll maintain it as long as folks are interested in playing OpenSlop2
+- **vibe-coded by me because I wanted to play sc2 in my browser** (also my macbook never has enough free disk space to install actual sc2, so I wanted a way to play sc2 without the disk bloat lol [for reals] (also I can't afford the 50 clams to buy actual sc2).. anyway, when i realized OpenSlop2 was feasible for my own personal play, I realized you Terrans might wanna play too. so here I am in my Bunker writing this now
+- **not built for commercial use.** I made this for funsies
+- **free and open source** (*) (*BUT you must be fully aware that most of the unit/structure 3D models in the game were built by actual human 3D artists we found with our own eyeballs on sites like Sketchfab [ex: Catholomew]). so tl;dr - don't make money off of the 3D models in OpenSlop2 or distribute them without proper attribution - that would go against the human 3D artists' licenses. check each 3D model's individual license before use in your own project. we have an Attributions page just for that!
+- **yours.** the full OpenSlop2 source code is on github. i'm even including instructions on how to add game features with just 1 Claude prompt, how to fill in missing stuff, build new Missions, new maps, etc. use it as a starting point to do what you please with, like a boilerplate for an entirely new game or your own Campaign / storyline
+- **modular, customizable and full of cool stuff** (like the OpenSlop2 Mission Builder) for you to build your own missions, maps, etc (maps are .slopmap, missions are .openslop2mission). easy to add on-to, mod, bla bla - just tell Claude / other agent what you wanna do with OpenSlop2
+- **playable for free, offline and online!** single / multi player (campaign, skirmish, 1v1 online matches)
+- **fully playable on any device** (single/multi player, campaign/skirmish, all units, structures & upgrades) - Desktop, Tablet, and Mobile (play-tested on M1 Macbook Air 16GB, Pixel 8, and M1 iPad Air). also available as standalone desktop app (actual Mac .app or Windows app)
+
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ffp101fs%2Fopenslop2&project-name=openslop2&repository-name=openslop2)
 
 One click gives you your own online server with a public URL. For the public game list too, use the [Upstash version](#-deploy-your-own-server-one-click-vercel).
