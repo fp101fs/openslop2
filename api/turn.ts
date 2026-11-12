@@ -44,9 +44,9 @@ async function cloudflare(keyId: string, token: string): Promise<IceServer[]> {
   return servers;
 }
 
-/** coturn REST-API credentials: username "<expiry>:slopcraft", password = base64(HMAC-SHA1(secret, username)). */
+/** coturn REST-API credentials: username "<expiry>:openslop2", password = base64(HMAC-SHA1(secret, username)). */
 async function coturn(urls: string[], secret: string): Promise<IceServer[]> {
-  const username = `${Math.floor(Date.now() / 1000) + TTL_SEC}:slopcraft`;
+  const username = `${Math.floor(Date.now() / 1000) + TTL_SEC}:openslop2`;
   const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']);
   const sig = new Uint8Array(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(username)));
   return [{ urls, username, credential: btoa(String.fromCharCode(...sig)) }];

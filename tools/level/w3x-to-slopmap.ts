@@ -1,5 +1,5 @@
 /**
- * Converts a Warcraft III (.w3x / .w3m) MPQ map archive into a single self-contained Slopcraft 2 .slopmap file.
+ * Converts a Warcraft III (.w3x / .w3m) MPQ map archive into a single self-contained OpenSlop II .slopmap file.
  *
  * Usage:
  *   bun tools/level/w3x-to-slopmap.ts "<path/to/map.w3x>" ["<path/to/output.slopmap>"]
@@ -529,7 +529,7 @@ function convertMdxToGlb(
     const nV = (P.length / 3) | 0;
     if (nV === 0) return null;
 
-    // WC3 Z-up -> Slopcraft 2 Y-up, and scale from WC3 units (128 = 1 tile) to Slopcraft 2 tiles (1.0 = 1 tile)
+    // WC3 Z-up -> OpenSlop II Y-up, and scale from WC3 units (128 = 1 tile) to OpenSlop II tiles (1.0 = 1 tile)
     const pos = new Float32Array(P.length);
     const min = [1e9, 1e9, 1e9];
     const max = [-1e9, -1e9, -1e9];
@@ -694,7 +694,7 @@ function convertMdxToGlb(
     }
 
     const gltfJson: any = {
-      asset: { version: '2.0', generator: 'Slopcraft 2 w3x-to-slopmap', extras: { title } },
+      asset: { version: '2.0', generator: 'OpenSlop II w3x-to-slopmap', extras: { title } },
       scene: 0,
       scenes: [{ nodes: [0] }],
       nodes: [{ mesh: 0, name: title }],
@@ -797,7 +797,7 @@ ep += 16;
 
 const widthTiles = mx - 1;  // 160
 const heightTiles = my - 1; // 192
-const size = Math.max(widthTiles, heightTiles); // 192 (square Slopcraft 2 playfield)
+const size = Math.max(widthTiles, heightTiles); // 192 (square OpenSlop II playfield)
 const padX = Math.floor((size - widthTiles) / 2); // 16
 const padZ = Math.floor((size - heightTiles) / 2); // 0
 const res = size * 2 + 1; // 385
@@ -812,7 +812,7 @@ const vTileIdx = new Uint8Array(vCount);
 const vWaterFlag = new Uint8Array(vCount);
 const vRampFlag = new Uint8Array(vCount);
 
-// Brick / square-slab tiles in Sunken Ruins map to Slopcraft 2's `plaza` shader channel
+// Brick / square-slab tiles in Sunken Ruins map to OpenSlop II's `plaza` shader channel
 const plazaTileIndices = new Set<number>();
 groundTiles.forEach((tid, idx) => {
   if (/^(Zbkl|Zbks|Ztil|Ksqt|Ibsq|Itbk)$/i.test(tid)) plazaTileIndices.add(idx);
@@ -827,7 +827,7 @@ for (let i = 0; i < vCount; i++) {
   const layer = ctLayer & 0x0f;
   const rawGround = (gh - 8192) / 512; // 1 WC3 cliff level (256 units) = ~2.0 world units
   const rawWater = ((wl & 0x3fff) - 8192) / 512 + (layer - 2) * 1.4;
-  // Combine base cliff layer + vertex height deformation into Slopcraft 2 elevation
+  // Combine base cliff layer + vertex height deformation into OpenSlop II elevation
   vLayer[i] = layer;
   vHeight[i] = (layer - 2) * TIER_HEIGHT + rawGround * 0.7;
   vWaterLevel[i] = rawWater;
@@ -858,7 +858,7 @@ const pw = wpmDv.getUint32(8, true);
 const ph = wpmDv.getUint32(12, true);
 const wpmCells = wpm.subarray(16, 16 + pw * ph);
 
-// Build Slopcraft 2 LevelRaster arrays at `res = 385 x 385` (0.5-tile step)
+// Build OpenSlop II LevelRaster arrays at `res = 385 x 385` (0.5-tile step)
 const nCells = res * res;
 const rHeight = new Float32Array(nCells);
 const rTier = new Float32Array(nCells);
@@ -894,7 +894,7 @@ for (let iz = 0; iz < res; iz++) {
     const idx = iz * res + ix;
     const x = ix * 0.5;
     const z = iz * 0.5;
-    // Map Slopcraft 2 (x, z) -> WC3 tile coordinates (wx, wy)
+    // Map OpenSlop II (x, z) -> WC3 tile coordinates (wx, wy)
     const wx = x - padX;
     const wy = heightTiles - (z - padZ);
     const inBounds = wx >= 1 && wx <= widthTiles - 1 && wy >= 1 && wy <= heightTiles - 1;
@@ -969,7 +969,7 @@ for (let iz = 1; iz < res - 1; iz++) {
     const slope = Math.hypot(r - l, d - u);
     const cw = Math.max(0, Math.min(1, (slope - 0.18) / 0.45));
     rCliffW[i] = rBlocked[i] && !rLiquid[i] ? Math.max(cw, 0.85) : cw;
-    // Walkable sloped corridors act as ramps in Slopcraft 2
+    // Walkable sloped corridors act as ramps in OpenSlop II
     if (!rWall[i] && slope > 0.22) {
       rRamp[i] = 1;
       rRampT[i] = 0.5;
@@ -978,7 +978,7 @@ for (let iz = 1; iz < res - 1; iz++) {
   }
 }
 
-// ---------------- 6. Auto-Place & Validate Slopcraft 2 Bases on Largest Walkable Network ----------------
+// ---------------- 6. Auto-Place & Validate OpenSlop II Bases on Largest Walkable Network ----------------
 
 console.log(`[3/6] Computing connected walkable graph & placing skirmish/campaign bases...`);
 const S = size;

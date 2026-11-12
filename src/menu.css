@@ -78,14 +78,14 @@
 .sc2s .news .nh { font-size: calc(15 * var(--u)); font-weight: 700; letter-spacing: 0.2em; color: #8fb2dd; padding: 0 0 calc(8 * var(--u)) calc(6 * var(--u)); text-transform: uppercase; }
 .sc2s .news .nbox { background: linear-gradient(rgba(10,24,44,0.92), rgba(6,14,28,0.92)); border: calc(2 * var(--u)) solid #1b3f72; box-shadow: 0 0 calc(22 * var(--u)) rgba(30,100,200,0.25), inset 0 0 calc(20 * var(--u)) rgba(40,120,230,0.12); }
 .sc2s .news .nban { height: calc(190 * var(--u)); position: relative; overflow: hidden;
-  background: linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.62)), url('/ui/slopcraft_splash.webp') 62% 34% / 210% no-repeat; display: flex; align-items: flex-end; padding: calc(14 * var(--u)); }
+  background: linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.62)), url('/ui/openslop2_splash.webp') 62% 34% / 210% no-repeat; display: flex; align-items: flex-end; padding: calc(14 * var(--u)); }
 .sc2s .news .nban span { font-size: calc(24 * var(--u)); font-weight: 800; letter-spacing: 0.06em; text-shadow: 0 calc(2 * var(--u)) calc(8 * var(--u)) #000; }
 .sc2s .news .nbody { padding: calc(14 * var(--u)) calc(16 * var(--u)) calc(16 * var(--u)); }
 .sc2s .news .nbody b { display: block; font-size: calc(21 * var(--u)); letter-spacing: 0.05em; color: #fff; margin-bottom: calc(6 * var(--u)); }
 .sc2s .news .nbody p { margin: 0; font-size: calc(16 * var(--u)); line-height: 1.4; color: #a9c3e6; letter-spacing: 0.02em; }
 .sc2s .news .nfoot { margin-top: calc(10 * var(--u)); padding: calc(12 * var(--u)) calc(16 * var(--u)); font-size: calc(16 * var(--u)); color: #a9c3e6; background: rgba(8,18,34,0.9); border: calc(2 * var(--u)) solid #18365f; }
 .sc2s .profbar { position: absolute; left: 0; bottom: 0; width: calc(560 * var(--u)); height: calc(86 * var(--u)); display: flex; align-items: center; gap: calc(14 * var(--u)); padding-left: calc(14 * var(--u)); background: linear-gradient(90deg, rgba(8,20,40,0.95), rgba(8,20,40,0)); }
-.sc2s .avatar { width: calc(62 * var(--u)); height: calc(62 * var(--u)); border: calc(2 * var(--u)) solid #58b4ff; background: url('/ui/slopcraft_sm.webp') 56% 24% / 380% no-repeat; box-shadow: 0 0 calc(12 * var(--u)) rgba(70,160,255,0.6); }
+.sc2s .avatar { width: calc(62 * var(--u)); height: calc(62 * var(--u)); border: calc(2 * var(--u)) solid #58b4ff; background: url('/ui/openslop2_sm.webp') 56% 24% / 380% no-repeat; box-shadow: 0 0 calc(12 * var(--u)) rgba(70,160,255,0.6); }
 .sc2s .profbar .pn { font-size: calc(24 * var(--u)); font-weight: 700; color: #f3f8ff; }
 .sc2s .profbar .ps { font-size: calc(17 * var(--u)); color: #8fb2dd; margin-top: calc(2 * var(--u)); }
 .sc2s .botright { position: absolute; right: calc(24 * var(--u)); bottom: calc(22 * var(--u)); display: flex; align-items: center; gap: calc(18 * var(--u)); font-size: calc(18 * var(--u)); letter-spacing: 0.2em; color: #cfe4ff; }
@@ -112,7 +112,7 @@
 .sc2s.play .planet { position: absolute; left: calc(-300 * var(--u)); bottom: calc(-760 * var(--u)); width: calc(1500 * var(--u)); height: calc(1000 * var(--u)); border-radius: 50%;
   background: radial-gradient(ellipse at 52% 0%, #d7ffd0 0, #6a9a6a 1.2%, #1c3347 3.5%, #0a1626 9%, #050b14 70%); box-shadow: 0 calc(-8 * var(--u)) calc(40 * var(--u)) rgba(190,255,190,0.3); }
 .sc2s.play .heroart { position: absolute; right: calc(-60 * var(--u)); top: calc(60 * var(--u)); height: calc(1150 * var(--u)); width: calc(862 * var(--u)); opacity: 0.38;
-  background: url('/ui/slopcraft_splash.webp') center / cover no-repeat;
+  background: url('/ui/openslop2_splash.webp') center / cover no-repeat;
   -webkit-mask-image: radial-gradient(ellipse 60% 62% at 55% 48%, #000 35%, transparent 100%); mask-image: radial-gradient(ellipse 60% 62% at 55% 48%, #000 35%, transparent 100%); }
 
 /* top nav */
@@ -128,7 +128,7 @@
 .sc2s .topnav .plus { width: calc(70 * var(--u)); display: flex; align-items: center; justify-content: center; font-size: calc(32 * var(--u)); color: #7fa6d6; }
 .sc2s .topnav .resume { align-self: center; margin-right: calc(18 * var(--u)); height: calc(40 * var(--u)); font-size: calc(17 * var(--u)); padding: 0 calc(20 * var(--u)); }
 .sc2s .topnav .tavatar { width: calc(84 * var(--u)); height: calc(84 * var(--u)); margin: calc(8 * var(--u)) calc(18 * var(--u)) 0 0; border: calc(2 * var(--u)) solid #58b4ff; position: relative; z-index: 3;
-  background: url('/ui/slopcraft_sm.webp') 56% 24% / 380% no-repeat; box-shadow: 0 0 calc(14 * var(--u)) rgba(70,160,255,0.65); }
+  background: url('/ui/openslop2_sm.webp') 56% 24% / 380% no-repeat; box-shadow: 0 0 calc(14 * var(--u)) rgba(70,160,255,0.65); }
 .sc2s .topnav .tavatar i { position: absolute; left: calc(4 * var(--u)); bottom: calc(2 * var(--u)); font-style: normal; font-size: calc(18 * var(--u)); font-weight: 800; background: #0d2a52; border: calc(1 * var(--u)) solid #58b4ff; padding: 0 calc(6 * var(--u)); }
 .sc2s .subnav { position: absolute; left: 0; right: 0; top: calc(64 * var(--u)); height: calc(46 * var(--u)); background: rgba(5,11,20,0.75); border-bottom: calc(1 * var(--u)) solid #12233a; display: flex; align-items: center; padding-left: calc(100 * var(--u)); }
 .sc2s .subbtn { font-size: calc(19 * var(--u)); font-weight: 700; letter-spacing: 0.09em; color: #b3cbe8; padding: 0 calc(20 * var(--u)); height: 100%; display: flex; align-items: center; cursor: pointer; text-transform: uppercase; border-right: calc(1 * var(--u)) solid #1a2c47; background: none; border-top: 0; border-left: 0; border-bottom: 0; position: relative; }

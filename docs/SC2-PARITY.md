@@ -1,4 +1,4 @@
-# Slopcraft II vs StarCraft II: how close are we?
+# OpenSlop II vs StarCraft II: how close are we?
 
 One table per area. Rows are items (units, buildings, systems); columns are the parts of the game that apply to them.
 Read down a column to see a gap; read across a row to see how finished one item is.

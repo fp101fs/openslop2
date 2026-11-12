@@ -23,7 +23,7 @@ test('coturn shared secret: time-limited REST credentials', () => withEnv({ TURN
   const s = iceServers[0];
   expect(s.urls).toEqual(['turn:t.example.com:3478', 'turns:t.example.com:5349']);
   const [expiry, name] = s.username.split(':');
-  expect(name).toBe('slopcraft');
+  expect(name).toBe('openslop2');
   expect(Number(expiry)).toBeGreaterThan(Date.now() / 1000 + 23 * 3600);
   expect(s.credential).toBe(createHmac('sha1', 's3cret').update(s.username).digest('base64'));
 }));

@@ -1,5 +1,5 @@
 /**
- * Public game list for slopcraft (Vercel Function, Web-standard handlers).
+ * Public game list for OpenSlop II (Vercel Function, Web-standard handlers).
  *
  *   GET    /api/rooms          -> { v: 2, rooms: [...] }   open / full / in-game public rooms, newest first
  *   POST   /api/rooms          -> create or heartbeat a room (body: room fields; header x-room-token once created)

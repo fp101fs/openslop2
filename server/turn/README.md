@@ -36,7 +36,7 @@ tls-listening-port=5349
 fingerprint
 use-auth-secret
 static-auth-secret=CHANGE_ME_LONG_RANDOM_STRING
-realm=slopcraft
+realm=openslop2
 # TLS (Let's Encrypt): needed for turns: URLs
 cert=/etc/letsencrypt/live/turn.example.com/fullchain.pem
 pkey=/etc/letsencrypt/live/turn.example.com/privkey.pem
@@ -62,6 +62,6 @@ For services that give you a plain username and password (for example Metered):
 
 ## Checking it
 
-- `https://slopcraft.vercel.app/api/turn` returns `{ "iceServers": [...] }` when configured, or 503 when not.
+- `https://<your-project>.vercel.app/api/turn` returns `{ "iceServers": [...] }` when configured, or 503 when not.
 - Locally: put the variables in `.env` and run `bun server/dev-api.ts` (it serves `/api/turn` and `/api/rooms`).
 - In a match, `chrome://webrtc-internals` shows a `relay` candidate pair when the TURN path is in use.

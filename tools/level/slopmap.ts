@@ -1,5 +1,5 @@
 /**
- * .slopmap — Single-file self-contained binary map format for Slopcraft 2.
+ * .slopmap — Single-file self-contained binary map format for OpenSlop II.
  *
  * Binary layout (little-endian, 4-byte aligned, modeled on glTF 2.0 .glb):
  *   Bytes 0..4   : Magic "SLOP" (0x504F4C53)
@@ -33,7 +33,7 @@ export interface SlopmapDoodadDef {
   parentId: string;
   /** Resolved human-readable name. */
   name: string;
-  /** Mapped Slopcraft 2 procedural/GLB PropKit id (from src/levels/PropKits.ts), or 'blocker' for invisible pathing blockers. */
+  /** Mapped OpenSlop II procedural/GLB PropKit id (from src/levels/PropKits.ts), or 'blocker' for invisible pathing blockers. */
   propKit: string;
   /** Original WC3 or imported MDX model path if specified. */
   mdxPath?: string;
@@ -68,7 +68,7 @@ export interface SlopmapManifest {
     sourceFile: string;
     tileset: string;
     tilesetName: string;
-    /** Square world dimension in Slopcraft 2 tiles (1 unit = 1 tile). */
+    /** Square world dimension in OpenSlop II tiles (1 unit = 1 tile). */
     size: number;
     /** Half-tile raster resolution (size * 2 + 1). */
     res: number;

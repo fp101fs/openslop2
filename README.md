@@ -20,8 +20,6 @@ One click gives you your own online server with a public URL (see [Deploy your o
 | **OpenSlop II Mission Builder** | Editor for `.openslop2mission` files (`bun run mission-builder`) |
 | **OpenSlop II Voice Studio** | Text-to-speech tool for unit voice lines (`tools/voice-studio`) |
 
-The project was called Slopcraft II. Files use `.openslop2mission` and `.openslop2save`.
-
 ### Public repo
 
 [openslop2](https://github.com/fp101fs/openslop2) is the public repo. Development happens in a private repo, and `tools/publish-public.sh` copies the current files there as one new commit (private history never goes public).
@@ -947,9 +945,9 @@ These are still synthesised in `SoundSystem.ts` (Web Audio oscillators / noise) 
 
 ### 🎛️ SC2-style menus
 
-- **Title screen** (`MainMenu.ts`, styles in `src/menu.css`): StarCraft-II-style home screen - OpenSlop II logo image top-left (`public/ui/openslop_logo.webp`, screen-blended so its starfield fades into the menu), stacked blue buttons (Campaign / Single Player / Multiplayer / Co-op / Custom Games), the hero art in the centre (`public/ui/slopcraft_splash.webp`), a News & Community card, a profile bar and a MENU link that opens Options.
+- **Title screen** (`MainMenu.ts`, styles in `src/menu.css`): StarCraft-II-style home screen - OpenSlop II logo image top-left (`public/ui/openslop_logo.webp`, screen-blended so its starfield fades into the menu), stacked blue buttons (Campaign / Single Player / Multiplayer / Co-op / Custom Games), the hero art in the centre (`public/ui/openslop2_splash.webp`), a News & Community card, a profile bar and a MENU link that opens Options.
 - **Title-screen hero** (`src/ui/TitleHero.ts`): the centre shows one animated unit picked at random per page load (Roach, Adept or Thor), idling with a slow sway. It lazy-loads: the menu paints first, the model (2.7-4.9 MB) downloads once the browser is idle, shaders compile ahead of time, then the canvas fades in over 1 s, so menu navigation is never blocked. Bottom-right of the model: race + unit name ("PROTOSS ADEPT") above a "3D model by <author>" credit that opens Attributions. Phones skip it entirely (no `.hero` element, nothing downloads); iPads and desktop get it; Save-Data users get the plain backdrop.
-- **Boot splash**: `index.html` paints the `slopcraft_splash.webp` poster (1000x1333 WebP, 162 KB; the old 1125x1500 JPEG was 554 KB; the blurred backdrop is a 32x43 JPEG stretched and blurred; menu art uses `slopcraft_sm.webp` and `slopcraft_logo.webp`) with a loading bar from inline CSS before any JS loads, then fades out once the tank cinematic is ready (20 s cap).
+- **Boot splash**: `index.html` paints the `openslop2_splash.webp` poster (1000x1333 WebP, 162 KB; the old 1125x1500 JPEG was 554 KB; the blurred backdrop is a 32x43 JPEG stretched and blurred; menu art uses `openslop2_sm.webp` and `openslop2_logo.webp`) with a loading bar from inline CSS before any JS loads, then fades out once the tank cinematic is ready (20 s cap).
 - **Responsive title screen**: portrait screens (phones, iPad portrait) and short landscape screens (phones sideways) switch from the scaled 1920x1080 layout to a flowing one (logo, cinematic, buttons, news; landscape: buttons left, cinematic right, news hidden). The Campaign / Versus (Training, A.I., 1v1) / Co-op / Custom screens use the same approach: one scrollable column in portrait (nav strips scroll sideways, cards wrap, maps panel below the setup), two columns on landscape tablets and phones. Anything wider than 1100 px and taller than 520 px keeps the scaled desktop layout.
 - **Live 3D unit heroes** (`src/ui/UnitHero.ts`): one shared transparent WebGL canvas shows any in-game rigged model with its idle clip, slowly swaying and turned slightly towards the left of the screen, on the right of the play screens (Campaign heroes are scaled per race: Marine 1.25x, Hydralisk 1.5x, Zealot 1.25x); `portrait()` renders cached bust thumbnails for tiles.
 - **Campaign race select**: pick Terran / Zerg / Protoss (Marine / Hydralisk / Zealot hero); the mission row shows that race's missions.

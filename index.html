@@ -8,8 +8,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" href="/favicon.ico" />
-    <link rel="preload" as="image" href="/ui/slopcraft_splash.webp" type="image/webp" />
-    <link rel="preload" as="image" href="/ui/slopcraft_bg.jpg" />
+    <link rel="preload" as="image" href="/ui/openslop2_splash.webp" type="image/webp" />
+    <link rel="preload" as="image" href="/ui/openslop2_bg.jpg" />
     <title>OpenSlop II</title>
     <link rel="stylesheet" href="/src/style.css" />
     <link rel="stylesheet" href="/src/menu.css" />
@@ -18,7 +18,7 @@
       html, body { margin: 0; background: #02060d; }
       #splash { position: fixed; inset: 0; z-index: 100000; background: #02060d; overflow: hidden; display: flex; align-items: center; justify-content: center; transition: opacity .7s ease; }
       #splash.out { opacity: 0; pointer-events: none; }
-      #splash .sp-bg { position: absolute; inset: -4%; background: url('/ui/slopcraft_bg.jpg') center / cover no-repeat; filter: blur(14px) brightness(.45) saturate(1.2); }
+      #splash .sp-bg { position: absolute; inset: -4%; background: url('/ui/openslop2_bg.jpg') center / cover no-repeat; filter: blur(14px) brightness(.45) saturate(1.2); }
       #splash .sp-art { position: relative; height: 100%; max-width: 100%; width: auto; aspect-ratio: 3 / 4; object-fit: contain; box-shadow: 0 0 60px rgba(40,110,255,.35); -webkit-mask-image: linear-gradient(#000 82%, transparent); mask-image: linear-gradient(#000 82%, transparent); }
       #splash .sp-load { position: absolute; left: 50%; bottom: max(28px, env(safe-area-inset-bottom)); transform: translateX(-50%); width: min(420px, 72vw); text-align: center; font: 700 13px/1 Eurostile, 'Avenir Next', Arial, sans-serif; letter-spacing: .32em; text-transform: uppercase; color: #cfe4ff; text-shadow: 0 2px 8px #000; }
       #splash .sp-bar { margin-top: 12px; height: 6px; background: rgba(8,20,40,.85); border: 1px solid #1d63b8; overflow: hidden; }
@@ -30,7 +30,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Exo:wght@100;300;400;500;600&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <div id="splash"><div class="sp-bg"></div><img class="sp-art" src="/ui/slopcraft_splash.webp" alt="OpenSlop II" width="1000" height="1333" decoding="async" fetchpriority="high" /><div class="sp-load">Loading<div class="sp-bar"><i></i></div></div></div>
+    <div id="splash"><div class="sp-bg"></div><img class="sp-art" src="/ui/openslop2_splash.webp" alt="OpenSlop II" width="1000" height="1333" decoding="async" fetchpriority="high" /><div class="sp-load">Loading<div class="sp-bar"><i></i></div></div></div>
     <div id="app">
       <!-- 3D Graphics Viewport -->
       <div id="canvas-container"></div>
