@@ -143,7 +143,12 @@ export class SignalPeer extends Emitter {
   private async claim() {
     if (this.destroyed || this.claiming) return;
     this.claiming = true;
-    const r = await signalCall({ op: 'claim', id: this.wantId ?? (this.id || undefined) });
+    const body = { op: 'claim', id: this.wantId ?? (this.id || undefined) };
+    let r = await signalCall(body);
+    if (r.status === 0 && !this.destroyed) { // no answer (busy page or a network blip): try once more before giving up
+      await new Promise(res => setTimeout(res, 600));
+      r = await signalCall(body);
+    }
     this.claiming = false;
     if (this.destroyed) {
       if (r.status === 200) void signalCall({ op: 'release', id: r.data.id, token: r.data.token }, true);

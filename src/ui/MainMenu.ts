@@ -752,6 +752,11 @@ export class MainMenu {
     }).join('')}</div>`;
   }
 
+  /** Compact race picker for the lobby (the full cards would push START out of view). */
+  private factionChips(group: string, selected: FactionType) {
+    return `<div class="mm-chips">${FACTIONS.map(f => `<button class="mm-chip ${selected === f ? 'sel' : ''}" style="--accent:${FACTION_TECH[f].color}" data-act="pick" data-g="${group}" data-v="${f}">${FACTION_ICON[f]} ${FACTION_TECH[f].name}</button>`).join('')}</div>`;
+  }
+
   private mapPicker(group: string, selected: MapId) {
     // Online matches can't reload the page to change map size, so the 2x map is skirmish-only
     const ids = Object.keys(MAP_CONFIGS) as MapId[];
@@ -799,6 +804,7 @@ export class MainMenu {
               ${ready && this.mp.mode === 'multiplayer_pvp' ? `<span>(${FACTION_TECH[this.mp.enemyFaction].name})</span>` : ''}</div>
           </div>
           <div class="mm-card-sub">${this.mp.mode === 'multiplayer_pvp' ? '1v1 Player vs Player' : 'Co-op vs AI'} · ${MAP_CONFIGS[this.mp.mapId].name}</div>
+          <div class="mm-section">Your Faction</div>${this.factionChips('hostFaction', this.mp.faction)}
           ${useP2P() ? `<div class="mm-row center"><label>Game name</label><input class="mm-input" data-chg="gname" maxlength="24" placeholder="${this.escape(this.playerName)}'s game" value="${this.escape(this.mp.gameName)}" /></div>` : ''}
           ${status}
           <div class="mm-actions">
@@ -819,7 +825,7 @@ export class MainMenu {
             <div class="mm-player on">👤 ${this.escape(this.playerName)} <span>(you)</span></div>
           </div>
           <div class="mm-card-sub">${pvp ? '1v1 Player vs Player' : 'Co-op vs AI'} · ${MAP_CONFIGS[(l.config.mapId || 'sector_vanguard') as MapId]?.name ?? ''}</div>
-          ${pvp ? `<div class="mm-section">Your Faction</div>${this.factionPicker('guestFaction', this.mp.faction)}` : ''}
+          ${pvp ? `<div class="mm-section">Your Faction</div>${this.factionChips('guestFaction', this.mp.faction)}` : ''}
           ${status || '<div class="mm-status">Waiting for the host to start the game…</div>'}
           <div class="mm-actions"><button class="mm-btn" data-act="mp-leave">Leave Game</button></div>
         </div>`;
@@ -1048,6 +1054,15 @@ export class MainMenu {
         this.mp.faction = v as FactionType;
         this.client?.relay({ t: 'pick', faction: v });
         break;
+      case 'hostFaction':
+        this.oneRandom = false;
+        this.mp.faction = v as FactionType;
+        break;
+    }
+    // Host changed race in the lobby (lobby picker, or the 1v1 race cards above it): update the guest's view
+    if ((g === 'hostFaction' || g === 'oneRace') && this.lobby.kind === 'hosting') {
+      this.rollRandomRace();
+      this.client?.send({ t: 'config', config: this.hostConfig() });
     }
   }
 
@@ -1075,8 +1090,12 @@ export class MainMenu {
     return c;
   }
 
-  private hostConfig(): Partial<MatchConfig> {
+  /** 1v1 "Random" race: roll it once when the game is created, so the lobby, the guest and the match all agree. */
+  private rollRandomRace() {
     if (this.oneRandom && this.nav === 'versus') this.mp.faction = FACTIONS[Math.floor(Math.random() * FACTIONS.length)]!;
+  }
+
+  private hostConfig(): Partial<MatchConfig> {
     const pvp = this.mp.mode === 'multiplayer_pvp';
     return {
       mode: this.mp.mode,
@@ -1097,6 +1116,7 @@ export class MainMenu {
     const c = await this.ensureClient();
     if (!c) { this.setBusy(null); this.render(); return; }
     c.name = this.playerName;
+    if (!rehost) this.rollRandomRace();
     if (this.mp.mode === 'multiplayer_pvp') {
       // Guest picks their own faction in the lobby; default to a different one for variety
       this.mp.enemyFaction = this.mp.enemyFaction === this.mp.faction ? FACTIONS.find(f => f !== this.mp.faction)! : this.mp.enemyFaction;
@@ -1112,6 +1132,7 @@ export class MainMenu {
     const c = await this.ensureClient();
     if (!c) { this.setBusy(null); this.render(); return; }
     c.name = this.playerName;
+    this.rollRandomRace();
     c.quick(this.hostConfig());
   }
 
