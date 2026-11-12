@@ -7,7 +7,7 @@ import { FogOfWar } from './graphics/FogOfWar';
 import { ParticleSystem } from './graphics/ParticleSystem';
 import { Decals } from './graphics/Decals';
 import { SoundSystem } from './audio/SoundSystem';
-import { loadMatchRigged, loadRigged, hasRigDef, setRiggedProgressListener, whenRiggedReady } from './graphics/RiggedModels';
+import { loadMatchRigged, loadRigged, hasRigDef, setRiggedProgressListener, preloadRiggedInBackground } from './graphics/RiggedModels';
 import { GameWorld } from './simulation/GameWorld';
 import { UIManager } from './ui/UIManager';
 import { Minimap } from './ui/Minimap';
@@ -16,7 +16,7 @@ import { SmithCinematic } from './cinematic/SmithCinematic';
 import { InputHandler } from './input/InputHandler';
 import { TouchControls, isTouchDevice } from './ui/TouchControls';
 import { QuickSelect } from './ui/QuickSelect';
-import { UnitType, BuildingType, UpgradeType, MatchConfig } from './types';
+import { UnitType, BuildingType, UpgradeType, MatchConfig, FactionType } from './types';
 import { missionOf, campaignById } from './campaign/registry';
 import { markDone, nextMission } from './campaign/progress';
 import type { MapId } from './types';
@@ -28,7 +28,7 @@ import { NetSync } from './net/NetSync';
 import { NetTrace, debugOn as netDebugOn } from './net/netTrace';
 import { Chat } from './net/Chat';
 import { startPresence } from './net/Presence';
-import { Loading } from './ui/LoadingOverlay';
+import { StartCountdown } from './ui/StartCountdown';
 import { Unit } from './simulation/Unit';
 import { ABILITIES, castAbility, abilityBlocked, CastTarget } from './simulation/Mechanics';
 import { Building } from './simulation/Building';
@@ -45,6 +45,19 @@ import { readSave, writeSave } from './save/SaveFiles';
  */
 export function simSpeed(world: { net: unknown }): number {
   return world.net ? 1 : gameSpeedMult();
+}
+
+/**
+ * Shader warm-up strategy (compare with `?warm=idle` / `?warm=match`, remembered in localStorage):
+ *  - idle (default): warms every race in small chunks while the player sits idle on the menu, so Play is usually instant;
+ *  - match: warms only the two races of the match, during the start countdown.
+ */
+function warmMode(): 'idle' | 'match' {
+  try {
+    const q = new URLSearchParams(location.search).get('warm');
+    if (q === 'idle' || q === 'match') { localStorage.setItem('sc2_warm', q); return q; }
+    return localStorage.getItem('sc2_warm') === 'match' ? 'match' : 'idle';
+  } catch { return 'idle'; }
 }
 
 export class StarCraftApp {
@@ -69,6 +82,8 @@ export class StarCraftApp {
   private netClient: NetTransport | null = null;
   private victoryRecorded = false;
   private matchActive = false;
+  /** The online start modal, open until both players start together. */
+  private startModal: StartCountdown | null = null;
 
   private lastTime: number = 0;
   private lastProduceTime: number = 0;
@@ -119,7 +134,8 @@ export class StarCraftApp {
 
     // Front-end menu: campaign / skirmish / multiplayer. The intro cutscene plays when Mission 1 launches.
     this.menu = new MainMenu(this, document.body);
-    if (this.menuOpen) this.sound.startMenuMusic(); // the menu is up at load
+    if (this.menuOpen) this.sound.startMenuMusic(); // the menu is up at load (silent: no menu theme)
+    this.startIdleWarmUp();
 
     // "Playing now" counter on the landing page: a tab counts while a match is on screen (not in the menu, not after game over)
     startPresence(() => this.menu.isOpen || this.world.isGameOver ? null : (this.world.matchConfig.mode.startsWith('multiplayer') ? 'multi' : 'single'));
@@ -139,7 +155,7 @@ export class StarCraftApp {
       const pending = sessionStorage.getItem('sc2_pending_match');
       if (pending) {
         sessionStorage.removeItem('sc2_pending_match');
-        setTimeout(() => this.startMatch(JSON.parse(pending)), 50);
+        setTimeout(() => this.startMatch(JSON.parse(pending), { countdown: false }), 50);
       }
       // Mission Builder links: ?mission=<campaign>/<key>[&diff=normal][&preview=1] starts that mission at once (Playtest / 3D preview).
       // After a map-size reload the pending match above carries on instead.
@@ -147,7 +163,7 @@ export class StarCraftApp {
       if (mq && !pending && !pendingLoad) {
         const [c, k] = mq.split('/');
         const diff = new URLSearchParams(location.search).get('diff') as MatchConfig['difficulty'] | null;
-        if (c && k && missionOf(c, k)) setTimeout(() => this.startPathMission(c, k, diff ?? undefined), 50);
+        if (c && k && missionOf(c, k)) setTimeout(() => this.startPathMission(c, k, diff ?? undefined, { countdown: false }), 50);
       }
     } catch { /* ignore */ }
 
@@ -553,37 +569,69 @@ export class StarCraftApp {
     slot.appendChild(wrap);
   }
 
-  /** Shows the "Preparing battlefield" card first (so the tap is acknowledged at once), then builds the match behind it. */
-  public startMatch(partial: Partial<MatchConfig>) {
-    void Loading.show('Preparing battlefield', 'Loading units').then(async () => {
+  /**
+   * Starts a match from the "Starting game" modal: a 10 s countdown over the menu (one beep per second) while the models load
+   * and the shaders warm up behind it; Play skips the rest once everything is in. `countdown: false` (map-size reload resume,
+   * Mission Builder links, restarts from inside a match) starts as soon as it is ready instead.
+   */
+  public startMatch(partial: Partial<MatchConfig>, opts: { countdown?: boolean } = {}) {
+    // A map-size change reloads the page: decide that BEFORE loading models, or they would be downloaded and parsed twice
+    if (this.reloadForMapLayout(partial)) return;
+    const countdown = opts.countdown ?? this.menu.isOpen;
+    const cd = new StartCountdown({ seconds: countdown ? 10 : 0, cancellable: true, onTick: () => this.sound.playAck() });
+    void (async () => {
       try {
-        // A map-size change reloads the page: decide that BEFORE loading models, or they would be downloaded and parsed twice
-        if (this.reloadForMapLayout(partial)) return;
-        await this.prepareMatchAssets({ ...this.world.matchConfig, ...partial });
+        await this.prepareMatchAssets({ ...this.world.matchConfig, ...partial }, cd);
+        cd.setReady();
+        if (!(await cd.result)) return;
         this.startMatchNow(partial);
-      } catch (e) { Loading.hide(); throw e; }
-    });
+      } catch (e) {
+        console.error('[start]', e);
+        this.ui.showToast(`Could not start the match: ${(e as Error).message}`, true);
+      }
+      cd.close();
+    })();
   }
 
-  /** Both races' models load up front behind the loading card, then the shaders warm up; nothing streams in mid-match (that lagged iPads). */
-  private async prepareMatchAssets(cfg: MatchConfig) {
-    setRiggedProgressListener((d, t) => { Loading.progress(d / t); Loading.sub(`Loading units ${d}/${t}`); });
-    await loadMatchRigged([cfg.playerFaction, cfg.enemyFaction], cfg.mode === 'campaign' && !isTouchDevice());
-    // data missions (src/campaign/data): their own models (e.g. the Dominion transport) and the mission UI, only when one is played
-    const dm = cfg.mode === 'campaign' ? missionOf(cfg.campaignId, cfg.missionKey)?.data : undefined;
-    if (dm) {
-      const kinds = [...new Set(dm.groups.flatMap(g => g.units.map(u => u.type as string)))].filter(hasRigDef);
-      await Promise.all([loadRigged(kinds as any), import('./ui/mission/MissionUI').then(m => { this.missionUIModule = m; })]);
-    }
-    setRiggedProgressListener(null); Loading.progress(null); Loading.sub('');
-    // Shader warm-up (a ~3 s main-thread freeze) happens here, behind the loading card, never during play. Desktop only: iPads skip it.
-    if (!isTouchDevice()) {
-      Loading.sub('Preparing graphics');
-      await new Promise<void>(r => requestAnimationFrame(() => requestAnimationFrame(() => r())));
-      await this.renderer.warmUp();
-      await new Promise<void>(r => requestAnimationFrame(() => requestAnimationFrame(() => r())));
-      Loading.sub('');
-    }
+  /** Both races' models load up front (behind the start modal), then the shaders warm up; nothing streams in mid-match (that lagged iPads). */
+  private async prepareMatchAssets(cfg: MatchConfig, cd?: StartCountdown) {
+    setRiggedProgressListener((d, t) => cd?.progress(0.9 * d / t));
+    const allRaces = cfg.mode === 'campaign' && !isTouchDevice();
+    try {
+      await loadMatchRigged([cfg.playerFaction, cfg.enemyFaction], allRaces);
+      // data missions (src/campaign/data): their own models (e.g. the Dominion transport) and the mission UI, only when one is played
+      const dm = cfg.mode === 'campaign' ? missionOf(cfg.campaignId, cfg.missionKey)?.data : undefined;
+      if (dm) {
+        const kinds = [...new Set(dm.groups.flatMap(g => g.units.map(u => u.type as string)))].filter(hasRigDef);
+        await Promise.all([loadRigged(kinds as any), import('./ui/mission/MissionUI').then(m => { this.missionUIModule = m; })]);
+      }
+    } finally { setRiggedProgressListener(null); }
+    // Shader warm-up in small chunks (the countdown keeps ticking), on every device, so no unit type hitches the first time it
+    // appears in battle; types warmed while idle on the menu (desktop) are skipped
+    cd?.progress(0.92);
+    this.idleWarmStopped = true; this.renderer.stopWarmUp(); // the idle pre-warm yields: warm this match's races now
+    await this.renderer.warmUp(allRaces ? undefined : [cfg.playerFaction, cfg.enemyFaction]);
+    cd?.progress(1);
+  }
+
+  /** `?warm=idle`: while the menu is up and the browser is idle, load and warm one race at a time (desktop only: on iPads / phones
+   *  that would download every race's models into limited memory; they warm just the match's races during the countdown). */
+  private idleWarmStopped = false;
+  private startIdleWarmUp() {
+    if (isTouchDevice() || warmMode() !== 'idle') return;
+    const idle = () => new Promise<void>(r => setTimeout(() => ((window as any).requestIdleCallback ?? ((f: () => void) => setTimeout(f, 50)))(() => r(), { timeout: 2000 }), 1500));
+    void (async () => {
+      for (const race of ['terran', 'zerg', 'protoss'] as FactionType[]) {
+        await idle();
+        if (!this.menu.isOpen || this.idleWarmStopped) return; // a match is starting / running: it warms what it needs
+        try {
+          await preloadRiggedInBackground([race]);
+          if (this.idleWarmStopped) return;
+          await this.renderer.warmUp([race]);
+        } catch { /* best effort */ }
+      }
+      console.info('[warm] idle pre-warm done');
+    })();
   }
 
   // ---------------------------------------------------------------------
@@ -604,7 +652,8 @@ export class StarCraftApp {
 
   /** Load a saved game by name (replaces the current match). */
   public loadSavedGame(name: string) {
-    void Loading.show('Loading saved game', name).then(async () => {
+    const cd = new StartCountdown({ title: 'Loading saved game', seconds: 0, cancellable: true });
+    void (async () => {
       try {
         const data = await readSave(name);
         if (data.v !== SAVE_VERSION) throw new Error('This saved game is from an incompatible version');
@@ -615,15 +664,16 @@ export class StarCraftApp {
           location.reload();
           return;
         }
-        await this.prepareMatchAssets(data.config);
+        await this.prepareMatchAssets(data.config, cd);
+        cd.setReady();
+        if (!(await cd.result)) return;
         this.startMatchNow(data.config, data);
       } catch (e) {
-        Loading.hide();
-        (window as any).__hideSplash?.();
         console.error('[load]', e);
         this.ui.showToast(`Could not load the saved game: ${(e as Error).message}`, true);
       }
-    });
+      cd.close();
+    })();
   }
 
   /** Reloads the page into the map's layout (auto-starting this match on boot). True if a reload was triggered. */
@@ -663,8 +713,6 @@ export class StarCraftApp {
       // a saved game picks up where it left off: no intro or cinematic, the objective list is just there
       restoreGame(this, restore);
       this.ui.showObjectives();
-      Loading.hide();
-      (window as any).__hideSplash?.();
       return;
     }
 
@@ -678,8 +726,6 @@ export class StarCraftApp {
     } else {
       this.ui.triggerMissionObjectiveIntro();
     }
-    Loading.hide();
-    (window as any).__hideSplash?.();
   }
 
   /** Mission Builder's 3D preview (?preview=1): lowest graphics preset (not saved), no fog, game paused, so editing stays smooth. */
@@ -705,10 +751,10 @@ export class StarCraftApp {
   }
 
   /** Start a mission of a pathway campaign (src/campaign). */
-  public startPathMission(campaignId: string, key: string, difficultyOverride?: MatchConfig['difficulty']) {
+  public startPathMission(campaignId: string, key: string, difficultyOverride?: MatchConfig['difficulty'], opts?: { countdown?: boolean }) {
     const m = missionOf(campaignId, key);
     if (!m) return;
-    this.startMatch({ mode: 'campaign', campaignId, missionKey: key, campaignMissionId: 0, playerFaction: m.playerFaction, enemyFaction: m.enemyFaction, mapId: m.mapId as MapId, difficulty: difficultyOverride ?? m.difficulty });
+    this.startMatch({ mode: 'campaign', campaignId, missionKey: key, campaignMissionId: 0, playerFaction: m.playerFaction, enemyFaction: m.enemyFaction, mapId: m.mapId as MapId, difficulty: difficultyOverride ?? m.difficulty }, opts);
   }
 
   public nextCampaignMission() {
@@ -749,13 +795,16 @@ export class StarCraftApp {
     const early: unknown[] = [];
     const offEarly = client.on(m => { if ((m as any)?.t !== 'start') early.push(m); });
     const f = { ...this.world.matchConfig, ...partial };
-    void Loading.show('Preparing battlefield', 'Loading units').then(async () => {
+    // no countdown online: both players start together when the host's starting state arrives (the modal says what it waits for)
+    this.startModal?.close();
+    const cd = this.startModal = new StartCountdown({ seconds: 0 });
+    void (async () => {
       try {
-        await this.prepareMatchAssets(f);
+        await this.prepareMatchAssets(f, cd);
         NetTrace.mark('assets_ready');
         this.startMultiplayerNow(role, partial, client, early, offEarly);
-      } catch (e) { offEarly(); Loading.hide(); throw e; }
-    });
+      } catch (e) { offEarly(); cd.close(); throw e; }
+    })();
   }
 
   /** `gameApp.netTrace()`: the multiplayer timing trace (start timeline, stalls), plus the latest load numbers of both sides. */
@@ -784,7 +833,7 @@ export class StarCraftApp {
     this.menu.close();
     this.finishMatchSetup(this.world.matchConfig, this.objectiveFor(this.world.matchConfig));
     const go = () => {
-      Loading.hide();
+      this.startModal?.close(); this.startModal = null;
       this.ui.triggerMissionObjectiveIntro();
       this.ui.showToast(role === 'host' ? 'Match started — you are the host' : 'Connected to host — good luck, Commander!');
     };
@@ -794,8 +843,8 @@ export class StarCraftApp {
     sync.feed(early);
     if (sync.isStarted) go();
     else {
-      Loading.sub(role === 'host' ? 'Waiting for the other player to load' : 'Receiving the battlefield from the host');
-      window.setTimeout(() => { if (this.world.net === sync && !sync.isStarted) Loading.sub('Still waiting for the other player…'); }, 20000);
+      this.startModal?.status(role === 'host' ? 'Waiting for the other player…' : 'Receiving the battlefield…');
+      window.setTimeout(() => { if (this.world.net === sync && !sync.isStarted) this.startModal?.status('Still waiting for the other player…'); }, 20000);
     }
     if (netDebugOn()) this.startNetOverlay(sync);
   }
@@ -823,7 +872,7 @@ export class StarCraftApp {
   private onPeerLost(role: 'host' | 'guest') {
     const sync = this.world.net as NetSync | null;
     if (!sync || this.world.isGameOver) return;
-    Loading.hide();
+    this.startModal?.close(); this.startModal = null;
     const pvp = this.world.matchConfig.mode === 'multiplayer_pvp';
     if (pvp) {
       this.ui.showToast(role === 'host' ? 'Your opponent disconnected' : 'Lost connection to the host', true);
@@ -996,18 +1045,6 @@ export class StarCraftApp {
 const bootGame = async () => {
   await ensureBootSlopmapReady();
   new StarCraftApp();
-  // boot splash (index.html): leaves as soon as the title screen has painted, or, when a match resumes after a map-size reload, once that match is running
-  const hideSplash = () => {
-    const sp = document.getElementById('splash');
-    if (!sp || sp.classList.contains('out')) return;
-    sp.classList.add('out');
-    setTimeout(() => sp.remove(), 800);
-  };
-  (window as any).__hideSplash = hideSplash;
-  let resuming = false;
-  try { resuming = !!sessionStorage.getItem('sc2_pending_match') || !!sessionStorage.getItem('sc2_pending_load'); } catch { /* ignore */ }
-  if (resuming) setTimeout(hideSplash, 15000); // safety net
-  else requestAnimationFrame(() => requestAnimationFrame(hideSplash));
 };
 if (document.readyState === 'loading') window.addEventListener('DOMContentLoaded', () => void bootGame());
 else void bootGame();

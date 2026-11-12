@@ -1,6 +1,6 @@
 {
   "name": "openslop2",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "OpenSlop II: an unofficial, open-source StarCraft II inspired RTS that runs in the browser",
   "type": "module",
   "scripts": {

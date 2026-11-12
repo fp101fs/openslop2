@@ -8,29 +8,37 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" href="/favicon.ico" />
-    <link rel="preload" as="image" href="/ui/openslop2_splash.webp" type="image/webp" />
-    <link rel="preload" as="image" href="/ui/openslop2_bg.jpg" />
+    <link rel="preload" as="image" href="/ui/openslop_logo.webp" type="image/webp" fetchpriority="high" />
     <title>OpenSlop II</title>
     <link rel="stylesheet" href="/src/style.css" />
     <link rel="stylesheet" href="/src/menu.css" />
-    <style>
-      /* Boot splash: pure HTML + inline CSS so it paints before any JS / three.js has loaded */
-      html, body { margin: 0; background: #02060d; }
-      #splash { position: fixed; inset: 0; z-index: 100000; background: #02060d; overflow: hidden; display: flex; align-items: center; justify-content: center; transition: opacity .7s ease; }
-      #splash.out { opacity: 0; pointer-events: none; }
-      #splash .sp-bg { position: absolute; inset: -4%; background: url('/ui/openslop2_bg.jpg') center / cover no-repeat; filter: blur(14px) brightness(.45) saturate(1.2); }
-      #splash .sp-art { position: relative; height: 100%; max-width: 100%; width: auto; aspect-ratio: 3 / 4; object-fit: contain; box-shadow: 0 0 60px rgba(40,110,255,.35); -webkit-mask-image: linear-gradient(#000 82%, transparent); mask-image: linear-gradient(#000 82%, transparent); }
-      #splash .sp-load { position: absolute; left: 50%; bottom: max(28px, env(safe-area-inset-bottom)); transform: translateX(-50%); width: min(420px, 72vw); text-align: center; font: 700 13px/1 Eurostile, 'Avenir Next', Arial, sans-serif; letter-spacing: .32em; text-transform: uppercase; color: #cfe4ff; text-shadow: 0 2px 8px #000; }
-      #splash .sp-bar { margin-top: 12px; height: 6px; background: rgba(8,20,40,.85); border: 1px solid #1d63b8; overflow: hidden; }
-      #splash .sp-bar i { display: block; height: 100%; width: 40%; background: linear-gradient(90deg, transparent, #58b4ff, transparent); animation: spbar 1.15s ease-in-out infinite; }
-      @keyframes spbar { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
-    </style>
+    <style>html, body { margin: 0; background: #02060d; }</style>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Exo:wght@100;300;400;500;600&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <div id="splash"><div class="sp-bg"></div><img class="sp-art" src="/ui/openslop2_splash.webp" alt="OpenSlop II" width="1000" height="1333" decoding="async" fetchpriority="high" /><div class="sp-load">Loading<div class="sp-bar"><i></i></div></div></div>
+    <!-- Title menu, painted from HTML + CSS before any JS loads; MainMenu.ts takes it over (and replays an early click) once the game code is in -->
+    <div id="main-menu" class="main-menu sc2s home"><div class="bgfx base"></div><div class="bgfx haze"></div><div class="stage">
+      <div class="logo" role="img" aria-label="OpenSlop II"><div class="lgimg"></div></div>
+      <div class="homenav">
+        <button class="sbtn" data-act="go" data-nav="campaign" data-sub="ai">Campaign</button>
+        <button class="sbtn" data-act="go" data-nav="versus" data-sub="ai">Single Player</button>
+        <button class="sbtn" data-act="go" data-nav="versus" data-sub="1v1">Multiplayer</button>
+        <button class="sbtn" data-act="go" data-nav="coop" data-sub="ai">Co-op</button>
+        <button class="sbtn" data-act="go" data-nav="custom" data-sub="ai">Custom Games</button>
+        <div class="pcount"><i class="live"></i><button type="button" class="pc"><b>0</b> single player</button><button type="button" class="pc"><b>0</b> multiplayer</button></div>
+        <button class="sbtn chat" data-act="help">? Game Guide</button>
+        <button class="sbtn chat" data-act="parity">How Close Are We?</button>
+        <button class="sbtn chat" data-act="attrib">Attributions</button>
+      </div>
+    </div></div>
+    <script>
+      document.getElementById('main-menu').addEventListener('click', function (e) {
+        var b = e.target.closest && e.target.closest('[data-act]');
+        if (b) window.__bootClick = { act: b.dataset.act, nav: b.dataset.nav || '', sub: b.dataset.sub || '' };
+      });
+    </script>
     <div id="app">
       <!-- 3D Graphics Viewport -->
       <div id="canvas-container"></div>

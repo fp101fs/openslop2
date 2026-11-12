@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Outline } from './Outline';
-import { MAP_SIZE } from '../config';
+import { MAP_SIZE, UNIT_CONFIGS, BUILDING_CONFIGS } from '../config';
 import { LAYOUT } from '../maps';
 import { themeOf, Theme } from '../levels/Themes';
 import { rasterFor } from '../levels/LevelRaster';
@@ -18,7 +18,7 @@ import { createScenery, applyFogOfWar } from './Scenery';
 import { whenRiggedReady, buildRigged } from './RiggedModels';
 import { PerformanceProfiler } from '../utils/PerformanceProfiler';
 import { modelFactory } from './ModelFactory';
-import type { UnitType, BuildingType } from '../types';
+import type { UnitType, BuildingType, FactionType } from '../types';
 
 /** The default 1v1 map is dressed as a space-station deck: riveted plates instead of grass, oddball plates in the bases. */
 const STATION_MAP = !LAYOUT.level && LAYOUT.id === 'standard';
@@ -1417,7 +1417,7 @@ ${roads ? ASPHALT_PAVE : ''}
     { const sz = this.webglRenderer.getDrawingBufferSize(new THREE.Vector2()); Outline.setResolution(sz.x, sz.y, this.webglRenderer.getPixelRatio()); }
     if (this.composer) this.composer.render(dt); else this.webglRenderer.render(this.scene, this.camera);
     PerformanceProfiler.get().end('gpu');
-    if (this.warmGroup && this.warmFramesLeft > 0 && --this.warmFramesLeft === 0) { this.scene.remove(this.warmGroup); this.warmGroup.clear(); }
+    if (this.warmGroup && this.warmFramesLeft > 0 && --this.warmFramesLeft === 0) this.endWarmChunk();
   }
 
   // ---- Render resolution / quality presets (persisted) ----
@@ -1486,28 +1486,57 @@ ${roads ? ASPHALT_PAVE : ''}
 
   private warmGroup: THREE.Group | null = null;
   private warmFramesLeft = 0;
+  private warmChunkDone: (() => void) | null = null;
+  /** Model types already warmed ('u:marine', 'b:pylon'): later calls skip them. */
+  private warmed = new Set<string>();
+  private warmChain: Promise<void> = Promise.resolve();
+  private warmGen = 0;
+  /** Stops the warm-up in progress after its current chunk (and drops queued ones), so a newer, more urgent one runs next. */
+  public stopWarmUp() { this.warmGen++; }
+  private static readonly WARM_CHUNK = 8; // types per chunk (x2 team colours): a short hitch per frame instead of one ~3 s freeze
+
+  private endWarmChunk() {
+    if (this.warmGroup) { this.scene.remove(this.warmGroup); this.warmGroup.clear(); this.warmGroup = null; }
+    this.warmFramesLeft = 0;
+    const done = this.warmChunkDone; this.warmChunkDone = null; done?.();
+  }
+
   /**
-   * Shader / geometry / texture warm-up: every unit and building model (both team colours) is placed, microscopic, in front
-   * of the camera; their programs are compiled in parallel, then drawn for a few frames so buffers and textures are uploaded.
-   * Run once while the splash / menu is up, so no unit type ever compiles for the first time in the middle of a battle (and
-   * automatic quality steps find every shader variant ready).
+   * Shader / geometry / texture warm-up: unit and building models (both team colours) are placed, microscopic, in front of the
+   * camera; their programs are compiled in parallel, then drawn for a couple of frames so buffers and textures are uploaded.
+   * Runs in small chunks (the scene keeps rendering behind the menu), skips types already warmed, and queues behind any warm-up
+   * in progress, so it can run while idle on the menu and again, for just the match's races, during the start countdown.
+   * `races` limits it to those races' models (load their rigged models first, or the fallback models get warmed instead).
    */
-  public async warmUp() {
-    if (this.warmGroup) return;
-    const units: UnitType[] = ['observer', 'warp_prism', 'disruptor', 'phoenix', 'oracle', 'mothership', 'infestor', 'scv', 'marine', 'marauder', 'firebat', 'medic', 'siege_tank', 'siege_tank_sieged', 'medivac', 'wraith', 'banshee', 'hellion', 'thor', 'thor_ap', 'goliath', 'mule',
+  public warmUp(races?: FactionType[]): Promise<void> {
+    const gen = this.warmGen;
+    const run = async () => {
+      if (gen !== this.warmGen) return;
+      const units: UnitType[] = ['observer', 'warp_prism', 'disruptor', 'phoenix', 'oracle', 'mothership', 'infestor', 'scv', 'marine', 'marauder', 'firebat', 'medic', 'siege_tank', 'siege_tank_sieged', 'medivac', 'wraith', 'banshee', 'hellion', 'thor', 'thor_ap', 'goliath', 'mule',
       'viking', 'viking_assault', 'widow_mine', 'dark_templar', 'auto_turret', 'lurker', 'drone', 'zergling', 'roach', 'hydralisk', 'mutalisk', 'queen', 'baneling', 'ravager', 'ultralisk', 'broodlord', 'viper', 'probe', 'zealot', 'stalker', 'archon', 'sentry', 'void_ray', 'cyclone', 'odin', 'overlord', 'swarm_host', 'immortal', 'colossus', 'carrier', 'tempest', 'adept'];
-    const buildings: BuildingType[] = ['fusion_core', 'ghost_academy', 'sensor_tower', 'command_center', 'orbital_command', 'planetary_fortress', 'techlab', 'reactor', 'supply_depot', 'supply_depot_lowered', 'refinery', 'barracks', 'engineering_bay', 'bunker', 'missile_turret', 'factory', 'starport', 'armory',
+      const buildings: BuildingType[] = ['fusion_core', 'ghost_academy', 'sensor_tower', 'command_center', 'orbital_command', 'planetary_fortress', 'techlab', 'reactor', 'supply_depot', 'supply_depot_lowered', 'refinery', 'barracks', 'engineering_bay', 'bunker', 'missile_turret', 'factory', 'starport', 'armory',
       'hatchery', 'spawning_pool', 'roach_warren', 'hydralisk_den', 'spine_crawler', 'extractor', 'overlord_pod', 'nexus', 'pylon', 'assimilator', 'gateway', 'forge', 'photon_cannon', 'stargate', 'infestation_pit', 'hive', 'baneling_nest', 'evolution_chamber', 'lurker_den', 'spire', 'greater_spire', 'nydus_network', 'ultralisk_cavern', 'spore_crawler', 'cybernetics_core', 'twilight_council', 'robotics_facility', 'robotics_bay', 'templar_archives', 'dark_shrine', 'fleet_beacon', 'shield_battery', 'creep_tumor', 'nydus_worm'];
-    const g = new THREE.Group();
-    const at = new THREE.Vector3(); this.camera.getWorldDirection(at); at.multiplyScalar(30).add(this.camera.position);
-    const place = (m: THREE.Object3D) => { m.position.copy(at); m.scale.multiplyScalar(0.0005); g.add(m); };
-    for (const t of units) for (const mine of [true, false]) { try { place(modelFactory.createUnitModel(t, mine)); } catch { /* model not available */ } }
-    for (const t of buildings) for (const mine of [true, false]) { try { place(modelFactory.createBuildingModel(t, mine)); } catch { /* ignore */ } }
-    g.traverse(o => { o.frustumCulled = false; (o as THREE.Mesh).castShadow = false; });
-    this.warmGroup = g;
-    this.scene.add(g);
-    try { await (this.webglRenderer as any).compileAsync(this.scene, this.camera); } catch { /* ignore */ }
-    this.warmFramesLeft = 4; // drawn through the normal path for a few frames, then removed
+      const want = (race: FactionType | undefined) => !races || !race || races.includes(race);
+      const todo: [string, () => THREE.Object3D, () => THREE.Object3D][] = [];
+      for (const t of units) if (!this.warmed.has('u:' + t) && want(UNIT_CONFIGS[t]?.race)) todo.push(['u:' + t, () => modelFactory.createUnitModel(t, true), () => modelFactory.createUnitModel(t, false)]);
+      for (const t of buildings) if (!this.warmed.has('b:' + t) && want(BUILDING_CONFIGS[t]?.race)) todo.push(['b:' + t, () => modelFactory.createBuildingModel(t, true), () => modelFactory.createBuildingModel(t, false)]);
+      for (let i = 0; i < todo.length; i += Renderer.WARM_CHUNK) {
+        if (gen !== this.warmGen) return; // stopped: a match start wants its own races first
+        const g = new THREE.Group();
+        const at = new THREE.Vector3(); this.camera.getWorldDirection(at); at.multiplyScalar(30).add(this.camera.position);
+        for (const [key, ...makers] of todo.slice(i, i + Renderer.WARM_CHUNK)) {
+          this.warmed.add(key);
+          for (const make of makers) { try { const m = make(); m.position.copy(at); m.scale.multiplyScalar(0.0005); g.add(m); } catch { /* model not available */ } }
+        }
+        g.traverse(o => { o.frustumCulled = false; (o as THREE.Mesh).castShadow = false; });
+        this.scene.add(g);
+        try { await (this.webglRenderer as any).compileAsync(g, this.camera, this.scene); } catch { /* ignore */ }
+        // drawn through the normal path for 2 frames, then removed (500 ms cap: hidden tabs do not render)
+        await new Promise<void>(res => { this.warmGroup = g; this.warmFramesLeft = 2; this.warmChunkDone = res; setTimeout(() => { if (this.warmGroup === g) this.endWarmChunk(); }, 500); });
+      }
+    };
+    this.warmChain = this.warmChain.then(run, run);
+    return this.warmChain;
   }
 
   private ratioTarget = -1;

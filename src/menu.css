@@ -74,6 +74,19 @@
 .sc2s .homenav { position: absolute; left: calc(110 * var(--u)); top: calc(330 * var(--u)); width: calc(372 * var(--u)); display: flex; flex-direction: column; gap: calc(16 * var(--u)); }
 .sc2s .homenav .sbtn { height: calc(60 * var(--u)); font-size: calc(23 * var(--u)); }
 .sc2s .homenav .chat { height: calc(44 * var(--u)); width: calc(260 * var(--u)); font-size: calc(16 * var(--u)); margin-top: calc(8 * var(--u)); gap: calc(8 * var(--u)); }
+/* live "playing now" counts under the mode buttons: each number opens its mode */
+.sc2s .homenav .pcount { display: flex; align-items: center; gap: calc(6 * var(--u)); min-height: calc(30 * var(--u)); margin: calc(-4 * var(--u)) 0 calc(-6 * var(--u));
+  font-size: calc(17 * var(--u)); letter-spacing: .06em; color: #8fb3da; visibility: hidden; opacity: 0; transform: translateY(3px); transition: opacity .6s ease, transform .6s ease, visibility 0s .6s; }
+.sc2s .homenav .pcount.on { visibility: visible; opacity: 1; transform: none; transition: opacity .6s ease, transform .6s ease, visibility 0s; }
+.sc2s .homenav .pcount .live { flex: none; width: calc(9 * var(--u)); height: calc(9 * var(--u)); margin: 0 calc(4 * var(--u)) 0 calc(2 * var(--u)); border-radius: 50%;
+  background: #3fe08a; box-shadow: 0 0 calc(8 * var(--u)) rgba(63,224,138,.8); animation: pclive 2.4s ease-in-out infinite; }
+@keyframes pclive { 50% { opacity: .35; } }
+.sc2s .homenav .pc { padding: calc(4 * var(--u)) calc(8 * var(--u)); border: 1px solid transparent; border-radius: calc(4 * var(--u)); background: none; color: inherit;
+  font-size: inherit; letter-spacing: inherit; text-transform: lowercase; cursor: pointer; white-space: nowrap; }
+.sc2s .homenav .pc b { color: #e6f2ff; font-weight: 700; margin-right: calc(3 * var(--u)); font-variant-numeric: tabular-nums; }
+.sc2s .homenav .pc:hover { border-color: #1d63b8; background: rgba(20,60,120,.35); color: #cfe4ff; }
+.sc2s .homenav .pc:focus-visible { outline: 2px solid #58b4ff; outline-offset: 1px; }
+@media (prefers-reduced-motion: reduce) { .sc2s .homenav .pcount .live { animation: none; } }
 .sc2s .news { position: absolute; left: calc(1360 * var(--u)); top: calc(120 * var(--u)); width: calc(440 * var(--u)); }
 .sc2s .news .nh { font-size: calc(15 * var(--u)); font-weight: 700; letter-spacing: 0.2em; color: #8fb2dd; padding: 0 0 calc(8 * var(--u)) calc(6 * var(--u)); text-transform: uppercase; }
 .sc2s .news .nbox { background: linear-gradient(rgba(10,24,44,0.92), rgba(6,14,28,0.92)); border: calc(2 * var(--u)) solid #1b3f72; box-shadow: 0 0 calc(22 * var(--u)) rgba(30,100,200,0.25), inset 0 0 calc(20 * var(--u)) rgba(40,120,230,0.12); }

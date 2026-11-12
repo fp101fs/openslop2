@@ -15,6 +15,7 @@ import type { RigKind } from '../graphics/RiggedModels';
 import { NetClient, NetTransport, RoomInfo, fetchRooms } from '../net/NetClient';
 import { P2PClient, useP2P } from '../net/P2PClient';
 import { roomBrowser, BrowserState } from '../net/RoomBrowser';
+import { fetchPlayerCounts, type PlayerCounts } from '../net/Presence';
 
 type Screen = 'home' | 'play';
 type Nav = 'campaign' | 'coop' | 'versus' | 'custom' | 'collection' | 'replays';
@@ -151,6 +152,8 @@ export class MainMenu {
         this.oneTab = 'maps';
       }
     } catch { /* ignore */ }
+    // index.html paints a static copy of the title menu before the game code loads: replace it (same frame, no flicker)
+    document.getElementById('main-menu')?.remove();
     this.el = document.createElement('div');
     this.el.id = 'main-menu';
     this.el.className = 'main-menu';
@@ -171,6 +174,43 @@ export class MainMenu {
       this.render();
       void this.joinByCode(code);
     }
+    // a button pressed on the static menu before the code was in: press it again now
+    const early = (window as any).__bootClick as { act: string; nav: string; sub: string } | undefined;
+    delete (window as any).__bootClick;
+    if (early && !code && this.screen === 'home') {
+      const sel = `[data-act="${early.act}"]${early.nav ? `[data-nav="${early.nav}"]` : ''}${early.sub ? `[data-sub="${early.sub}"]` : ''}`;
+      setTimeout(() => this.el.querySelector<HTMLElement>(sel)?.click(), 0);
+    }
+    this.pollPlayerCounts();
+  }
+
+  // ---- live "playing now" counts on the title screen (relay /api/players) ----
+  private counts: PlayerCounts | null = null;
+  private pollPlayerCounts() {
+    const tick = async () => {
+      if (!this.isOpen || this.screen !== 'home' || document.hidden) return;
+      const c = await fetchPlayerCounts();
+      this.counts = c;
+      this.paintCounts();
+    };
+    void tick();
+    window.setInterval(() => void tick(), 10_000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) void tick(); });
+  }
+  private countsHtml() {
+    const c = this.counts;
+    const n = (v: number | undefined) => (v ?? 0).toLocaleString('en-US');
+    return `<div class="pcount" aria-live="polite"><i class="live" aria-hidden="true"></i>
+      <button type="button" class="pc" data-act="go" data-nav="versus" data-sub="ai" title="Players in single player games right now"><b>${n(c?.single)}</b> single player</button>
+      <button type="button" class="pc" data-act="go" data-nav="versus" data-sub="1v1" title="Players in multiplayer games right now"><b>${n(c?.multi)}</b> multiplayer</button></div>`;
+  }
+  /** Numbers update in place; the row fades in once there are numbers (and out if the server stops answering). */
+  private paintCounts() {
+    const el = this.el.querySelector<HTMLElement>('.pcount');
+    if (!el) return;
+    const c = this.counts;
+    if (c) el.querySelectorAll('b').forEach((b, i) => { b.textContent = (i ? c.multi : c.single).toLocaleString('en-US'); });
+    requestAnimationFrame(() => el.classList.toggle('on', !!c)); // next frame, so the opacity transition runs
   }
 
   // ---------------------------------------------------------------------
@@ -252,6 +292,7 @@ export class MainMenu {
     if (h3 && this.isOpen !== false) { UnitHero.show(h3, h3.dataset.kind as RigKind, { zoom: Number(h3.dataset.zoom) || 1 }); UnitHero.fillPortraits(this.el); } else UnitHero.hide();
     UnitHero.fillFigures(this.el);
     this.bindHubHover();
+    this.paintCounts();
     this.el.querySelectorAll<HTMLCanvasElement>('canvas.mappreview').forEach(c => drawMapPreview(c, c.dataset.map!));
     if (this.isMultiplayerView() && this.lobby.kind === 'browse') this.startRoomPolling();
     else this.stopRoomPolling();
@@ -277,6 +318,7 @@ export class MainMenu {
         ${btn('Multiplayer', 'versus', '1v1')}
         ${btn('Co-op', 'coop')}
         ${btn('Custom Games', 'custom')}
+        ${this.countsHtml()}
         ${resume ? '<button class="sbtn chat green" data-act="resume">▶ Resume Match</button>' : '<button class="sbtn chat" data-act="help">? Game Guide</button>'}
         <button class="sbtn chat" data-act="parity">How Close Are We?</button>
         <button class="sbtn chat" data-act="attrib">Attributions</button>
@@ -1021,10 +1063,10 @@ export class MainMenu {
       case 'cmpRace': {
         this.campaignPicked = true;
         const hub = HUB.find(h => h.id === v);
-        if (hub) { this.campaignPath = v; this.campaignRace = 'terran'; this.selPathMission = ''; this.pathChapter = ''; this.app.sound.playUnitGreeting(hub.hero); break; }
+        if (hub) { this.campaignPath = v; this.campaignRace = 'terran'; this.selPathMission = ''; this.pathChapter = ''; this.app.sound.playAck(); break; }
         this.campaignPath = 'classic';
         this.campaignRace = v as FactionType;
-        this.app.sound.playUnitGreeting(RACE_HERO[v as FactionType]); // the race's hero unit says (or growls) its own hello
+        this.app.sound.playAck(); // comms beep (menus have no voice lines)
         const first = CAMPAIGN_MISSIONS.find(m => m.playerFaction === this.campaignRace);
         if (first) this.selMission = first.id;
         break;

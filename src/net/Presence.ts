@@ -35,3 +35,15 @@ export function startPresence(getMode: () => PresenceMode) {
   setTimeout(tick, 2_000);
   addEventListener('pagehide', () => { if (last) send(null); });
 }
+
+export interface PlayerCounts { total: number; single: number; multi: number }
+
+/** Live totals from the relay's /api/players; null when the server is not answering. */
+export async function fetchPlayerCounts(): Promise<PlayerCounts | null> {
+  try {
+    const r = await fetch(`${BASE}/api/players`, { cache: 'no-store' });
+    if (!r.ok) return null;
+    const d = await r.json() as PlayerCounts;
+    return typeof d.single === 'number' && typeof d.multi === 'number' ? d : null;
+  } catch { return null; }
+}

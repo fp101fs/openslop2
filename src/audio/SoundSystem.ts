@@ -126,6 +126,7 @@ export class SoundSystem {
 
   constructor() {
     this.init();
+    this.preloadSfx('confirm_beep'); // menu / countdown beep: ready before the first click
   }
 
 
@@ -384,29 +385,22 @@ export class SoundSystem {
     return this.playSfxOf(['growl1', 'growl2', 'growl3', 'growl4', 'growl5', 'growl6', 'growl7', 'growl8', 'growl9', 'growl10', 'growl11'], vol, small ? 1.35 : 1, 0.06);
   }
 
-  // ---- main-menu theme (replaces the classical decks while the menu is open) ----
-  private menuAudio: HTMLAudioElement | null = null;
+  // ---- main menu: silent (no theme, the classical decks stay muted while the menu is open) ----
   private menuMusicOn = false;
   public startMenuMusic() {
     this.menuMusicOn = true;
-    if (!this.menuAudio) {
-      this.menuAudio = new Audio('/audio/music/menu_theme.mp3');
-      this.menuAudio.loop = true;
-      this.menuAudio.preload = 'auto';
-    }
-    this.menuAudio.volume = Math.min(1, Math.max(0.05, this.musicVolumePercent / 100 * 3));
     this.applyDeckVolumes();
-    if (this.isMuted) return;
-    this.menuAudio.play().catch(() => {
-      // autoplay blocked: start on the first click / key
-      const go = () => { window.removeEventListener('pointerdown', go); window.removeEventListener('keydown', go); if (this.menuMusicOn && !this.isMuted) this.menuAudio?.play().catch(() => {}); };
-      window.addEventListener('pointerdown', go); window.addEventListener('keydown', go);
-    });
   }
   public stopMenuMusic() {
     this.menuMusicOn = false;
-    this.menuAudio?.pause();
     this.applyDeckVolumes();
+  }
+
+  /** The short comms "acknowledge" beep that plays before campaign dialogue: menu picks and every second of the start countdown. */
+  public playAck(vol = 0.6) {
+    if (this.ctx?.state === 'suspended') void this.ctx.resume().catch(() => {});
+    this.preloadSfx('confirm_beep');
+    this.playSfx('confirm_beep', vol, 1, 0);
   }
 
   private t(): number { return this.ctx ? this.ctx.currentTime : 0; }

@@ -502,20 +502,31 @@ export const setRiggedProgressListener = (fn: typeof onProgress) => { onProgress
 // GLB parsing and model preparation run on the main thread. A small pool plus a pause after each model keeps the page responsive (the loading bar keeps painting) instead of one big freeze.
 const POOL = 3;
 let active = 0;
-const waiting: (() => void)[] = [];
-const acquire = () => active < POOL ? (active++, Promise.resolve()) : new Promise<void>(res => waiting.push(() => { active++; res(); }));
-const release = () => { active--; waiting.shift()?.(); };
+/** Queue for a pool slot: urgent loads (a match about to start) go ahead of background ones (the menu's idle pre-load). */
+const waiting: { kind: RigKind; urgent: boolean; go: () => void }[] = [];
+const acquire = (kind: RigKind, urgent: boolean) => active < POOL ? (active++, Promise.resolve()) : new Promise<void>(res => {
+  const e = { kind, urgent, go: () => { active++; res(); } };
+  if (urgent) { const i = waiting.findIndex(w => !w.urgent); waiting.splice(i < 0 ? waiting.length : i, 0, e); } else waiting.push(e);
+});
+/** A background load that is still queued becomes urgent (moves ahead of the other background loads). */
+const promote = (kind: RigKind) => {
+  const i = waiting.findIndex(w => w.kind === kind && !w.urgent);
+  if (i < 0) return;
+  const [e] = waiting.splice(i, 1); e!.urgent = true;
+  const j = waiting.findIndex(w => !w.urgent); waiting.splice(j < 0 ? waiting.length : j, 0, e!);
+};
+const release = () => { active--; waiting.shift()?.go(); };
 const breathe = () => new Promise<void>(res => setTimeout(res, 0));
 
 /** Load one model (idempotent, shared by everyone who asks). Failures leave the procedural fallback model in place. */
-function loadKind(kind: RigKind): Promise<void> {
+function loadKind(kind: RigKind, urgent = true): Promise<void> {
   let p = loads.get(kind);
-  if (p) return p;
+  if (p) { if (urgent) promote(kind); return p; }
   loader ??= new GLTFLoader();
   const ld = loader;
   progress.total++;
   p = (async () => {
-    await acquire();
+    await acquire(kind, urgent);
     try {
       const g = await ld.loadAsync(baseUrl() + DEFS[kind].url);
       let gun: THREE.Group | undefined;
@@ -537,7 +548,7 @@ function loadKind(kind: RigKind): Promise<void> {
 }
 
 /** Load these models in parallel; resolves when all are ready. */
-export const loadRigged = (kinds: RigKind[]): Promise<void> => Promise.all(kinds.map(loadKind)).then(() => {});
+export const loadRigged = (kinds: RigKind[]): Promise<void> => Promise.all(kinds.map(k => loadKind(k))).then(() => {});
 /** Load one model (for menu viewers / portraits that need exactly one). */
 export const ensureRigged = (kind: RigKind) => loadKind(kind);
 
@@ -551,6 +562,11 @@ const racesOf = (...f: string[]) => [...new Set(f)].filter((r): r is Race => r i
 export function loadMatchRigged(factions: string[], all = false): Promise<void> {
   const races = all ? (Object.keys(RACE) as Race[]) : racesOf(...factions);
   return loadRigged([...NEUTRAL, ...races.flatMap(r => RACE[r])]).then(() => { ready = true; });
+}
+
+/** Menu idle pre-load (desktop): these races' models at background priority, so a match start's own models load first. */
+export function preloadRiggedInBackground(factions: string[]): Promise<void> {
+  return Promise.all([...NEUTRAL, ...racesOf(...factions).flatMap(r => RACE[r])].map(k => loadKind(k, false))).then(() => {});
 }
 
 /** True once the starting models of the current match are in. */

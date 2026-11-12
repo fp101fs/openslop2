@@ -217,8 +217,13 @@ body, html {
   text-shadow: 0 1px 2px #000, 0 0 4px rgba(0, 0, 0, 0.85);
   pointer-events: none; /* only the headers take clicks, so the map shows through */
 }
-.sc2-objectives.intro { animation: objIntro 0.6s ease-out; }
+.sc2-objectives.intro { animation: objIntro 0.6s ease-out; overflow: hidden; }
 @keyframes objIntro { from { opacity: 0; transform: translateX(-14px); } to { opacity: 1; transform: none; } }
+/* shimmer-in: one soft light sweep across the panel (a single transformed layer, so it costs next to nothing) */
+.sc2-objectives.intro::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(100deg, transparent 35%, rgba(170, 255, 130, 0.16) 50%, transparent 65%);
+  transform: translateX(-100%); animation: objShimmer 1.3s ease-out 0.25s forwards; }
+@keyframes objShimmer { to { transform: translateX(100%); } }
 
 .sc2-objectives .o-head {
   display: flex;
@@ -243,7 +248,9 @@ body, html {
   filter: drop-shadow(0 0 3px rgba(116, 214, 60, 0.6));
   transition: transform 0.15s ease;
 }
-.sc2-objectives.collapsed .o-row, .sc2-objectives.collapsed .o-msg { display: none; }
+/* rows roll up / down smoothly (collapsed by the header click, or on their own ~10 s after they appear) */
+.sc2-objectives .o-row, .sc2-objectives .o-msg { max-height: 120px; overflow: hidden; transition: max-height 0.5s ease, opacity 0.4s ease, padding 0.5s ease, margin 0.5s ease; }
+.sc2-objectives.collapsed .o-row, .sc2-objectives.collapsed .o-msg { max-height: 0; opacity: 0; padding-top: 0; padding-bottom: 0; margin-top: 0; }
 .sc2-objectives.collapsed .o-tri { transform: rotate(90deg); }
 .sc2-objectives.collapsed .o-head { opacity: 0.75; }
 
@@ -263,7 +270,7 @@ body, html {
   background: rgba(20, 34, 12, 0.85);
   box-shadow: inset 0 0 4px rgba(116, 214, 60, 0.35), 0 0 4px rgba(116, 214, 60, 0.25);
 }
-.sc2-objectives .o-cnt { margin-left: 5px; color: #a8e27e; }
+.sc2-objectives .o-cnt { display: block; margin-top: 1px; font-size: 0.92em; color: #a8e27e; } /* "(3 Structures Remaining)" on its own line */
 .sc2-objectives .o-row.cur .o-text { color: #fff; }
 
 .sc2-objectives .o-row.done .o-text { color: #8a9590; }
@@ -2045,20 +2052,34 @@ html.touch-device:not(.touch-compact) .touch-grpwrap .grptoggle { min-width: 44p
 html.touch-device:not(.touch-compact) .touch-tools { display: none; flex-wrap: wrap; gap: 6px; max-width: 200px; }
 html.touch-device:not(.touch-compact) .touch-tools.open { display: flex; }
 
-/* ===================== Loading indicators (LoadingOverlay.ts) ===================== */
-.ld-card { position: fixed; inset: 0; z-index: 99990; display: flex; align-items: center; justify-content: center; background: #02060d; opacity: 0; pointer-events: none; transition: opacity .18s ease; }
-.ld-card.on { opacity: 1; pointer-events: auto; transition-duration: .12s; }
-.ld-bg { position: absolute; inset: -4%; background: url('/ui/openslop2_bg.jpg') center / cover no-repeat; filter: blur(14px) brightness(.4) saturate(1.2); }
-.ld-box { position: relative; width: min(420px, 78vw); text-align: center; font: 700 14px/1 Eurostile, 'Avenir Next', Arial, sans-serif; letter-spacing: .3em; text-transform: uppercase; color: #cfe4ff; text-shadow: 0 2px 8px #000; }
-.ld-bar { margin: 14px 0 12px; height: 6px; background: rgba(8,20,40,.85); border: 1px solid #1d63b8; overflow: hidden; }
-.ld-bar i { display: block; height: 100%; width: 40%; background: linear-gradient(90deg, transparent, #58b4ff, transparent); animation: ldbar 1.1s ease-in-out infinite; }
-.ld-sub { min-height: 1em; font-size: 11px; letter-spacing: .18em; color: #7fa6d6; }
-@keyframes ldbar { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
-.ld-pill { position: fixed; z-index: 99980; left: 50%; top: max(10px, env(safe-area-inset-top, 0px)); transform: translate(-50%, -8px); display: flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 16px; background: rgba(8,16,30,.88); border: 1px solid #1d63b8; color: #cfe4ff; font: 700 11px/1 Eurostile, 'Avenir Next', Arial, sans-serif; letter-spacing: .12em; text-transform: uppercase; opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease; }
-.ld-pill.on { opacity: 1; transform: translate(-50%, 0); }
-.ld-pill i { width: 10px; height: 10px; border-radius: 50%; border: 2px solid #58b4ff; border-top-color: transparent; animation: ldspin .8s linear infinite; }
-@keyframes ldspin { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce) { .ld-bar i, .ld-pill i { animation-duration: 3s; } }
+/* ===================== Start countdown modal (StartCountdown.ts) ===================== */
+.sc-modal { position: fixed; inset: 0; z-index: 99990; display: flex; align-items: center; justify-content: center;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  background: rgba(1,4,10,.5); opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+.sc-modal.on { opacity: 1; pointer-events: auto; }
+.sc-box { width: min(340px, 100%); padding: 22px 20px 20px; text-align: center; font-family: 'Exo', 'Avenir Next', Arial, sans-serif; color: #d7ebff;
+  background: linear-gradient(180deg, rgba(12,28,52,.96), rgba(4,12,26,.96)); border: 1px solid #2a6fc4; border-radius: 10px;
+  box-shadow: 0 0 0 1px rgba(88,180,255,.12), 0 18px 50px rgba(0,0,0,.6), 0 0 34px rgba(47,140,255,.18);
+  transform: translateY(6px) scale(.98); transition: transform .2s ease; }
+.sc-modal.on .sc-box { transform: none; }
+.sc-title { font-weight: 500; font-size: 14px; letter-spacing: .24em; text-transform: uppercase; color: #9cc6f2; }
+.sc-num { display: flex; align-items: center; justify-content: center; height: 84px; margin: 6px 0 14px; font-weight: 300; font-size: 68px; line-height: 1;
+  color: #fff; font-variant-numeric: tabular-nums; text-shadow: 0 0 18px rgba(88,180,255,.45); }
+.sc-num.txt { font-weight: 400; font-size: 20px; letter-spacing: .04em; color: #cfe4ff; text-shadow: none; }
+.sc-num.pop { animation: scpop .35s ease-out; }
+@keyframes scpop { from { transform: scale(1.18); opacity: .55; } to { transform: none; opacity: 1; } }
+.sc-btns { display: flex; gap: 10px; }
+.sc-btn { flex: 1; min-height: 46px; padding: 0 12px; border-radius: 6px; font: 600 15px/1 'Exo', 'Avenir Next', Arial, sans-serif; letter-spacing: .12em;
+  text-transform: uppercase; cursor: pointer; touch-action: manipulation; transition: background .15s ease, opacity .15s ease, border-color .15s ease; }
+.sc-btn.play { color: #fff; background: linear-gradient(#2f8cff, #1d5fb8); border: 1px solid #6bbcff; }
+.sc-btn.play:disabled { opacity: .4; cursor: default; filter: saturate(.4); }
+.sc-btn.play.on:not(:disabled):hover { background: linear-gradient(#4aa0ff, #2a6fc4); }
+.sc-btn.cancel { color: #cfe4ff; background: rgba(8,20,40,.6); border: 1px solid #35557c; }
+.sc-btn.cancel:hover { border-color: #6b8fbc; background: rgba(20,40,70,.7); }
+.sc-btn:focus-visible { outline: 2px solid #8fd0ff; outline-offset: 2px; }
+@media (max-height: 420px) { .sc-box { padding: 14px 16px; } .sc-num { height: 60px; font-size: 50px; margin: 2px 0 10px; } .sc-btn { min-height: 40px; } }
+@media (prefers-reduced-motion: reduce) { .sc2-objectives.intro::after { animation: none; display: none; } .sc2-objectives .o-row, .sc2-objectives .o-msg { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .sc-num.pop { animation: none; } .sc-box { transition: none; } }
 
 /* ===== SC2-style selection bar (single / structure / many) ===== */
 .console-selection-panel.sb-wrap { padding: 0; max-width: 700px; justify-content: stretch; background: none; border: 0; border-radius: 0; box-shadow: none; overflow: visible; }
@@ -2187,3 +2208,7 @@ html.touch-compact .touch-grpwrap { bottom: calc(max(8px, env(safe-area-inset-bo
 html.touch-compact .quick-select { left: max(8px, env(safe-area-inset-left, 0px)); }
 html.touch-device:not(.touch-compact) .touch-grpwrap { bottom: 282px; }
 html.touch-device:not(.touch-compact) .quick-select { left: 8px; }
+
+/* Menu 3D model viewers fade out (and stop drawing, ui/menu3d.ts) while the start modal is up */
+.titlehero, .hero3d canvas, .livefig { transition: opacity 0.35s ease-out; }
+body.menu3d-off .titlehero, body.menu3d-off .hero3d canvas, body.menu3d-off .livefig { opacity: 0 !important; transition: opacity 0.2s ease-in !important; }

@@ -8,7 +8,7 @@
  */
 
 /** OpenSlop II Web: the game (also package.json "version"). */
-export const GAME_VERSION = '0.5.0';
+export const GAME_VERSION = '0.6.0';
 
 /** Tools and servers, versioned on their own. */
 export const TOOL_VERSIONS = {

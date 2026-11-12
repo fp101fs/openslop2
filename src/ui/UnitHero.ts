@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { buildRigged, ensureRigged, RigInstance, RigKind } from '../graphics/RiggedModels';
+import { menu3dPaused } from './menu3d';
 
 /**
  * Live 3D "hero" render of any in-game unit model for the menu screens (campaign race select, co-op commanders, 1v1 backdrop).
@@ -132,6 +133,7 @@ class UnitHeroImpl {
   private loop = () => {
     this.raf = requestAnimationFrame(this.loop);
     if (!this.renderer || !this.host || !this.host.isConnected) { if (this.host && !this.host.isConnected) this.hide(); return; }
+    if (menu3dPaused()) { this.clock.getDelta(); return; } // start modal up: no drawing
     const dt = Math.min(0.05, this.clock.getDelta());
     const c = this.cur;
     if (c) {
@@ -253,6 +255,7 @@ class UnitHeroImpl {
     this.figs = this.figs.filter(f => { if (f.el.isConnected) return true; f.cv.remove(); return false; });
     const r = this.figR;
     if (!r || !this.figs.length) { this.stopLiveFigures(); return; }
+    if (menu3dPaused()) { this.figClock.getDelta(); return; }
     const dt = Math.min(0.05, this.figClock.getDelta());
     r.setSize(360, 560, false);
     for (const f of this.figs) {

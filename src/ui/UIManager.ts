@@ -74,6 +74,9 @@ export class UIManager {
   private objectiveText = '';
   /** Player folded the list away by tapping its header. */
   private objectivesCollapsed = false;
+  /** The player collapsed the list themselves: it stays collapsed (no auto open / roll-up). */
+  private objectivesUserCollapsed = false;
+  private objRollTimer = 0;
 
   // Possessed Unit (3rd-Person Crimson Skies / 1st-Person Ace Combat + IL-2) HUD Elements
   private fpsOverlayEl!: HTMLElement;
@@ -552,8 +555,9 @@ export class UIManager {
     this.missionObjectiveWidgetEl?.addEventListener('click', (e) => {
       if (!(e.target as HTMLElement).closest('.o-head')) return;
       e.stopPropagation();
-      this.objectivesCollapsed = !this.objectivesCollapsed;
-      this.missionObjectiveWidgetEl.classList.toggle('collapsed', this.objectivesCollapsed);
+      window.clearTimeout(this.objRollTimer);
+      this.setObjectivesCollapsed(!this.objectivesCollapsed);
+      this.objectivesUserCollapsed = this.objectivesCollapsed;
     });
 
     // Music Volume Slider & Track Selector
@@ -614,12 +618,27 @@ export class UIManager {
     }, 450);
   }
 
-  /** Show the objective list (fades in the first time). */
+  /** Show the objective list (fades and shimmers in the first time), then roll it up after a while. */
   public showObjectives() {
     const el = this.missionObjectiveWidgetEl;
     if (el.style.display !== 'none') return;
     el.style.display = 'block';
     el.classList.remove('intro'); void el.offsetWidth; el.classList.add('intro');
+    this.objectivesUserCollapsed = false;
+    this.revealObjectives();
+  }
+
+  /** Unroll the list (unless the player collapsed it) and roll it up again ~10 s later; the header still toggles it. */
+  private revealObjectives() {
+    if (this.objectivesUserCollapsed) return;
+    this.setObjectivesCollapsed(false);
+    window.clearTimeout(this.objRollTimer);
+    this.objRollTimer = window.setTimeout(() => { if (!this.objectivesUserCollapsed) this.setObjectivesCollapsed(true); }, 10_000);
+  }
+
+  private setObjectivesCollapsed(on: boolean) {
+    this.objectivesCollapsed = on;
+    this.missionObjectiveWidgetEl.classList.toggle('collapsed', on);
   }
 
   public showToast(message: string, isError: boolean = false) {
@@ -732,7 +751,10 @@ export class UIManager {
       this.lastObjVersion = rt.version;
       this.showObjectives();
       this.lastObjProgressKey = '';
-      for (const ev of rt.log.splice(0)) {
+      const evs = rt.log.splice(0);
+      // a new, completed or failed objective unrolls the list again (kill-count ticks do not)
+      if (evs.some(ev => ev.kind !== 'progress' && !rt.objectives.get(ev.id)?.def.passive)) this.revealObjectives();
+      for (const ev of evs) {
         const o = rt.objectives.get(ev.id);
         if (!o || o.def.passive) continue;
         if (ev.kind === 'complete') this.showToast(`✔ ${o.def.kind === 'bonus' ? 'Bonus objective' : 'Objective'} complete: ${o.def.text}`);

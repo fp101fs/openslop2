@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { buildRigged, ensureRigged, RigInstance, type RigKind } from '../graphics/RiggedModels';
+import { menu3dPaused } from './menu3d';
 
 /**
  * Title-screen hero: one animated unit, picked at random per page load, lazy-loaded once the page is idle.
@@ -78,6 +79,7 @@ class TitleHeroImpl {
     const loop = () => {
       this.raf = requestAnimationFrame(loop);
       if (!this.host?.isConnected) { this.unmount(); return; }
+      if (menu3dPaused()) { this.clock.getDelta(); return; } // start modal up: no drawing
       this.tickUnit(Math.min(0.05, this.clock.getDelta()));
       r.render(this.scene, this.camera);
       // start the fade once a couple of frames are drawn (textures uploaded), so the transition itself runs smoothly
