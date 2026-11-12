@@ -125,6 +125,23 @@ test('PvP lockstep: both worlds stay identical through orders and a fight', asyn
   expect(lost(m.gw, 'marine') + lost(m.gw, 'zealot')).toBe(lost(m.hw, 'marine') + lost(m.hw, 'zealot'));
 }, 120000);
 
+test('start handshake: nobody runs before the guest has the starting state, and a lost keyframe is asked for again', async () => {
+  const m = await match('multiplayer_coop');
+  // lose everything the host sends at first (the guest was still loading models when it went out)
+  const realEmit = m.net.guest.emit;
+  m.net.guest.emit = () => {};
+  await m.run(1);
+  expect(m.host.isStarted).toBe(false);
+  expect(m.guest.isStarted).toBe(false);
+  expect(m.hw.gameTime).toBe(0);
+  m.net.guest.emit = realEmit;
+  await m.run(6); // the guest asks again after a few seconds
+  expect(m.guest.isStarted).toBe(true);
+  expect(m.host.isStarted).toBe(true);
+  expect(m.hw.gameTime).toBeGreaterThan(0.5);
+  expect(m.host.stats.desyncs).toBe(0);
+}, 120000);
+
 test('a desync is detected and healed by a keyframe', async () => {
   const m = await match('multiplayer_coop');
   await m.run(2);
@@ -160,9 +177,10 @@ test.each([
 ] as const)('lockstep keeps the two worlds bit-for-bit equal (%s, %s vs %s)', async (mode, a, b) => {
   const m = await match(mode, 'lockstep', [a, b]);
   await m.run(10);
-  // freeze the host and let the guest catch up to the same tick, then compare
-  for (let i = 0; i < 400 && m.gw.gameTime < m.hw.gameTime - 1e-9; i++) {
-    m.guest.advance(1 / 60, dt => m.gw.update(dt));
+  // freeze the side that is ahead and let the other catch up to the same tick, then compare
+  for (let i = 0; i < 400 && Math.abs(m.gw.gameTime - m.hw.gameTime) > 1e-9; i++) {
+    if (m.gw.gameTime < m.hw.gameTime) m.guest.advance(1 / 60, dt => m.gw.update(dt));
+    else m.host.advance(1 / 60, dt => m.hw.update(dt));
     m.net.deliver(m.frameAt() + i);
   }
   expect(m.gw.gameTime).toBeCloseTo(m.hw.gameTime, 6);

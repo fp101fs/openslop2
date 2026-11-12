@@ -25,6 +25,7 @@ import { cursorCss } from './input/Cursors';
 import { MainMenu } from './ui/MainMenu';
 import { NetTransport } from './net/NetClient';
 import { NetSync } from './net/NetSync';
+import { NetTrace, debugOn as netDebugOn } from './net/netTrace';
 import { Chat } from './net/Chat';
 import { startPresence } from './net/Presence';
 import { Loading } from './ui/LoadingOverlay';
@@ -732,7 +733,7 @@ export class StarCraftApp {
     net.advance(dt, step => this.world.update(step));
     // a short "waiting" toast when the other player's orders are late (lag spike, background tab)
     const now = performance.now();
-    if (!net.waiting) this.waitingSince = 0;
+    if (!net.waiting || !net.isStarted) this.waitingSince = 0;
     else if (!this.waitingSince) this.waitingSince = now;
     else if (now - this.waitingSince > 1500) { this.ui.showToast('Waiting for the other player…'); this.waitingSince = now + 3000; }
   }
@@ -742,11 +743,30 @@ export class StarCraftApp {
    * match config, so both always agree.
    */
   public startMultiplayer(role: 'host' | 'guest', partial: Partial<MatchConfig>, client: NetTransport) {
+    NetTrace.reset();
+    NetTrace.mark('start_pressed', { role });
+    // Game messages can arrive while our models load (the host's starting keyframe, its first turns): keep them for NetSync
+    const early: unknown[] = [];
+    const offEarly = client.on(m => { if ((m as any)?.t !== 'start') early.push(m); });
     const f = { ...this.world.matchConfig, ...partial };
-    void loadMatchRigged([f.playerFaction, f.enemyFaction]).then(() => this.startMultiplayerNow(role, partial, client));
+    void Loading.show('Preparing battlefield', 'Loading units').then(async () => {
+      try {
+        await this.prepareMatchAssets(f);
+        NetTrace.mark('assets_ready');
+        this.startMultiplayerNow(role, partial, client, early, offEarly);
+      } catch (e) { offEarly(); Loading.hide(); throw e; }
+    });
   }
 
-  private startMultiplayerNow(role: 'host' | 'guest', partial: Partial<MatchConfig>, client: NetTransport) {
+  /** `gameApp.netTrace()`: the multiplayer timing trace (start timeline, stalls), plus the latest load numbers of both sides. */
+  public netTrace(): string {
+    const net = this.world.net as NetSync | null;
+    const out = NetTrace.format() + (net ? `\nus: ${JSON.stringify(net.localStats)}\nthem: ${JSON.stringify(net.remoteStats)}` : '');
+    console.info(out);
+    return out;
+  }
+
+  private startMultiplayerNow(role: 'host' | 'guest', partial: Partial<MatchConfig>, client: NetTransport, early: unknown[], offEarly: () => void) {
     this.leaveNet();
     this.prepareForNewMatch();
     this.netClient = client;
@@ -763,8 +783,37 @@ export class StarCraftApp {
     this.startHiddenPump();
     this.menu.close();
     this.finishMatchSetup(this.world.matchConfig, this.objectiveFor(this.world.matchConfig));
-    this.ui.triggerMissionObjectiveIntro();
-    this.ui.showToast(role === 'host' ? 'Match started — you are the host' : 'Connected to host — good luck, Commander!');
+    const go = () => {
+      Loading.hide();
+      this.ui.triggerMissionObjectiveIntro();
+      this.ui.showToast(role === 'host' ? 'Match started — you are the host' : 'Connected to host — good luck, Commander!');
+    };
+    // lockstep: the loading card stays up until both computers hold the same starting state and start together
+    sync.onStarted = go;
+    offEarly();
+    sync.feed(early);
+    if (sync.isStarted) go();
+    else {
+      Loading.sub(role === 'host' ? 'Waiting for the other player to load' : 'Receiving the battlefield from the host');
+      window.setTimeout(() => { if (this.world.net === sync && !sync.isStarted) Loading.sub('Still waiting for the other player…'); }, 20000);
+    }
+    if (netDebugOn()) this.startNetOverlay(sync);
+  }
+
+  /** `?netdebug=1`: a small live read-out of both sides' frame rate, simulation time, waits and round trip (for phones). */
+  private startNetOverlay(sync: NetSync) {
+    let el = document.getElementById('net-debug');
+    if (!el) {
+      el = document.createElement('pre');
+      el.id = 'net-debug';
+      el.style.cssText = 'position:fixed;left:8px;top:48px;z-index:9999;margin:0;padding:6px 8px;font:11px/1.35 monospace;color:#cfe;background:rgba(0,0,0,.7);border-radius:6px;pointer-events:none;white-space:pre';
+      document.body.appendChild(el);
+    }
+    const line = (s: NetSync['localStats']) => s ? `${s.fps}fps sim ${s.simAvg}/${s.simMax}ms frame≤${s.frameMax}ms wait ${s.waitMs}ms/${s.waits}` : '…';
+    const timer = window.setInterval(() => {
+      if (this.world.net !== sync) { window.clearInterval(timer); el!.remove(); return; }
+      el!.textContent = `${sync.role} ${sync.mode} turn ${sync.localStats?.turn ?? 0} rtt ${sync.localStats?.rtt ?? '?'}ms\nus   ${line(sync.localStats)}\nthem ${line(sync.remoteStats)}`;
+    }, 1000);
   }
 
   /**
@@ -774,6 +823,7 @@ export class StarCraftApp {
   private onPeerLost(role: 'host' | 'guest') {
     const sync = this.world.net as NetSync | null;
     if (!sync || this.world.isGameOver) return;
+    Loading.hide();
     const pvp = this.world.matchConfig.mode === 'multiplayer_pvp';
     if (pvp) {
       this.ui.showToast(role === 'host' ? 'Your opponent disconnected' : 'Lost connection to the host', true);
