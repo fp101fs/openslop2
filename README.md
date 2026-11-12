@@ -5,7 +5,7 @@ Engineered to take **full advantage of Apple Silicon M1 (Metal GPU & ARM64 CPU)*
 
 > OpenSlop II is an unofficial fan project. StarCraft is a trademark of Blizzard Entertainment; OpenSlop II is not affiliated with or endorsed by Blizzard.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ffp101fs%2Fopenslop2&project-name=openslop2&repository-name=openslop2) &nbsp;**Your own OpenSlop II server, free, in one click** ([with game list](#-deploy-your-own-server-one-click-vercel))
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ffp101fs%2Fopenslop2&project-name=openslop2&repository-name=openslop2) &nbsp;**Your own OpenSlop II server, free, in one click** (*or* deploy [WITH game list](#-deploy-your-own-server-one-click-vercel))
 
 ### Message from the Meat Proxy
 
