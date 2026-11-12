@@ -147,7 +147,7 @@ function App() {
           {list.map(m => <option key={`${m.campaign}/${m.key}`} value={`${m.campaign}/${m.key}`}>{m.campaign.toUpperCase()} {m.order}. {m.title}{m.data ? '' : ' (code, read-only)'}</option>)}
         </select>
         <button onClick={newMission}>New</button>
-        <label className="btn">Import<input type="file" accept=".openslop2mission,.opensc2mission,application/json" hidden onChange={e => e.target.files?.[0] && importFile(e.target.files[0])} /></label>
+        <label className="btn">Import<input type="file" accept=".openslop2mission,application/json" hidden onChange={e => e.target.files?.[0] && importFile(e.target.files[0])} /></label>
         <button onClick={exportFile} disabled={!store}>Export</button>
         <span className="sep" />
         <button onClick={() => store?.undo()} disabled={!store?.canUndo} title="Ctrl/Cmd+Z">↶ Undo</button>

@@ -20,7 +20,7 @@ One click gives you your own online server with a public URL (see [Deploy your o
 | **OpenSlop II Mission Builder** | Editor for `.openslop2mission` files (`bun run mission-builder`) |
 | **OpenSlop II Voice Studio** | Text-to-speech tool for unit voice lines (`tools/voice-studio`) |
 
-The project was called Slopcraft II and then opensc2. Files use `.openslop2mission` and `.openslop2save`.
+The project was called Slopcraft II. Files use `.openslop2mission` and `.openslop2save`.
 
 ### Public repo
 
