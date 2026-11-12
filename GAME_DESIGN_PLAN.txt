@@ -1,0 +1,172 @@
+# GAME DESIGN PLAN & ARCHITECTURE SPECIFICATION
+# Project: Future Humanity - 3-Faction RTS (SC2 Engine)
+
+================================================================================
+1. CORE PREMISE & WORLD BUILDING
+================================================================================
+
+Essentially StarCraft II mechanics, but instead of alien species, three competing 
+branches of future humanity.
+
+The factions are technologically and visually distinct, not simply modern countries 
+with futuristic weapons. They are fictional successor civilizations inspired by 
+those historical traditions rather than simplistic national stereotypes.
+
+CENTRAL PREMISE:
+Humanity has successfully colonized the solar system. Earth and the interplanetary 
+colonies have fractured into three competing civilizations, and all three fiercely 
+believe they represent humanity's rightful evolutionary and societal future.
+
+================================================================================
+2. THE THREE FACTIONS
+================================================================================
+
+--------------------------------------------------------------------------------
+FACTION 1: RED — THE EAST (The Ascendant Collective)
+--------------------------------------------------------------------------------
+Concept: Collective / Technocratic civilization.
+Inspiration: East Asia-inspired future technocracy.
+Focus: Mass production, AI coordination, robotics, automated swarms, precision 
+manufacturing, and networked machine intelligence.
+
+Core Capabilities & Themes:
+- Autonomous combat drones & airborne swarm matrices
+- Heavy bipedal and quadrupedal walking mechs
+- Nanotechnology rapid repair and automated fabrication field units
+- Long-range hyper-velocity railgun artillery
+- Cybernetically linked, AI-coordinated drone infantry
+
+Gameplay Identity:
+- Numbers, automation, overwhelming scalable production, synchronized swarm tactics.
+
+--------------------------------------------------------------------------------
+FACTION 2: BLUE — THE WEST (The Atlantic Federation)
+--------------------------------------------------------------------------------
+Concept: Federation / Military-industrial civilization.
+Inspiration: North America, Europe, Australia-inspired defense-industrial complex.
+Focus: Advanced military engineering, individual combat superiority, aerospace 
+mastery, directional energy weapons, and high-tier defensive shielding.
+
+Core Capabilities & Themes:
+- Elite powered exoskeleton infantry (CMC Marines, Juggernauts)
+- Advanced aerospace fighters and active-camouflage stealth aircraft
+- Tactical localized nuclear and plasma strike ordnance
+- Regenerative kinetic and energy deflection shields
+- Heavy modular combat vehicles, siege tanks, and dropships
+
+Gameplay Identity:
+- Elite units, immense focused firepower, tactical mobility, survivability, and fortification.
+
+--------------------------------------------------------------------------------
+FACTION 3: PURPLE — THE OUTLANDS (The Transhuman Diaspora)
+--------------------------------------------------------------------------------
+Concept: Independent / Transhuman civilization.
+Inspiration: Africa, Middle East, South America, India, and outer rim frontiers.
+Focus: Decentralized command, radical experimentation, synthetic biology, 
+accelerated genetic engineering, nanite swarms, and asymmetrical warfare.
+
+Core Capabilities & Themes:
+- Bioengineered infantry and synthetic bio-soldiers
+- Living, self-mutating combat organisms and bio-structures
+- Nanite clouds capable of disabling, corroding, and consuming enemy mechanical hulls
+- Adaptive reactive camouflage and cloaked ambush organisms
+- Genetic super-soldiers with rapid cellular regeneration
+
+Gameplay Identity:
+- Dynamic adaptation, tactical disruption, debuffs, shape-shifting, and unconventional warfare.
+
+================================================================================
+3. STRATEGIC MATRIX & GAMEPLAY IDENTITIES
+================================================================================
+
+| Faction | Primary Color | Gameplay Identity                              | Strategic Focus                             |
+|---------|---------------|------------------------------------------------|---------------------------------------------|
+| RED     | Crimson Red   | Numbers, automation, overwhelming production   | Swarm drones, railguns, auto-production     |
+| BLUE    | Cobalt Blue   | Elite units, firepower, mobility, defense      | Heavy armor, shields, energy weapons        |
+| PURPLE  | Deep Violet   | Adaptation, disruption, unconventional tactics | Biotech mutation, nanites, shape-shifting   |
+
+================================================================================
+4. KEY FUTURISTIC UNIT ROSTER (EXAMPLES & CONCEPTS)
+================================================================================
+
+[RED - The East]
+- Swarm Carrier: Massive command platform that deploys and coordinates dozens of 
+  miniature lethal attack drones simultaneously.
+- Railgun Tank: Heavy armored mobile chassis with extreme range and devastating 
+  line-penetration projectile weaponry.
+- Automated Combat Drone: Cheap, rapid-fabrication autonomous skirmisher unit.
+- Nanite Fabricator: Mobile nanotech repair and assembly walker.
+
+[BLUE - The West]
+- Juggernaut: Slow, heavily armored super-infantry equipped with dual rotary 
+  autocannons and ballistic plating (280 HP, 3 Armor).
+- Phantom: High-tech aerospace fighter with active thermal stealth, reconnaissance, 
+  and targeted assassination munitions.
+- Powered Marine: Frontline combat infantry with Gauss kinetic rifles and 
+  stimpack combat stimulants.
+- Siege Platform: Mobile multi-role artillery system with deployable shock cannons.
+
+[PURPLE - The Outlands]
+- Shifter: Morphogenetic combat unit capable of dynamically altering its physical 
+  morphology in real time to counter specific enemy armor and unit classes.
+- Nanite Cloud: Semi-sentient aerosol cloud that corrodes, disables, and 
+  gradually consumes enemy machinery and structures while healing bio-allies.
+- Bio-Stalker: Agile genetic predator with cloaking and neurotoxin spit.
+- Regenerative Brood-Tank: Living organic assault beast that regenerates rapidly 
+  out of combat.
+
+================================================================================
+5. TACTICAL AI & BEHAVIOR SUBROUTINE UPGRADE SYSTEM (PROGRAMMABLE BEHAVIORS)
+================================================================================
+
+A central innovative mechanic allowing commanders to customize and upgrade 
+behavioral routines ("AI logic scripts") for individual units, entire unit types, 
+or the army as a whole.
+
+A. Scope Levels:
+1. Individual Unit: Select a specific veteran unit or commander unit and assign 
+   tailored behavioral rules.
+2. Unit Class / Type: Configure doctrine for all Marines, all Juggernauts, 
+   all Swarm Drones, etc.
+3. Global Army: Set civilization-wide stance and target acquisition doctrine.
+
+B. Upgradeable Behavioral Modules / Routine Trees:
+- Target Prioritization Matrix:
+  * Prioritize low-health enemies (focus fire to eliminate DPS)
+  * Prioritize armored / high-threat siege units
+  * Prioritize enemy repair / spellcaster units (e.g., Medivacs / Nanite Fabricators)
+  * Target nearest threat (default)
+
+- Engagement & Kiting Doctrine:
+  * Dynamic Stutter-Step / Hit-and-Run: Automatically fire and step back against 
+    slower melee or short-range units.
+  * Hold Fire / Ambush Stance: Stay silent and cloaked until high-value targets 
+    enter optimal kill zones.
+  * Bodyguard / Escort Protocol: Automatically orbit and protect vulnerable siege 
+    platforms or transport units.
+
+- Tactical Self-Preservation:
+  * Tactical Retreat Threshold: Unit automatically breaks off and retreats to base 
+    or friendly repair aura when falling below 25% HP.
+  * Stimpack / Ability Trigger Rule: Automatically inject combat stims when 
+    engaging 3+ hostiles, but never below 30 HP.
+  * Nanite / Shield Overcharge Routine: Automatically pop emergency defense matrix 
+    when taking heavy burst damage.
+
+C. Progression & Economy:
+- Purchased through dedicated research facilities (e.g., Red "Neural Core", 
+  Blue "Tactical Command Matrix", Purple "Synaptic Nexus").
+- Unlocks both automated routine slots and reactive behavioral behaviors that 
+  reward tactical macro and micro play.
+
+================================================================================
+6. ENGINE & MULTI-VIEW ARCHITECTURE
+================================================================================
+- RTS View: Classic isometric strategic command, drag-box marquee, control groups, 
+  fog of war, minimap, macro production, and base building.
+- First-Person View (FPS Mode): Direct unit cockpit/visor zoom, mouse look, WASD 
+  locomotion, and manual weapon firing with high-visibility projectiles.
+- Third-Person View (TPS Mode): Over-the-shoulder action perspective keeping full 
+  unit 3D model visible in action with pinch zoom follow distance.
+- Hardware Target: Metal GPU acceleration on Apple Silicon (M1/M2/M3) + 
+  DirectX 12/Vulkan on Windows via modern high-performance WebGL2 pipeline.

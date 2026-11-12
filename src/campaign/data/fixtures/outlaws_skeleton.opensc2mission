@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "key": "outlaws_skeleton",
+  "campaign": "test",
+  "order": 2,
+  "chapter": "Mar Sara",
+  "title": "The Outlaws (skeleton)",
+  "subtitle": "Format check for Mission 2",
+  "playerFaction": "terran",
+  "enemyFaction": "terran",
+  "briefing": "Checks that WoL 2's mechanics fit the data format: base building, rescuing an allied base, raider waves, resource pallets.",
+  "spec": "docs/campaign/wol/02-the-outlaws/README.md",
+  "noPlayerBase": false,
+  "startingMinerals": 400,
+  "startingGas": 0,
+  "startingUnits": [{ "type": "marine", "count": 6 }],
+  "map": {
+    "name": "Outlaws skeleton", "subtitle": "", "description": "", "size": 128, "theme": "marsara", "baseTier": 1,
+    "bases": [{ "th": [24, 104], "face": 0.785, "kind": "main", "minerals": [], "geysers": [] }, { "th": [104, 24], "face": 3.93, "kind": "main", "minerals": [], "geysers": [] }],
+    "home": 0, "foe": 1
+  },
+  "regions": [{ "id": "outlaw_camp", "name": "Rebel base (west)", "shape": { "k": "ell", "x": 20, "y": 60, "rx": 7, "ry": 7 } }],
+  "paths": [{ "id": "raid", "pts": [[60, 40], [40, 55], [20, 60]] }],
+  "groups": [
+    { "id": "outlaws", "owner": "player", "at": [18, 60], "spawn": "start", "scripted": true, "units": [{ "type": "marine", "count": 4 }, { "type": "medic", "count": 2 }], "note": "Allied rebels: not controllable until rescued" },
+    { "id": "outlaw_base", "owner": "player", "at": [14, 56], "spawn": "start", "scripted": true, "units": [{ "type": "barracks", "count": 1 }] },
+    { "id": "raiders", "owner": "enemy", "at": [64, 36], "spawn": "trigger", "units": [{ "type": "marine", "count": { "casual": 3, "normal": 4, "hard": 5, "brutal": 6 } }], "behavior": { "kind": "attackMove", "path": "raid" } },
+    { "id": "dig", "owner": "enemy", "at": [100, 30], "spawn": "start", "units": [{ "type": "command_center", "count": 1 }, { "type": "barracks", "count": 1 }, { "type": "bunker", "count": 1 }], "spread": 6 },
+    { "id": "dig_guard", "owner": "enemy", "at": [92, 38], "spawn": "start", "units": [{ "type": "marine", "count": 8 }, { "type": "hellion", "count": 2 }], "behavior": { "kind": "hold" } }
+  ],
+  "pickups": [
+    { "id": "pallet1", "at": [40, 90], "minerals": 100 },
+    { "id": "pallet2", "at": [52, 76], "minerals": 100 },
+    { "id": "pallet3", "at": [70, 70], "minerals": 100, "gas": 50 }
+  ],
+  "objectives": [
+    { "id": "dig", "text": "Destroy the Dominion base", "kind": "primary" },
+    { "id": "outlaws", "text": "Rescue the rebels", "kind": "bonus" }
+  ],
+  "speakers": { "raynor": { "name": "Jim Raynor", "voice": "am_michael", "unit": "marine" }, "rebel": { "name": "Rebel", "voice": "am_echo", "unit": "marine" } },
+  "dialogue": [
+    { "id": "help", "speaker": "rebel", "text": "Raynor! The Dominion is hitting our base, we need help!" },
+    { "id": "saved", "speaker": "rebel", "text": "We're with you now, Raynor." },
+    { "id": "supplies", "speaker": "raynor", "text": "That's every pallet. Let's put it to use." }
+  ],
+  "triggers": [
+    { "id": "intro", "when": { "k": "start" }, "do": [{ "a": "say", "line": "help" }] },
+    { "id": "raids", "when": { "k": "every", "sec": 70 }, "if": [{ "k": "objective", "id": "outlaws", "status": "active" }], "do": [{ "a": "spawn", "group": "raiders" }], "note": "Waves on the rebel base until it is reached (interval UNVERIFIED)" },
+    { "id": "rescue", "when": { "k": "enter", "region": "outlaw_camp", "who": "player" }, "do": [{ "a": "transfer", "group": "outlaws", "to": "player" }, { "a": "transfer", "group": "outlaw_base", "to": "player" }, { "a": "objective", "id": "outlaws", "op": "complete" }, { "a": "say", "line": "saved" }] },
+    { "id": "all_supplies", "when": { "k": "pickup", "n": 3 }, "do": [{ "a": "say", "line": "supplies" }] },
+    { "id": "dig_down", "when": { "k": "wiped", "group": "dig" }, "do": [{ "a": "objective", "id": "dig", "op": "complete" }] }
+  ]
+}

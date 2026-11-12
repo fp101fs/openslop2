@@ -1,0 +1,1216 @@
+{
+ "faction": "terran",
+ "voices": {
+  "marine": {
+   "voice": "am_adam",
+   "gender": "male"
+  },
+  "marauder": {
+   "voice": "am_onyx",
+   "gender": "male"
+  },
+  "siege_tank": {
+   "voice": "am_michael",
+   "gender": "male"
+  },
+  "siege_tank_sieged": {
+   "voice": "am_michael",
+   "gender": "male"
+  },
+  "scv": {
+   "voice": "af_sarah",
+   "gender": "female"
+  },
+  "medivac": {
+   "voice": "af_heart",
+   "gender": "female"
+  },
+  "wraith": {
+   "voice": "bf_emma",
+   "gender": "female"
+  },
+  "banshee": {
+   "voice": "af_nova",
+   "gender": "female"
+  },
+  "adjutant": {
+   "voice": "af_nicole",
+   "gender": "female"
+  },
+  "goliath": {
+   "voice": "am_eric",
+   "gender": "male"
+  },
+  "thor": {
+   "voice": "bm_lewis",
+   "gender": "male"
+  }
+ },
+ "clips": {
+  "adjutant": {
+   "army_attack": [
+    {
+     "file": "adjutant/army_attack_0.mp3",
+     "hash": "7502ba1ec5",
+     "text": "Our forces are under attack."
+    },
+    {
+     "file": "adjutant/army_attack_1.mp3",
+     "hash": "4b7c6977dd",
+     "text": "Units are under attack, commander."
+    },
+    {
+     "file": "adjutant/army_attack_2.mp3",
+     "hash": "e50e726b4b",
+     "text": "We are taking fire."
+    }
+   ],
+   "base_attack": [
+    {
+     "file": "adjutant/base_attack_0.mp3",
+     "hash": "4fd7a26a7f",
+     "text": "Our base is under attack."
+    },
+    {
+     "file": "adjutant/base_attack_1.mp3",
+     "hash": "44b116b0e1",
+     "text": "Structures are under attack, commander."
+    },
+    {
+     "file": "adjutant/base_attack_2.mp3",
+     "hash": "81716290c9",
+     "text": "Base under attack."
+    }
+   ],
+   "construction": [
+    {
+     "file": "adjutant/construction_0.mp3",
+     "hash": "36a951a0c8",
+     "text": "Construction complete."
+    },
+    {
+     "file": "adjutant/construction_1.mp3",
+     "hash": "507615d945",
+     "text": "Structure complete."
+    }
+   ],
+   "defeat": [
+    {
+     "file": "adjutant/defeat_0.mp3",
+     "hash": "a3b304a583",
+     "text": "Mission failed. All forces lost."
+    }
+   ],
+   "energy": [
+    {
+     "file": "adjutant/energy_0.mp3",
+     "hash": "0d559ac8c1",
+     "text": "Not enough energy."
+    }
+   ],
+   "gas": [
+    {
+     "file": "adjutant/gas_0.mp3",
+     "hash": "85ff4aaf2b",
+     "text": "Not enough vespene gas."
+    },
+    {
+     "file": "adjutant/gas_1.mp3",
+     "hash": "8fd4e9a2b3",
+     "text": "We require additional vespene gas."
+    }
+   ],
+   "incoming": [
+    {
+     "file": "adjutant/incoming_0.mp3",
+     "hash": "b5b382b9bb",
+     "text": "Enemy forces approaching."
+    },
+    {
+     "file": "adjutant/incoming_1.mp3",
+     "hash": "1798387e8a",
+     "text": "Hostile strike force detected."
+    },
+    {
+     "file": "adjutant/incoming_2.mp3",
+     "hash": "abd4b4c756",
+     "text": "Warning. Enemy attack wave inbound."
+    }
+   ],
+   "minerals": [
+    {
+     "file": "adjutant/minerals_0.mp3",
+     "hash": "0db59e90c8",
+     "text": "Not enough minerals."
+    },
+    {
+     "file": "adjutant/minerals_1.mp3",
+     "hash": "2f6cb9e7dc",
+     "text": "We require additional minerals."
+    }
+   ],
+   "research": [
+    {
+     "file": "adjutant/research_0.mp3",
+     "hash": "c197e72866",
+     "text": "Research complete."
+    },
+    {
+     "file": "adjutant/research_1.mp3",
+     "hash": "fd4738fab0",
+     "text": "Upgrade complete."
+    },
+    {
+     "file": "adjutant/research_2.mp3",
+     "hash": "8bbcddaf8e",
+     "text": "Technology research complete."
+    }
+   ],
+   "scan": [
+    {
+     "file": "adjutant/scan_0.mp3",
+     "hash": "380fac3149",
+     "text": "Scanner sweep initiated."
+    }
+   ],
+   "supply": [
+    {
+     "file": "adjutant/supply_0.mp3",
+     "hash": "4b44b1ba99",
+     "text": "You must construct additional supply depots."
+    },
+    {
+     "file": "adjutant/supply_1.mp3",
+     "hash": "d2366a8f03",
+     "text": "Supply capacity reached. Supply depot required."
+    }
+   ],
+   "victory": [
+    {
+     "file": "adjutant/victory_0.mp3",
+     "hash": "491a225da1",
+     "text": "Mission accomplished. Sector secured."
+    }
+   ]
+  },
+  "banshee": {
+   "attack": [
+    {
+     "file": "banshee/attack_0.mp3",
+     "hash": "477c756ff8",
+     "text": "Tearing 'em up!"
+    },
+    {
+     "file": "banshee/attack_1.mp3",
+     "hash": "f7e7cd53c7",
+     "text": "Hellfire inbound."
+    },
+    {
+     "file": "banshee/attack_2.mp3",
+     "hash": "dfc4b827f9",
+     "text": "Death from above."
+    }
+   ],
+   "move": [
+    {
+     "file": "banshee/move_0.mp3",
+     "hash": "8fab8294be",
+     "text": "Rotors spinning."
+    },
+    {
+     "file": "banshee/move_1.mp3",
+     "hash": "2f79a225e1",
+     "text": "On the move."
+    },
+    {
+     "file": "banshee/move_2.mp3",
+     "hash": "ce32060b4a",
+     "text": "Sweeping in."
+    }
+   ],
+   "order": [
+    {
+     "file": "banshee/order_0.mp3",
+     "hash": "77b4e072cb",
+     "text": "Strike run commencing."
+    },
+    {
+     "file": "banshee/order_1.mp3",
+     "hash": "475531610e",
+     "text": "Cleared hot!"
+    },
+    {
+     "file": "banshee/order_2.mp3",
+     "hash": "87b7193377",
+     "text": "Moving to attack vector."
+    }
+   ],
+   "pissed": [
+    {
+     "file": "banshee/pissed_0.mp3",
+     "hash": "f8a5f2698d",
+     "text": "Watch the rotors!"
+    },
+    {
+     "file": "banshee/pissed_1.mp3",
+     "hash": "01a20bd85a",
+     "text": "Hands off the controls."
+    },
+    {
+     "file": "banshee/pissed_2.mp3",
+     "hash": "71a97de499",
+     "text": "I'll drop you from altitude."
+    }
+   ],
+   "ready": [
+    {
+     "file": "banshee/ready_0.mp3",
+     "hash": "24042796a6",
+     "text": "Engines screaming."
+    }
+   ],
+   "select": [
+    {
+     "file": "banshee/select_0.mp3",
+     "hash": "24042796a6",
+     "text": "Engines screaming."
+    },
+    {
+     "file": "banshee/select_1.mp3",
+     "hash": "381ae59ae7",
+     "text": "Give me a target."
+    },
+    {
+     "file": "banshee/select_2.mp3",
+     "hash": "1624859a2d",
+     "text": "Ready for strike run."
+    },
+    {
+     "file": "banshee/select_3.mp3",
+     "hash": "a472ff2d81",
+     "text": "Banshee on station."
+    },
+    {
+     "file": "banshee/select_4.mp3",
+     "hash": "3877763732",
+     "text": "Cloak is ready."
+    }
+   ]
+  },
+  "goliath": {
+   "attack": [
+    {
+     "file": "goliath/attack_0.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "goliath/attack_1.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "goliath/attack_2.mp3",
+     "hash": "",
+     "text": ""
+    }
+   ],
+   "move": [
+    {
+     "file": "goliath/move_0.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "goliath/move_1.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "goliath/move_2.mp3",
+     "hash": "",
+     "text": ""
+    }
+   ],
+   "order": [
+    {
+     "file": "goliath/order_0.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "goliath/order_1.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "goliath/order_2.mp3",
+     "hash": "",
+     "text": ""
+    }
+   ],
+   "pissed": [
+    {
+     "file": "goliath/pissed_0.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "goliath/pissed_1.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "goliath/pissed_2.mp3",
+     "hash": "",
+     "text": ""
+    }
+   ],
+   "ready": [
+    {
+     "file": "goliath/ready_0.mp3",
+     "hash": "",
+     "text": ""
+    }
+   ],
+   "select": [
+    {
+     "file": "goliath/select_0.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "goliath/select_1.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "goliath/select_2.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "goliath/select_3.mp3",
+     "hash": "",
+     "text": ""
+    }
+   ]
+  },
+  "marauder": {
+   "attack": [
+    {
+     "file": "marauder/attack_0.mp3",
+     "hash": "8c93f47df3",
+     "text": "Time to crack some skulls."
+    },
+    {
+     "file": "marauder/attack_1.mp3",
+     "hash": "3631acbe15",
+     "text": "Concussive rounds hot!"
+    },
+    {
+     "file": "marauder/attack_2.mp3",
+     "hash": "80bdbcc075",
+     "text": "Light 'em up!"
+    }
+   ],
+   "move": [
+    {
+     "file": "marauder/move_0.mp3",
+     "hash": "73a4e1a058",
+     "text": "Rollin' out."
+    },
+    {
+     "file": "marauder/move_1.mp3",
+     "hash": "baf35e1ed4",
+     "text": "Movin' heavy."
+    },
+    {
+     "file": "marauder/move_2.mp3",
+     "hash": "c1d84d01a2",
+     "text": "On the double."
+    }
+   ],
+   "order": [
+    {
+     "file": "marauder/order_0.mp3",
+     "hash": "24c3912d68",
+     "text": "Hit 'em hard!"
+    },
+    {
+     "file": "marauder/order_1.mp3",
+     "hash": "8d59753e93",
+     "text": "Affirmative."
+    },
+    {
+     "file": "marauder/order_2.mp3",
+     "hash": "1b9ac1f8fb",
+     "text": "Let's crack some shells."
+    },
+    {
+     "file": "marauder/order_3.mp3",
+     "hash": "8399844765",
+     "text": "Understood."
+    }
+   ],
+   "pissed": [
+    {
+     "file": "marauder/pissed_0.mp3",
+     "hash": "f90e69530f",
+     "text": "Don't touch the gear."
+    },
+    {
+     "file": "marauder/pissed_1.mp3",
+     "hash": "170cf5fa91",
+     "text": "I said, hands off."
+    },
+    {
+     "file": "marauder/pissed_2.mp3",
+     "hash": "c53cb31f89",
+     "text": "You're testing me, commander."
+    }
+   ],
+   "ready": [
+    {
+     "file": "marauder/ready_0.mp3",
+     "hash": "72d249b5b3",
+     "text": "Kaboom, baby!"
+    }
+   ],
+   "select": [
+    {
+     "file": "marauder/select_0.mp3",
+     "hash": "a07d96e170",
+     "text": "Ready for action."
+    },
+    {
+     "file": "marauder/select_1.mp3",
+     "hash": "0a20eb8dad",
+     "text": "Kaboom, baby."
+    },
+    {
+     "file": "marauder/select_2.mp3",
+     "hash": "0628869e97",
+     "text": "Heavy armor standing by."
+    },
+    {
+     "file": "marauder/select_3.mp3",
+     "hash": "4d84405dad",
+     "text": "Sound off."
+    },
+    {
+     "file": "marauder/select_4.mp3",
+     "hash": "992d28b221",
+     "text": "Marauder, reporting."
+    },
+    {
+     "file": "marauder/select_5.mp3",
+     "hash": "3ed0d4ffcb",
+     "text": "Say the word."
+    }
+   ]
+  },
+  "marine": {
+   "attack": [
+    {
+     "file": "marine/attack_0.mp3",
+     "hash": "9f02042d95",
+     "text": "Open fire!"
+    },
+    {
+     "file": "marine/attack_1.mp3",
+     "hash": "343ee09148",
+     "text": "Lock 'em up!"
+    },
+    {
+     "file": "marine/attack_2.mp3",
+     "hash": "51951b9c04",
+     "text": "Eat lead!"
+    }
+   ],
+   "move": [
+    {
+     "file": "marine/move_0.mp3",
+     "hash": "b8ee9e4551",
+     "text": "Movin' out!"
+    },
+    {
+     "file": "marine/move_1.mp3",
+     "hash": "5a53a74cdc",
+     "text": "On my way!"
+    },
+    {
+     "file": "marine/move_2.mp3",
+     "hash": "28e8a5aafb",
+     "text": "Roger that."
+    }
+   ],
+   "order": [
+    {
+     "file": "marine/order_0.mp3",
+     "hash": "b40cec7781",
+     "text": "Rock and roll!"
+    },
+    {
+     "file": "marine/order_1.mp3",
+     "hash": "0262cc453c",
+     "text": "Orders received."
+    },
+    {
+     "file": "marine/order_2.mp3",
+     "hash": "b8ee9e4551",
+     "text": "Movin' out!"
+    },
+    {
+     "file": "marine/order_3.mp3",
+     "hash": "52b3488af7",
+     "text": "Will do!"
+    }
+   ],
+   "pissed": [
+    {
+     "file": "marine/pissed_0.mp3",
+     "hash": "bc6ce365f7",
+     "text": "Quit pokin' me!"
+    },
+    {
+     "file": "marine/pissed_1.mp3",
+     "hash": "203902cbce",
+     "text": "Hey, watch the armor!"
+    },
+    {
+     "file": "marine/pissed_2.mp3",
+     "hash": "dc65a6be76",
+     "text": "You do that again, I'm gonna shoot something."
+    }
+   ],
+   "ready": [
+    {
+     "file": "marine/ready_0.mp3",
+     "hash": "54adadb898",
+     "text": "You wanna piece of me, boy?"
+    }
+   ],
+   "select": [
+    {
+     "file": "marine/select_0.mp3",
+     "hash": "54adadb898",
+     "text": "You wanna piece of me, boy?"
+    },
+    {
+     "file": "marine/select_1.mp3",
+     "hash": "6265fa1a43",
+     "text": "Armed and ready!"
+    },
+    {
+     "file": "marine/select_2.mp3",
+     "hash": "f1976b9344",
+     "text": "Standing by."
+    },
+    {
+     "file": "marine/select_3.mp3",
+     "hash": "1129883d7c",
+     "text": "Go, go, go!"
+    },
+    {
+     "file": "marine/select_4.mp3",
+     "hash": "76876f6d79",
+     "text": "Gimme something to shoot!"
+    },
+    {
+     "file": "marine/select_5.mp3",
+     "hash": "6f461446b4",
+     "text": "Ready to roll out."
+    },
+    {
+     "file": "marine/select_6.mp3",
+     "hash": "bf325a6cef",
+     "text": "Locked and loaded."
+    }
+   ]
+  },
+  "medivac": {
+   "move": [
+    {
+     "file": "medivac/move_0.mp3",
+     "hash": "08110602c2",
+     "text": "Flying out."
+    },
+    {
+     "file": "medivac/move_1.mp3",
+     "hash": "3a55447556",
+     "text": "En route."
+    },
+    {
+     "file": "medivac/move_2.mp3",
+     "hash": "1b904b781b",
+     "text": "Wheels up."
+    }
+   ],
+   "order": [
+    {
+     "file": "medivac/order_0.mp3",
+     "hash": "850ad5bff5",
+     "text": "Inbound."
+    },
+    {
+     "file": "medivac/order_1.mp3",
+     "hash": "5c0a9b8f15",
+     "text": "On my way."
+    },
+    {
+     "file": "medivac/order_2.mp3",
+     "hash": "58e2322e98",
+     "text": "Clear skies."
+    }
+   ],
+   "pissed": [
+    {
+     "file": "medivac/pissed_0.mp3",
+     "hash": "92b4bb877f",
+     "text": "I'm a medic, not a mascot."
+    },
+    {
+     "file": "medivac/pissed_1.mp3",
+     "hash": "ecc7d2612d",
+     "text": "Cut it out, please."
+    },
+    {
+     "file": "medivac/pissed_2.mp3",
+     "hash": "1d0bcce801",
+     "text": "Do you need medical attention?"
+    }
+   ],
+   "ready": [
+    {
+     "file": "medivac/ready_0.mp3",
+     "hash": "79a7ac22c2",
+     "text": "Need a lift?"
+    }
+   ],
+   "select": [
+    {
+     "file": "medivac/select_0.mp3",
+     "hash": "249567b0e0",
+     "text": "Ready for pickup."
+    },
+    {
+     "file": "medivac/select_1.mp3",
+     "hash": "1284e1f613",
+     "text": "Need medical attention?"
+    },
+    {
+     "file": "medivac/select_2.mp3",
+     "hash": "81d8191971",
+     "text": "Standing by."
+    },
+    {
+     "file": "medivac/select_3.mp3",
+     "hash": "3d7d811f62",
+     "text": "Medivac standing by."
+    },
+    {
+     "file": "medivac/select_4.mp3",
+     "hash": "61c9181c66",
+     "text": "Ready for evac."
+    }
+   ]
+  },
+  "scv": {
+   "attack": [
+    {
+     "file": "scv/attack_0.mp3",
+     "hash": "f8ac1c06a9",
+     "text": "Uh, I'm not a soldier."
+    },
+    {
+     "file": "scv/attack_1.mp3",
+     "hash": "5ebc2af7c3",
+     "text": "Is that really my job?"
+    },
+    {
+     "file": "scv/attack_2.mp3",
+     "hash": "9e24053834",
+     "text": "If you say so."
+    }
+   ],
+   "move": [
+    {
+     "file": "scv/move_0.mp3",
+     "hash": "79f5be3d0c",
+     "text": "Comin' through."
+    },
+    {
+     "file": "scv/move_1.mp3",
+     "hash": "7bdcf4a737",
+     "text": "On my way."
+    },
+    {
+     "file": "scv/move_2.mp3",
+     "hash": "bc8d4a3290",
+     "text": "Be right there."
+    }
+   ],
+   "order": [
+    {
+     "file": "scv/order_0.mp3",
+     "hash": "5a3e15ac14",
+     "text": "Right away, sir."
+    },
+    {
+     "file": "scv/order_1.mp3",
+     "hash": "aea54d980b",
+     "text": "Moving out."
+    },
+    {
+     "file": "scv/order_2.mp3",
+     "hash": "25f4d2dd07",
+     "text": "Got it."
+    },
+    {
+     "file": "scv/order_3.mp3",
+     "hash": "c8a1430fbd",
+     "text": "On it."
+    }
+   ],
+   "pissed": [
+    {
+     "file": "scv/pissed_0.mp3",
+     "hash": "c2121fa067",
+     "text": "Hey, I'm busy here!"
+    },
+    {
+     "file": "scv/pissed_1.mp3",
+     "hash": "204ddd3834",
+     "text": "Stop it, boss."
+    },
+    {
+     "file": "scv/pissed_2.mp3",
+     "hash": "4bc699798b",
+     "text": "I've got work to do!"
+    }
+   ],
+   "ready": [
+    {
+     "file": "scv/ready_0.mp3",
+     "hash": "ad74574db5",
+     "text": "SCV ready."
+    }
+   ],
+   "select": [
+    {
+     "file": "scv/select_0.mp3",
+     "hash": "ad74574db5",
+     "text": "SCV ready."
+    },
+    {
+     "file": "scv/select_1.mp3",
+     "hash": "388e31472a",
+     "text": "Orders, cap'n?"
+    },
+    {
+     "file": "scv/select_2.mp3",
+     "hash": "4f0b5efd72",
+     "text": "Job finished?"
+    },
+    {
+     "file": "scv/select_3.mp3",
+     "hash": "165e6cfe5d",
+     "text": "What's the plan?"
+    },
+    {
+     "file": "scv/select_4.mp3",
+     "hash": "eb62a7948f",
+     "text": "Right on it."
+    },
+    {
+     "file": "scv/select_5.mp3",
+     "hash": "165e6cfe5d",
+     "text": "What's the plan?"
+    }
+   ]
+  },
+  "siege_tank": {
+   "attack": [
+    {
+     "file": "siege_tank/attack_0.mp3",
+     "hash": "d20ba8386e",
+     "text": "Firin' main gun!"
+    },
+    {
+     "file": "siege_tank/attack_1.mp3",
+     "hash": "ae5243528b",
+     "text": "Target in the crosshairs."
+    },
+    {
+     "file": "siege_tank/attack_2.mp3",
+     "hash": "e66e134d9a",
+     "text": "Give 'em hell."
+    }
+   ],
+   "move": [
+    {
+     "file": "siege_tank/move_0.mp3",
+     "hash": "a8bab5802e",
+     "text": "Rollin' out."
+    },
+    {
+     "file": "siege_tank/move_1.mp3",
+     "hash": "44d0647bca",
+     "text": "Treads turnin'."
+    },
+    {
+     "file": "siege_tank/move_2.mp3",
+     "hash": "f9e6c4aa83",
+     "text": "On the move."
+    }
+   ],
+   "order": [
+    {
+     "file": "siege_tank/order_0.mp3",
+     "hash": "fe89ef9c6f",
+     "text": "Rollin' out!"
+    },
+    {
+     "file": "siege_tank/order_1.mp3",
+     "hash": "8581941625",
+     "text": "Right on."
+    },
+    {
+     "file": "siege_tank/order_2.mp3",
+     "hash": "410c55989b",
+     "text": "Setting course."
+    }
+   ],
+   "pissed": [
+    {
+     "file": "siege_tank/pissed_0.mp3",
+     "hash": "40a62b1864",
+     "text": "Hey, mind the paint job!"
+    },
+    {
+     "file": "siege_tank/pissed_1.mp3",
+     "hash": "cc66f312d2",
+     "text": "I'm not a taxi!"
+    },
+    {
+     "file": "siege_tank/pissed_2.mp3",
+     "hash": "edffda5e8e",
+     "text": "Easy on the treads."
+    }
+   ],
+   "ready": [
+    {
+     "file": "siege_tank/ready_0.mp3",
+     "hash": "03b6a00b07",
+     "text": "Ready to roll out!"
+    }
+   ],
+   "select": [
+    {
+     "file": "siege_tank/select_0.mp3",
+     "hash": "03b6a00b07",
+     "text": "Ready to roll out!"
+    },
+    {
+     "file": "siege_tank/select_1.mp3",
+     "hash": "e36d1f875e",
+     "text": "Destination?"
+    },
+    {
+     "file": "siege_tank/select_2.mp3",
+     "hash": "285ca2ced6",
+     "text": "Identify target."
+    },
+    {
+     "file": "siege_tank/select_3.mp3",
+     "hash": "a0cc3a56f3",
+     "text": "Tank ready."
+    },
+    {
+     "file": "siege_tank/select_4.mp3",
+     "hash": "ef4091f1f5",
+     "text": "Gun's hot."
+    }
+   ]
+  },
+  "siege_tank_sieged": {
+   "attack": [
+    {
+     "file": "siege_tank_sieged/attack_0.mp3",
+     "hash": "a3581610d7",
+     "text": "Bombardment commencing."
+    },
+    {
+     "file": "siege_tank_sieged/attack_1.mp3",
+     "hash": "296247e44f",
+     "text": "Shells away!"
+    },
+    {
+     "file": "siege_tank_sieged/attack_2.mp3",
+     "hash": "d6cbfe751a",
+     "text": "Fire for effect."
+    }
+   ],
+   "order": [
+    {
+     "file": "siege_tank_sieged/order_0.mp3",
+     "hash": "edf1ca243f",
+     "text": "Firing coordinates locked."
+    },
+    {
+     "file": "siege_tank_sieged/order_1.mp3",
+     "hash": "c8b083a974",
+     "text": "Bombardment initialized."
+    }
+   ],
+   "pissed": [
+    {
+     "file": "siege_tank_sieged/pissed_0.mp3",
+     "hash": "e2bc266bf7",
+     "text": "Hold your fire, I mean, hold your clicks."
+    },
+    {
+     "file": "siege_tank_sieged/pissed_1.mp3",
+     "hash": "8ea769fbbb",
+     "text": "Locked down, commander."
+    },
+    {
+     "file": "siege_tank_sieged/pissed_2.mp3",
+     "hash": "d558db2e86",
+     "text": "Stop that."
+    }
+   ],
+   "select": [
+    {
+     "file": "siege_tank_sieged/select_0.mp3",
+     "hash": "fa38945fd8",
+     "text": "Shock cannon armed."
+    },
+    {
+     "file": "siege_tank_sieged/select_1.mp3",
+     "hash": "db2960002b",
+     "text": "Target locked."
+    },
+    {
+     "file": "siege_tank_sieged/select_2.mp3",
+     "hash": "e37edec94b",
+     "text": "Awaiting fire order."
+    },
+    {
+     "file": "siege_tank_sieged/select_3.mp3",
+     "hash": "6fe8abf9bd",
+     "text": "Sieged and ready."
+    }
+   ]
+  },
+  "thor": {
+   "attack": [
+    {
+     "file": "thor/attack_0.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "thor/attack_1.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "thor/attack_2.mp3",
+     "hash": "",
+     "text": ""
+    }
+   ],
+   "move": [
+    {
+     "file": "thor/move_0.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "thor/move_1.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "thor/move_2.mp3",
+     "hash": "",
+     "text": ""
+    }
+   ],
+   "order": [
+    {
+     "file": "thor/order_0.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "thor/order_1.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "thor/order_2.mp3",
+     "hash": "",
+     "text": ""
+    }
+   ],
+   "pissed": [
+    {
+     "file": "thor/pissed_0.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "thor/pissed_1.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "thor/pissed_2.mp3",
+     "hash": "",
+     "text": ""
+    }
+   ],
+   "ready": [
+    {
+     "file": "thor/ready_0.mp3",
+     "hash": "",
+     "text": ""
+    }
+   ],
+   "select": [
+    {
+     "file": "thor/select_0.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "thor/select_1.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "thor/select_2.mp3",
+     "hash": "",
+     "text": ""
+    },
+    {
+     "file": "thor/select_3.mp3",
+     "hash": "",
+     "text": ""
+    }
+   ]
+  },
+  "wraith": {
+   "attack": [
+    {
+     "file": "wraith/attack_0.mp3",
+     "hash": "3208df24f2",
+     "text": "Guns hot!"
+    },
+    {
+     "file": "wraith/attack_1.mp3",
+     "hash": "e67abb2598",
+     "text": "Engaging targets."
+    },
+    {
+     "file": "wraith/attack_2.mp3",
+     "hash": "ebada621a4",
+     "text": "Missiles away!"
+    }
+   ],
+   "move": [
+    {
+     "file": "wraith/move_0.mp3",
+     "hash": "bc3d761146",
+     "text": "Banking left."
+    },
+    {
+     "file": "wraith/move_1.mp3",
+     "hash": "76c6a35043",
+     "text": "Vectoring in."
+    },
+    {
+     "file": "wraith/move_2.mp3",
+     "hash": "cb2b7d6dcc",
+     "text": "Moving to coordinates."
+    }
+   ],
+   "order": [
+    {
+     "file": "wraith/order_0.mp3",
+     "hash": "5df432a7e5",
+     "text": "Vector locked in."
+    },
+    {
+     "file": "wraith/order_1.mp3",
+     "hash": "dda4e3477e",
+     "text": "Engaging afterburners!"
+    },
+    {
+     "file": "wraith/order_2.mp3",
+     "hash": "46adc5f0c1",
+     "text": "Target acquired."
+    }
+   ],
+   "pissed": [
+    {
+     "file": "wraith/pissed_0.mp3",
+     "hash": "5462681aeb",
+     "text": "Quit it, commander."
+    },
+    {
+     "file": "wraith/pissed_1.mp3",
+     "hash": "0faa33bc92",
+     "text": "I'm trying to fly here."
+    },
+    {
+     "file": "wraith/pissed_2.mp3",
+     "hash": "cfdc5493af",
+     "text": "Don't make me crash."
+    }
+   ],
+   "ready": [
+    {
+     "file": "wraith/ready_0.mp3",
+     "hash": "4f8ed0fe64",
+     "text": "Wraith standing by."
+    }
+   ],
+   "select": [
+    {
+     "file": "wraith/select_0.mp3",
+     "hash": "c663d766ec",
+     "text": "Wraith awaiting launch orders."
+    },
+    {
+     "file": "wraith/select_1.mp3",
+     "hash": "eb29fc3b46",
+     "text": "Go ahead, HQ."
+    },
+    {
+     "file": "wraith/select_2.mp3",
+     "hash": "d8a7ca9d52",
+     "text": "Skies are mine."
+    },
+    {
+     "file": "wraith/select_3.mp3",
+     "hash": "2d102cc8a5",
+     "text": "Coordinates received."
+    },
+    {
+     "file": "wraith/select_4.mp3",
+     "hash": "df4dfe917d",
+     "text": "Wraith ready."
+    },
+    {
+     "file": "wraith/select_5.mp3",
+     "hash": "7f4f87017d",
+     "text": "Eyes on the sky."
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0d0d0d">
+<title>OpenSlop II</title>
+<meta name="description" content="Play OpenSlop II, a StarCraft II fan clone, in your browser: the Wings of Liberty and Nova Covert Ops campaigns, skirmish and online games with friends. Fan project, not affiliated with Blizzard Entertainment.">
+<meta name="application-name" content="OpenSlop II">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="OpenSlop II">
+<meta property="og:title" content="OpenSlop II">
+<meta property="og:description" content="Play OpenSlop II, a StarCraft II fan clone, in your browser: campaigns, skirmish and online games with friends.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="alternate icon" href="/favicon.ico">
+<link rel="stylesheet" href="/src/landing/landing.css">
+<link rel="prefetch" href="/ui/slopcraft_splash.webp" as="image">
+<link rel="prefetch" href="/ui/slopcraft_bg.jpg" as="image">
+<script type="module" src="/src/landing/landing.ts"></script>
+</head>
+<body data-phase="ready">
+
+<main class="app" id="app">
+  <header class="top">
+    <div class="top-row">
+      <div class="brand">
+        <h1>OpenSlop II</h1>
+        <p class="hint">Fan project. Not affiliated with or endorsed by Blizzard Entertainment.</p>
+      </div>
+      <div class="top-end">
+        <label class="lang-pick"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9M12 3C9.5 5.6 8.2 8.6 8.2 12s1.3 6.4 3.8 9"/></svg><select id="lang-pick" aria-label="Language"><option>English</option></select></label>
+        <a class="btn" href="https://github.com/fp101fs/openslop2" target="_blank" rel="noopener noreferrer"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.4c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>GitHub</a>
+      </div>
+    </div>
+    <div class="bar" id="progress" role="progressbar" aria-label="Game loading" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+      <div class="bar-fill" id="progress-fill" style="width:100%"></div>
+    </div>
+  </header>
+
+  <div class="side">
+    <section class="panel hero" aria-label="Play">
+      <p class="status" id="status" role="status">Ready</p>
+      <p class="status-sub" id="status-sub">Runs in your browser. Nothing to install.</p>
+      <div class="row">
+        <a class="play" id="play" href="/" style="text-decoration:none">Play <kbd class="key-only">Enter</kbd></a>
+      </div>
+    </section>
+
+    <section class="panel players" id="players" aria-labelledby="players-title">
+      <h2 id="players-title">Playing now</h2>
+      <div class="stats">
+        <p class="stat"><b id="players-all">–</b> <span>in total</span></p>
+        <p class="stat"><b id="players-single">–</b> <span>single player</span></p>
+        <p class="stat"><b id="players-multi">–</b> <span>multi player</span></p>
+      </div>
+      <p class="hint" id="players-note" hidden></p>
+    </section>
+
+    <section class="panel" id="about" aria-label="About this project">
+      <div class="tabs big" role="tablist" aria-label="About this project">
+        <button type="button" class="tab" role="tab" data-tab="about">About</button>
+        <button type="button" class="tab" role="tab" data-tab="credits">Credits</button>
+      </div>
+      <div class="pane prose" role="tabpanel" data-tab="about">
+        <p>A StarCraft II style RTS for the browser: the Wings of Liberty and Nova Covert Ops campaigns, skirmish against the AI, and online games with friends. Play it in third person, first person or the classic top-down view.</p>
+        <p>It is an unofficial fan project made for fun. Everyone gets the same game, with no microtransactions or paid perks.</p>
+        <p>Bugs and questions: <a href="https://github.com/fp101fs/openslop2/issues" target="_blank" rel="noopener noreferrer">GitHub issues</a>.</p>
+      </div>
+      <div class="pane prose" role="tabpanel" data-tab="credits" hidden>
+        <p>Source code on <a href="https://github.com/fp101fs/openslop2" target="_blank" rel="noopener noreferrer">GitHub</a>. Built with three.js and Vite; online play uses PeerJS.</p>
+        <p>StarCraft is a trademark of Blizzard Entertainment. OpenSlop II is not affiliated with or endorsed by Blizzard.</p>
+      </div>
+    </section>
+  </div>
+
+  <div class="content">
+    <section class="panel tabbed" id="settings">
+      <div class="tabs big" role="tablist">
+        <button type="button" class="tab" role="tab" data-tab="modes">Modes</button>
+        <button type="button" class="tab" role="tab" data-tab="online">Online</button>
+        <button type="button" class="tab" role="tab" data-tab="controls">Controls</button>
+      </div>
+
+      <div class="pane" role="tabpanel" data-tab="modes">
+        <div class="panel-head">
+          <h3>Campaigns</h3>
+        </div>
+        <p class="hint">Wings of Liberty (29 missions) and Nova Covert Ops are the main paths, with OpenSlop II Originals on the side. Progress is saved in this browser.</p>
+        <div class="panel-head sub">
+          <h3>Skirmish</h3>
+        </div>
+        <p class="hint">Pick a race and a map and fight the AI at the difficulty you choose.</p>
+      </div>
+
+      <div class="pane" role="tabpanel" data-tab="online" hidden>
+        <p class="hint">Host a game and share the 5-letter room code, join with a friend's code, or use Find Game to be matched with an open game. 1v1 and 2-player co-op against the AI.</p>
+      </div>
+
+      <div class="pane" role="tabpanel" data-tab="controls" hidden>
+        <dl class="keys">
+          <div><dt>Left click</dt><dd>Select; drag for a box</dd></div>
+          <div><dt>Right click</dt><dd>Move, attack, mine, repair, rally</dd></div>
+          <div><dt><kbd>A</kbd> + click</dt><dd>Attack-move</dd></div>
+          <div><dt><kbd>S</kbd></dt><dd>Stop</dd></div>
+          <div><dt><kbd>P</kbd></dt><dd>Patrol</dd></div>
+          <div><dt><kbd>Ctrl</kbd> + <kbd>1</kbd>–<kbd>9</kbd></dt><dd>Make a control group</dd></div>
+          <div><dt><kbd>1</kbd>–<kbd>9</kbd></dt><dd>Select a control group</dd></div>
+          <div><dt><kbd>V</kbd> <kbd>F</kbd></dt><dd>Third person, first person</dd></div>
+          <div><dt><kbd>Enter</kbd></dt><dd>Chat (online)</dd></div>
+        </dl>
+      </div>
+    </section>
+  </div>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+# .opensc2mission files are JSON: load them as modules (tools/bun-opensc2.ts)
+preload = ["./tools/bun-opensc2.ts"]
+
+[test]
+preload = ["./tools/bun-opensc2.ts"]
+
+[serve.static]
+plugins = ["./tools/bun-opensc2.ts"]

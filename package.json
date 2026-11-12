@@ -1,0 +1,31 @@
+{
+  "name": "openslop2",
+  "version": "0.5.0",
+  "description": "OpenSlop II: an unofficial, open-source StarCraft II inspired RTS that runs in the browser",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "relay": "bun server/relay.ts",
+    "start": "bun server/relay.ts & vite",
+    "mission-builder": "bun tools/mission-builder/server.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@types/three": "^0.187.0",
+    "pngjs": "^7.0.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "typescript": "^5.0.0",
+    "vite": "^6.0.0",
+    "war3-model": "^4.0.1"
+  },
+  "dependencies": {
+    "@upstash/redis": "^1.41.0",
+    "peerjs": "^1.5.5",
+    "three": "^0.187.0"
+  }
+}

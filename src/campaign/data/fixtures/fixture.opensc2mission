@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "key": "fixture",
+  "campaign": "test",
+  "order": 1,
+  "chapter": "Test",
+  "title": "Fixture",
+  "subtitle": "Data mission test",
+  "playerFaction": "terran",
+  "enemyFaction": "terran",
+  "briefing": "Unit-test mission for src/campaign/data.",
+  "spec": "src/campaign/data/compile.test.ts",
+  "noPlayerBase": true,
+  "startingMinerals": 0,
+  "startingGas": 0,
+  "enemyUpgrades": { "casual": { "hpScale": 0.5 }, "brutal": { "infantryArmor": 1, "infantryWeapons": 1 } },
+  "map": {
+    "name": "Fixture", "subtitle": "", "description": "", "size": 64, "theme": "meadow",
+    "bases": [{ "th": [12, 12], "face": 0.785, "kind": "main", "minerals": [], "geysers": [] }, { "th": [52, 52], "face": 3.93, "kind": "main", "minerals": [], "geysers": [] }],
+    "home": 0, "foe": 1, "noResources": true
+  },
+  "regions": [{ "id": "camp", "shape": { "k": "ell", "x": 40, "y": 30, "rx": 6, "ry": 6 } }],
+  "paths": [{ "id": "route", "pts": [[30, 30], [40, 30]] }],
+  "groups": [
+    { "id": "hero", "owner": "player", "at": [30, 30], "spawn": "start", "units": [{ "type": "marine", "count": 1, "hp": 400, "hero": "Jim Raynor" }] },
+    { "id": "squad", "owner": "player", "at": [28, 30], "spawn": "start", "units": [{ "type": "marine", "count": 3 }] },
+    { "id": "guards", "owner": "enemy", "at": [44, 30], "spawn": "start", "units": [{ "type": "marine", "count": { "casual": 2, "normal": 3, "brutal": 5 } }] },
+    { "id": "pods", "owner": "player", "at": [36, 34], "spawn": "trigger", "units": [{ "type": "marine", "count": 3 }] },
+    { "id": "folk", "owner": "player", "at": [30, 26], "spawn": "trigger", "units": [{ "type": "marine", "count": 2 }], "behavior": { "kind": "follow", "leader": "hero", "scripted": true }, "deathStat": "lost" }
+  ],
+  "objectives": [
+    { "id": "clear", "text": "Clear the camp", "kind": "primary" },
+    { "id": "hero", "text": "Raynor must survive", "kind": "primary", "passive": true },
+    { "id": "bonus", "text": "Bonus", "kind": "bonus", "hidden": true, "target": 2 }
+  ],
+  "speakers": { "raynor": { "name": "Jim Raynor", "voice": "am_adam", "unit": "marine" }, "adjutant": { "name": "Adjutant", "voice": "af_nicole", "portrait": "ui/portraits/adjutant.png" } },
+  "dialogue": [
+    { "id": "hello", "speaker": "raynor", "text": "Let's move." },
+    { "id": "camp", "speaker": "adjutant", "text": "Enemy camp ahead." },
+    { "id": "done", "speaker": "raynor", "text": "Camp's clear." }
+  ],
+  "stats": [{ "id": "lost", "label": "Allies lost", "showOnVictory": true }, { "id": "ticks", "label": "Ticks" }],
+  "triggers": [
+    { "id": "intro", "when": { "k": "start" }, "do": [{ "a": "say", "line": "hello" }, { "a": "tutorial", "id": "t1", "title": "Tutorial", "text": "Move out." }] },
+    { "id": "late", "when": { "k": "time", "sec": 5 }, "do": [{ "a": "spawn", "group": "folk" }] },
+    { "id": "tick", "when": { "k": "every", "sec": 10 }, "do": [{ "a": "stat", "id": "ticks", "op": "add", "n": 1 }] },
+    { "id": "reach", "when": { "k": "enter", "region": "camp", "who": "hero" }, "do": [{ "a": "say", "line": "camp" }, { "a": "dropPods", "group": "pods", "pods": 3 }, { "a": "objective", "id": "bonus", "op": "reveal" }] },
+    { "id": "won", "when": { "k": "wiped", "group": "guards" }, "delay": 1, "do": [{ "a": "say", "line": "done" }, { "a": "objective", "id": "clear", "op": "complete" }] },
+    { "id": "dead", "when": { "k": "dies", "unit": "hero" }, "do": [{ "a": "objective", "id": "hero", "op": "fail" }] },
+    { "id": "edge", "when": { "k": "stat", "id": "ticks", "op": ">=", "n": 1 }, "once": false, "do": [{ "a": "objective", "id": "bonus", "op": "add" }] }
+  ],
+  "testRoute": "route"
+}

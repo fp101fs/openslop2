@@ -1,0 +1,12 @@
+{
+  "name": "openslop2-voice-studio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "bun --hot server.ts"
+  },
+  "dependencies": {
+    "kokoro-js": "^1.2.1"
+  }
+}

@@ -1,0 +1,438 @@
+{
+  "faction": "terran",
+  "units": {
+    "marine": {
+      "gender": "male",
+      "voice": "am_adam",
+      "speed": 1.1,
+      "fx": "radio",
+      "events": {
+        "select": [
+          "You wanna piece of me, boy?",
+          "Armed and ready!",
+          "Standing by.",
+          "Go, go, go!",
+          "Gimme something to shoot!",
+          "Ready to roll out.",
+          "Locked and loaded."
+        ],
+        "order": [
+          "Rock and roll!",
+          "Orders received.",
+          "Movin' out!",
+          "Will do!"
+        ],
+        "ready": [
+          "You wanna piece of me, boy?"
+        ],
+        "pissed": [
+          "Quit pokin' me!",
+          "Hey, watch the armor!",
+          "You do that again, I'm gonna shoot something."
+        ],
+        "move": [
+          "Movin' out!",
+          "On my way!",
+          "Roger that."
+        ],
+        "attack": [
+          "Open fire!",
+          "Lock 'em up!",
+          "Eat lead!"
+        ]
+      },
+      "pitch": 0.86
+    },
+    "marauder": {
+      "gender": "male",
+      "voice": "am_onyx",
+      "speed": 0.92,
+      "fx": "radio",
+      "events": {
+        "select": [
+          "Ready for action.",
+          "Kaboom, baby.",
+          "Heavy armor standing by.",
+          "Sound off.",
+          "Marauder, reporting.",
+          "Say the word."
+        ],
+        "order": [
+          "Hit 'em hard!",
+          "Affirmative.",
+          "Let's crack some shells.",
+          "Understood."
+        ],
+        "ready": [
+          "Kaboom, baby!"
+        ],
+        "pissed": [
+          "Don't touch the gear.",
+          "I said, hands off.",
+          "You're testing me, commander."
+        ],
+        "move": [
+          "Rollin' out.",
+          "Movin' heavy.",
+          "On the double."
+        ],
+        "attack": [
+          "Time to crack some skulls.",
+          "Concussive rounds hot!",
+          "Light 'em up!"
+        ]
+      }
+    },
+    "siege_tank": {
+      "gender": "male",
+      "voice": "am_michael",
+      "speed": 1.0,
+      "fx": "radio",
+      "events": {
+        "select": [
+          "Ready to roll out!",
+          "Destination?",
+          "Identify target.",
+          "Tank ready.",
+          "Gun's hot."
+        ],
+        "order": [
+          "Rollin' out!",
+          "Right on.",
+          "Setting course."
+        ],
+        "ready": [
+          "Ready to roll out!"
+        ],
+        "pissed": [
+          "Hey, mind the paint job!",
+          "I'm not a taxi!",
+          "Easy on the treads."
+        ],
+        "move": [
+          "Rollin' out.",
+          "Treads turnin'.",
+          "On the move."
+        ],
+        "attack": [
+          "Firin' main gun!",
+          "Target in the crosshairs.",
+          "Give 'em hell."
+        ]
+      }
+    },
+    "siege_tank_sieged": {
+      "gender": "male",
+      "voice": "am_michael",
+      "speed": 0.95,
+      "fx": "radio",
+      "events": {
+        "select": [
+          "Shock cannon armed.",
+          "Target locked.",
+          "Awaiting fire order.",
+          "Sieged and ready."
+        ],
+        "order": [
+          "Firing coordinates locked.",
+          "Bombardment initialized."
+        ],
+        "pissed": [
+          "Hold your fire, I mean, hold your clicks.",
+          "Locked down, commander.",
+          "Stop that."
+        ],
+        "attack": [
+          "Bombardment commencing.",
+          "Shells away!",
+          "Fire for effect."
+        ]
+      }
+    },
+    "scv": {
+      "gender": "female",
+      "voice": "af_sarah",
+      "speed": 1.12,
+      "fx": "radio",
+      "events": {
+        "select": [
+          "SCV ready.",
+          "Orders, cap'n?",
+          "Job finished?",
+          "What's the plan?",
+          "Right on it.",
+          "What's the plan?"
+        ],
+        "order": [
+          "Right away, sir.",
+          "Moving out.",
+          "Got it.",
+          "On it."
+        ],
+        "ready": [
+          "SCV ready."
+        ],
+        "pissed": [
+          "Hey, I'm busy here!",
+          "Stop it, boss.",
+          "I've got work to do!"
+        ],
+        "move": [
+          "Comin' through.",
+          "On my way.",
+          "Be right there."
+        ],
+        "attack": [
+          "Uh, I'm not a soldier.",
+          "Is that really my job?",
+          "If you say so."
+        ]
+      },
+      "pitch": 1.06
+    },
+    "medivac": {
+      "gender": "female",
+      "voice": "af_heart",
+      "speed": 1.0,
+      "fx": "radio",
+      "events": {
+        "select": [
+          "Ready for pickup.",
+          "Need medical attention?",
+          "Standing by.",
+          "Medivac standing by.",
+          "Ready for evac."
+        ],
+        "order": [
+          "Inbound.",
+          "On my way.",
+          "Clear skies."
+        ],
+        "ready": [
+          "Need a lift?"
+        ],
+        "pissed": [
+          "I'm a medic, not a mascot.",
+          "Cut it out, please.",
+          "Do you need medical attention?"
+        ],
+        "move": [
+          "Flying out.",
+          "En route.",
+          "Wheels up."
+        ]
+      }
+    },
+    "wraith": {
+      "gender": "female",
+      "voice": "bf_emma",
+      "speed": 1.05,
+      "fx": "pilot",
+      "events": {
+        "select": [
+          "Wraith awaiting launch orders.",
+          "Go ahead, HQ.",
+          "Skies are mine.",
+          "Coordinates received.",
+          "Wraith ready.",
+          "Eyes on the sky."
+        ],
+        "order": [
+          "Vector locked in.",
+          "Engaging afterburners!",
+          "Target acquired."
+        ],
+        "ready": [
+          "Wraith standing by."
+        ],
+        "pissed": [
+          "Quit it, commander.",
+          "I'm trying to fly here.",
+          "Don't make me crash."
+        ],
+        "move": [
+          "Banking left.",
+          "Vectoring in.",
+          "Moving to coordinates."
+        ],
+        "attack": [
+          "Guns hot!",
+          "Engaging targets.",
+          "Missiles away!"
+        ]
+      },
+      "pitch": 1.0
+    },
+    "banshee": {
+      "gender": "female",
+      "voice": "af_nova",
+      "speed": 0.95,
+      "fx": "pilot",
+      "events": {
+        "select": [
+          "Engines screaming.",
+          "Give me a target.",
+          "Ready for strike run.",
+          "Banshee on station.",
+          "Cloak is ready."
+        ],
+        "order": [
+          "Strike run commencing.",
+          "Cleared hot!",
+          "Moving to attack vector."
+        ],
+        "ready": [
+          "Engines screaming."
+        ],
+        "pissed": [
+          "Watch the rotors!",
+          "Hands off the controls.",
+          "I'll drop you from altitude."
+        ],
+        "move": [
+          "Rotors spinning.",
+          "On the move.",
+          "Sweeping in."
+        ],
+        "attack": [
+          "Tearing 'em up!",
+          "Hellfire inbound.",
+          "Death from above."
+        ]
+      },
+      "pitch": 0.92
+    },
+    "adjutant": {
+      "gender": "female",
+      "voice": "af_nicole",
+      "speed": 0.97,
+      "fx": "adjutant",
+      "events": {
+        "base_attack": [
+          "Our base is under attack.",
+          "Structures are under attack, commander.",
+          "Base under attack."
+        ],
+        "army_attack": [
+          "Our forces are under attack.",
+          "Units are under attack, commander.",
+          "We are taking fire."
+        ],
+        "minerals": [
+          "Not enough minerals.",
+          "We require additional minerals."
+        ],
+        "gas": [
+          "Not enough vespene gas.",
+          "We require additional vespene gas."
+        ],
+        "supply": [
+          "You must construct additional supply depots.",
+          "Supply capacity reached. Supply depot required."
+        ],
+        "energy": [
+          "Not enough energy."
+        ],
+        "construction": [
+          "Construction complete.",
+          "Structure complete."
+        ],
+        "research": [
+          "Research complete.",
+          "Upgrade complete.",
+          "Technology research complete."
+        ],
+        "incoming": [
+          "Enemy forces approaching.",
+          "Hostile strike force detected.",
+          "Warning. Enemy attack wave inbound."
+        ],
+        "victory": [
+          "Mission accomplished. Sector secured."
+        ],
+        "defeat": [
+          "Mission failed. All forces lost."
+        ],
+        "scan": [
+          "Scanner sweep initiated."
+        ]
+      }
+    },
+    "goliath": {
+      "gender": "male",
+      "voice": "am_eric",
+      "speed": 1.0,
+      "fx": "heavy",
+      "pitch": 0.9,
+      "events": {
+        "select": [
+          "Goliath online.",
+          "Ready to rumble.",
+          "Go ahead.",
+          "Standing by."
+        ],
+        "pissed": [
+          "Stop poking me.",
+          "Hey, quit it!",
+          "I'm a walking tank, pal."
+        ],
+        "order": [
+          "Affirmative.",
+          "Roger that.",
+          "Understood."
+        ],
+        "move": [
+          "Movin' out.",
+          "On my way.",
+          "Stomping along."
+        ],
+        "attack": [
+          "Opening fire!",
+          "Hellfire inbound!",
+          "Say hello to my little friend."
+        ],
+        "ready": [
+          "Goliath online."
+        ]
+      }
+    },
+    "thor": {
+      "gender": "male",
+      "voice": "bm_lewis",
+      "speed": 0.88,
+      "fx": "heavy",
+      "pitch": 0.88,
+      "events": {
+        "select": [
+          "Thor ready.",
+          "Hammer time.",
+          "Loaded for bear.",
+          "Standing by."
+        ],
+        "pissed": [
+          "Don't push your luck.",
+          "I can step on you.",
+          "That tickles."
+        ],
+        "order": [
+          "Understood.",
+          "Acknowledged.",
+          "Executing."
+        ],
+        "move": [
+          "Stomping out.",
+          "Rolling thunder.",
+          "Heavy walker moving."
+        ],
+        "attack": [
+          "Smashing 'em!",
+          "Thunder strike!",
+          "Let the hammer fall!"
+        ],
+        "ready": [
+          "Thor online."
+        ]
+      }
+    }
+  }
+}

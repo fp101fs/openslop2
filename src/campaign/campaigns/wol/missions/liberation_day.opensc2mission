@@ -1,0 +1,1066 @@
+{
+  "version": 1,
+  "key": "liberation_day",
+  "campaign": "wol",
+  "order": 1,
+  "chapter": "Mar Sara",
+  "title": "Liberation Day",
+  "subtitle": "Destroy the Dominion Outpost",
+  "playerFaction": "terran",
+  "enemyFaction": "terran",
+  "briefing": "Jim Raynor and five Marines strike the Dominion logistics headquarters in Backwater Station on Mar Sara.",
+  "spec": "docs/campaign/wol/01-liberation-day/README.md",
+  "gaps": [
+    "Dialogue is paraphrased (TTS); exact lines are on the Fandom quotations page",
+    "Set pieces (statue, gas station, signs, holoboards) are procedural stand-ins",
+    "Town buildings and props are not placed one by one; the square is open ground"
+  ],
+  "noPlayerBase": true,
+  "noEnemyBase": true,
+  "aiOff": true,
+  "startingMinerals": 0,
+  "startingGas": 0,
+  "enemyUpgrades": {
+    "casual": { "hpScale": 0.5 },
+    "hard": { "infantryArmor": 1 },
+    "brutal": { "infantryArmor": 1, "infantryWeapons": 1 }
+  },
+  "map": {
+    "name": "Backwater Station",
+    "subtitle": "Mar Sara",
+    "description": "Mar Sara: Backwater Station and the Dominion logistics HQ (Liberation Day).",
+    "size": 144,
+    "theme": "marsara",
+    "baseTier": 3,
+    "tiers": [
+      [
+        {
+          "k": "poly",
+          "pts": [
+            [29.5, 81],
+            [49, 76],
+            [71.5, 72.5],
+            [89.5, 72],
+            [97.5, 79.5],
+            [90.5, 96],
+            [84, 111.5],
+            [66, 120],
+            [44.5, 120],
+            [28.5, 111.5]
+          ]
+        },
+        1,
+        true
+      ],
+      [
+        {
+          "k": "poly",
+          "pts": [[32, 52], [57, 48], [63.5, 53.5], [60, 67.5], [45.5, 68.5], [32, 67.5]]
+        },
+        1,
+        false
+      ],
+      [
+        {
+          "k": "poly",
+          "pts": [[32, 64], [46.5, 64], [46.5, 82.5], [32, 82.5]]
+        },
+        1,
+        false
+      ],
+      [
+        {
+          "k": "poly",
+          "pts": [[60, 9.5], [111, 9.5], [113.5, 44.5], [96.5, 52], [78.5, 49.5], [62.5, 35]]
+        },
+        2,
+        true
+      ],
+      [
+        { "k": "ell", "x": 97.5, "y": 110.5, "rx": 6, "ry": 5 },
+        2
+      ],
+      [
+        { "k": "ell", "x": 70, "y": 49.5, "rx": 5, "ry": 4.75 },
+        1,
+        null
+      ]
+    ],
+    "roads": [
+      {
+        "pts": [
+          [24, 121],
+          [32, 128],
+          [41, 129],
+          [71.5, 131.5],
+          [101, 131.5],
+          [113.5, 129.5],
+          [118.5, 122],
+          [119.5, 105],
+          [119, 88],
+          [114.5, 76.5],
+          [105.5, 72],
+          [99, 76]
+        ],
+        "width": 6.5,
+        "tier": 0,
+        "shoulder": 4
+      },
+      {
+        "pts": [[55.5, 57], [63.5, 49.5], [69, 44.5]],
+        "width": 7,
+        "tier": 1,
+        "shoulder": 4
+      },
+      {
+        "pts": [[63.5, 32.5], [52.5, 26], [41, 22], [37.5, 10]],
+        "width": 6,
+        "tier": 2,
+        "shoulder": 4
+      }
+    ],
+    "ramps": [
+      [[99, 76], [93.5, 80.5], 7, 0, 1],
+      [[69, 44.5], [74, 39], 7, 1, 2]
+    ],
+    "massifs": [
+      [
+        { "k": "ell", "x": 85, "y": 123, "rx": 6, "ry": 3 },
+        4
+      ],
+      [
+        { "k": "ell", "x": 60, "y": 136, "rx": 5, "ry": 2 },
+        4
+      ],
+      [
+        { "k": "ell", "x": 107.5, "y": 98.5, "rx": 4, "ry": 6 },
+        4
+      ],
+      [
+        { "k": "ell", "x": 122.5, "y": 59, "rx": 5, "ry": 7 },
+        4
+      ],
+      [
+        { "k": "ell", "x": 85, "y": 61.5, "rx": 5, "ry": 4 },
+        4
+      ],
+      [
+        { "k": "ell", "x": 40, "y": 39, "rx": 6, "ry": 5 },
+        4
+      ],
+      [
+        { "k": "ell", "x": 116.5, "y": 26, "rx": 5, "ry": 6 },
+        4
+      ]
+    ],
+    "pits": [
+      [
+        {
+          "k": "poly",
+          "pts": [[4, 4], [33, 4], [31, 30], [29, 50], [27, 70], [27, 95], [22, 112], [12, 120], [4, 122]]
+        },
+        3,
+        false
+      ],
+      [
+        { "k": "ell", "x": 67.5, "y": 62, "rx": 4.5, "ry": 3.5 },
+        1,
+        true
+      ]
+    ],
+    "bases": [
+      { "th": [41, 129], "face": 0.785, "kind": "main", "minerals": [], "geysers": [] },
+      { "th": [96.5, 15], "face": 3.93, "kind": "main", "minerals": [], "geysers": [] }
+    ],
+    "home": 0,
+    "foe": 1,
+    "noResources": true,
+    "decor": [
+      {
+        "id": "gas_station",
+        "kit": "gas_station",
+        "at": [126.5, 119.5],
+        "rot": -1.57,
+        "block": 4,
+        "note": "Big Daddy Browder's Gas & Guns (Liquipedia secrets)"
+      },
+      {
+        "id": "graffiti_road",
+        "kit": "graffiti_sign",
+        "at": [60, 127],
+        "rot": 0,
+        "variant": 0,
+        "note": "anti-Mengsk graffiti; the tagger lies dead here (UNVERIFIED which sign)"
+      },
+      { "id": "graffiti_square", "kit": "graffiti_sign", "at": [50, 88], "rot": 0.6, "variant": 1 },
+      { "id": "graffiti_west", "kit": "graffiti_sign", "at": [34, 72], "rot": 1.2, "variant": 2 },
+      {
+        "id": "bc_billboard",
+        "kit": "billboard",
+        "at": [68, 75.5],
+        "rot": 0,
+        "variant": 0,
+        "block": 2,
+        "note": "battlecruiser silhouette at 12 o'clock on the square"
+      },
+      {
+        "id": "drill_sign",
+        "kit": "billboard",
+        "at": [43.5, 99.5],
+        "rot": 0.8,
+        "variant": 1,
+        "block": 2,
+        "note": "\"Real men drill deep\" at 8 o'clock on the square"
+      },
+      {
+        "id": "camp_gate",
+        "kit": "fence_gate",
+        "at": [39.5, 66],
+        "rot": 0,
+        "note": "RESTRICTED gate between the west side and the camp"
+      },
+      { "id": "crater", "kit": "crater_scorch", "at": [97.5, 110.5] },
+      { "id": "mengsk_statue", "kit": "mengsk_statue", "at": [83, 24.5], "rot": 0.7, "block": 3.5 }
+    ],
+    "refImage": {
+      "src": "docs/campaign/wol/01-liberation-day/img/liberation_day_map.jpg",
+      "x": 15,
+      "y": 6,
+      "w": 113,
+      "h": 132,
+      "opacity": 1
+    }
+  },
+  "regions": [
+    {
+      "id": "r_gp1",
+      "name": "First contact (south-east corner)",
+      "shape": { "k": "ell", "x": 113.5, "y": 127.5, "rx": 12, "ry": 12 }
+    },
+    {
+      "id": "r_hb1",
+      "name": "Holoboard 1 in view",
+      "shape": { "k": "ell", "x": 120.5, "y": 109, "rx": 13, "ry": 13 }
+    },
+    {
+      "id": "r_east_climb",
+      "name": "East road, north of holoboard 1",
+      "shape": { "k": "ell", "x": 119, "y": 90.5, "rx": 8, "ry": 8 }
+    },
+    {
+      "id": "r_gp2",
+      "name": "Top of the east road loop",
+      "shape": { "k": "ell", "x": 104.5, "y": 72.5, "rx": 9, "ry": 9 }
+    },
+    {
+      "id": "r_square_east",
+      "name": "Approaching the square (autosave + drop pods)",
+      "shape": { "k": "ell", "x": 94, "y": 79.5, "rx": 9, "ry": 9 }
+    },
+    {
+      "id": "r_hb2",
+      "shape": { "k": "ell", "x": 63.5, "y": 88, "rx": 12, "ry": 12 }
+    },
+    {
+      "id": "r_hb3",
+      "shape": { "k": "ell", "x": 78.5, "y": 102.5, "rx": 10, "ry": 10 }
+    },
+    {
+      "id": "r_hb4",
+      "shape": { "k": "ell", "x": 42, "y": 110.5, "rx": 10, "ry": 10 }
+    },
+    {
+      "id": "r_square",
+      "name": "Town square",
+      "shape": { "k": "ell", "x": 69, "y": 90.5, "rx": 10, "ry": 10 }
+    },
+    {
+      "id": "r_west",
+      "name": "West side, heading north",
+      "shape": { "k": "ell", "x": 38.5, "y": 74.5, "rx": 8, "ry": 8 }
+    },
+    {
+      "id": "r_camp_view",
+      "name": "Camp comes into view (cutscene)",
+      "shape": { "k": "ell", "x": 40, "y": 70.5, "rx": 6, "ry": 6 }
+    },
+    {
+      "id": "r_hb5",
+      "shape": { "k": "ell", "x": 43.5, "y": 57, "rx": 9, "ry": 9 }
+    },
+    {
+      "id": "r_causeway",
+      "name": "On the causeway (point of no return)",
+      "shape": { "k": "ell", "x": 61.5, "y": 52, "rx": 6, "ry": 6 }
+    },
+    {
+      "id": "r_hb6",
+      "shape": { "k": "ell", "x": 66.5, "y": 46.5, "rx": 11, "ry": 11 }
+    },
+    {
+      "id": "r_hq_gate",
+      "name": "Entering the HQ compound",
+      "shape": { "k": "ell", "x": 75, "y": 37, "rx": 9, "ry": 9 }
+    },
+    {
+      "id": "r_corridor",
+      "name": "Point of no return: the west-side corridor closes",
+      "shape": { "k": "rect", "x": 39.5, "y": 72, "w": 16, "h": 3 }
+    }
+  ],
+  "paths": [
+    {
+      "id": "route",
+      "pts": [
+        [41, 129],
+        [71.5, 130.5],
+        [113.5, 127.5],
+        [119, 114],
+        [120.5, 109],
+        [119, 92],
+        [112, 75.5],
+        [104.5, 72.5],
+        [96.5, 78.5],
+        [86, 85],
+        [78.5, 102.5],
+        [63.5, 88],
+        [42, 110.5],
+        [37.5, 88],
+        [38.5, 74.5],
+        [40, 65.5],
+        [48, 61],
+        [43.5, 57],
+        [55.5, 57],
+        [66.5, 46.5],
+        [75, 37.5],
+        [85, 27],
+        [96.5, 15]
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "raynor",
+      "owner": "player",
+      "at": [41, 129],
+      "spawn": "start",
+      "units": [
+        { "type": "marine", "count": 1, "hp": 300, "hero": "Jim Raynor" }
+      ],
+      "note": "Hero Marine: tougher, +1 range in the real game (UNVERIFIED hp 300)"
+    },
+    {
+      "id": "squad",
+      "owner": "player",
+      "at": [38, 130],
+      "spawn": "start",
+      "units": [
+        { "type": "marine", "count": 5 }
+      ]
+    },
+    {
+      "id": "road1",
+      "owner": "enemy",
+      "at": [113.5, 127.5],
+      "spawn": "start",
+      "units": [
+        {
+          "type": "marine",
+          "count": { "casual": 2, "normal": 2, "hard": 3, "brutal": 4 }
+        }
+      ]
+    },
+    {
+      "id": "road2",
+      "owner": "enemy",
+      "at": [104.5, 72.5],
+      "spawn": "start",
+      "units": [
+        {
+          "type": "marine",
+          "count": { "casual": 1, "normal": 1, "hard": 2, "brutal": 2 }
+        }
+      ]
+    },
+    {
+      "id": "square",
+      "owner": "enemy",
+      "at": [68, 89],
+      "spawn": "start",
+      "units": [
+        { "type": "marine", "count": 9 }
+      ],
+      "spread": 1.6
+    },
+    {
+      "id": "billboard_guard",
+      "owner": "enemy",
+      "at": [75.5, 100.5],
+      "spawn": "start",
+      "units": [
+        {
+          "type": "marine",
+          "count": { "casual": 2, "normal": 2, "hard": 2, "brutal": 3 }
+        }
+      ],
+      "note": "Avoidable group at a side holoboard (which one: UNVERIFIED)"
+    },
+    {
+      "id": "camp",
+      "owner": "enemy",
+      "at": [48, 61],
+      "spawn": "start",
+      "units": [
+        {
+          "type": "marine",
+          "count": { "casual": 3, "normal": 4, "hard": 5, "brutal": 6 }
+        },
+        { "type": "dominion_transport", "count": 1 }
+      ]
+    },
+    {
+      "id": "bystander",
+      "owner": "player",
+      "at": [55, 125.5],
+      "spawn": "start",
+      "units": [
+        { "type": "civilian", "count": 1 }
+      ],
+      "behavior": { "kind": "hold" },
+      "scripted": true,
+      "untargetable": true,
+      "note": "Roadside civilian who warns Raynor at 0:20 (\"I wouldn't go up that road\")"
+    },
+    {
+      "id": "runner",
+      "owner": "player",
+      "at": [50, 64],
+      "spawn": "start",
+      "units": [
+        { "type": "civilian", "count": 1 }
+      ],
+      "behavior": { "kind": "hold" },
+      "scripted": true,
+      "untargetable": true,
+      "note": "The civilian who runs in the cutscene (untargetable until the cutscene shoots him)"
+    },
+    {
+      "id": "civilians",
+      "owner": "player",
+      "at": [46, 59],
+      "spawn": "trigger",
+      "units": [
+        { "type": "civilian", "count": 61 }
+      ],
+      "spread": 1,
+      "behavior": { "kind": "follow", "leader": "raynor", "scripted": true },
+      "deathStat": "civiliansLost"
+    },
+    {
+      "id": "pods",
+      "owner": "player",
+      "at": [86, 85],
+      "spawn": "trigger",
+      "units": [
+        { "type": "marine", "count": 3 }
+      ],
+      "note": "One pod = 3 Marines; 3 pods = 9 Marines"
+    },
+    {
+      "id": "hq_guard",
+      "owner": "enemy",
+      "at": [87.5, 27],
+      "spawn": "start",
+      "units": [
+        {
+          "type": "marine",
+          "count": { "casual": 3, "normal": 5, "hard": 6, "brutal": 5 }
+        },
+        {
+          "type": "firebat",
+          "count": { "casual": 0, "normal": 0, "hard": 0, "brutal": 1 }
+        }
+      ],
+      "behavior": { "kind": "guard", "region": "r_hq_gate" }
+    },
+    {
+      "id": "vikings",
+      "owner": "enemy",
+      "at": [105.5, 6],
+      "spawn": "trigger",
+      "units": [
+        {
+          "type": "viking",
+          "count": { "casual": 2, "normal": 2, "hard": 2, "brutal": 3 }
+        }
+      ]
+    },
+    {
+      "id": "hq",
+      "owner": "enemy",
+      "at": [96.5, 15],
+      "spawn": "start",
+      "units": [
+        { "type": "command_center", "count": 1, "hp": 1500 }
+      ],
+      "note": "Logistics Headquarters"
+    },
+    {
+      "id": "hq_buildings",
+      "owner": "enemy",
+      "at": [85, 14],
+      "spawn": "start",
+      "units": [
+        { "type": "barracks", "count": 1 },
+        { "type": "supply_depot", "count": 2 }
+      ],
+      "spread": 5
+    },
+    {
+      "id": "hb1",
+      "owner": "enemy",
+      "at": [120.5, 109],
+      "spawn": "start",
+      "units": [
+        { "type": "holoboard", "count": 1 }
+      ]
+    },
+    {
+      "id": "hb2",
+      "owner": "enemy",
+      "at": [63.5, 88],
+      "spawn": "start",
+      "units": [
+        { "type": "holoboard", "count": 1 }
+      ]
+    },
+    {
+      "id": "hb3",
+      "owner": "enemy",
+      "at": [78.5, 102.5],
+      "spawn": "start",
+      "units": [
+        { "type": "holoboard", "count": 1 }
+      ]
+    },
+    {
+      "id": "hb4",
+      "owner": "enemy",
+      "at": [42, 110.5],
+      "spawn": "start",
+      "units": [
+        { "type": "holoboard", "count": 1 }
+      ]
+    },
+    {
+      "id": "hb5",
+      "owner": "enemy",
+      "at": [43.5, 57],
+      "spawn": "start",
+      "units": [
+        { "type": "holoboard", "count": 1 }
+      ]
+    },
+    {
+      "id": "hb6",
+      "owner": "enemy",
+      "at": [71, 49.5],
+      "spawn": "start",
+      "units": [
+        { "type": "holoboard", "count": 1 }
+      ]
+    }
+  ],
+  "objectives": [
+    { "id": "hq", "text": "Destroy the Logistics Headquarters", "kind": "primary" },
+    { "id": "raynor", "text": "Raynor must survive", "kind": "primary", "passive": true },
+    { "id": "boards", "text": "Destroy Dominion Holoboards", "kind": "bonus", "target": 6, "hidden": true }
+  ],
+  "speakers": {
+    "raynor": { "name": "Jim Raynor", "voice": "am_michael", "unit": "marine" },
+    "adjutant": { "name": "Adjutant", "voice": "af_nicole", "portrait": "ui/portraits/adjutant.png" },
+    "mengsk": { "name": "Arcturus Mengsk", "voice": "bm_george", "team": "enemy" },
+    "civilian": { "name": "Civilian", "voice": "am_echo", "unit": "civilian" },
+    "civilian2": { "name": "Civilian", "voice": "af_sarah", "unit": "civilian" },
+    "dominion": { "name": "Dominion Marine", "voice": "am_onyx", "unit": "marine", "team": "enemy" },
+    "raider": { "name": "Raynor's Raider", "voice": "am_puck", "unit": "marine" },
+    "officer": { "name": "Dominion Officer", "voice": "bm_lewis", "unit": "marine", "team": "enemy" }
+  },
+  "dialogue": [
+    {
+      "id": "intro1",
+      "speaker": "raynor",
+      "text": "Let's show these people they don't have to be afraid of the Dominion.",
+      "source": "paraphrase"
+    },
+    {
+      "id": "intro2",
+      "speaker": "adjutant",
+      "text": "Commander, tutorial videos are available any time from the help menu.",
+      "source": "paraphrase"
+    },
+    { "id": "move", "speaker": "raynor", "text": "Spread out, keep your eyes open. Move out.", "source": "paraphrase" },
+    {
+      "id": "warn",
+      "speaker": "civilian",
+      "text": "Mister, I wouldn't go up that road. Dominion's all over it.",
+      "source": "paraphrase"
+    },
+    { "id": "contact", "speaker": "dominion", "text": "Hey, that's Jim Raynor! Take him out!", "source": "paraphrase" },
+    {
+      "id": "mengsk1",
+      "speaker": "mengsk",
+      "text": "Keep watch on your neighbours. Report suspicious activity to the Dominion.",
+      "source": "paraphrase"
+    },
+    {
+      "id": "bonus",
+      "speaker": "adjutant",
+      "text": "Destroying the Dominion holoboards will stir the population to rebel.",
+      "source": "paraphrase"
+    },
+    {
+      "id": "blast",
+      "speaker": "raynor",
+      "text": "I'm tired of looking at Mengsk's face. Blow it up.",
+      "source": "paraphrase"
+    },
+    { "id": "where", "speaker": "raynor", "text": "Where'd everybody go?", "source": "paraphrase" },
+    {
+      "id": "family",
+      "speaker": "civilian2",
+      "text": "They took my neighbours... my whole family...",
+      "source": "paraphrase"
+    },
+    { "id": "ugly", "speaker": "raynor", "text": "This is turning ugly.", "source": "paraphrase" },
+    {
+      "id": "force",
+      "speaker": "adjutant",
+      "text": "Warning: a large Dominion force is massing in the centre of town.",
+      "source": "paraphrase"
+    },
+    {
+      "id": "delivery",
+      "speaker": "raynor",
+      "text": "Time for that special delivery. Bring 'em down!",
+      "source": "paraphrase"
+    },
+    {
+      "id": "thanks",
+      "speaker": "raider",
+      "text": "Thanks for the lift, Commander. We're with you.",
+      "source": "paraphrase"
+    },
+    {
+      "id": "wanted",
+      "speaker": "dominion",
+      "text": "It's Raynor! The most wanted man in the sector!",
+      "source": "paraphrase"
+    },
+    {
+      "id": "mengsk2",
+      "speaker": "mengsk",
+      "text": "Every citizen must be ready to sacrifice for the common good.",
+      "source": "paraphrase"
+    },
+    {
+      "id": "mengsk3",
+      "speaker": "mengsk",
+      "text": "The Dominion keeps your communities safe.",
+      "source": "paraphrase"
+    },
+    {
+      "id": "mengsk4",
+      "speaker": "mengsk",
+      "text": "Your freedoms are precious. The Dominion will protect them.",
+      "source": "paraphrase"
+    },
+    { "id": "bad", "speaker": "raynor", "text": "This doesn't look good.", "source": "paraphrase" },
+    { "id": "locals", "speaker": "raynor", "text": "There they are. The townsfolk.", "source": "paraphrase" },
+    {
+      "id": "cut1",
+      "speaker": "dominion",
+      "text": "Line up. Everyone who signs on for the dig site gets a hot meal.",
+      "source": "paraphrase"
+    },
+    {
+      "id": "cut2",
+      "speaker": "civilian",
+      "text": "My brother went to that mine and never came back. I'm not going!",
+      "source": "paraphrase"
+    },
+    { "id": "cut3", "speaker": "dominion", "text": "Runner! Stop him!", "source": "paraphrase" },
+    {
+      "id": "shoot",
+      "speaker": "raynor",
+      "text": "They're gunning down civilians! Move in, now!",
+      "source": "paraphrase"
+    },
+    { "id": "pay", "speaker": "raynor", "text": "Mengsk's got a lot to answer for.", "source": "paraphrase" },
+    {
+      "id": "thanksR",
+      "speaker": "civilian2",
+      "text": "Thank you, Raynor! They're holding more of us up ahead.",
+      "source": "paraphrase"
+    },
+    { "id": "seeto", "speaker": "raynor", "text": "I'll take care of it.", "source": "paraphrase" },
+    {
+      "id": "noreturn",
+      "speaker": "adjutant",
+      "text": "Commander, once we push north there is no turning back.",
+      "source": "UNVERIFIED"
+    },
+    {
+      "id": "mengsk5",
+      "speaker": "mengsk",
+      "text": "Serve your Emperor. Join an official Dominion labour program.",
+      "source": "paraphrase"
+    },
+    { "id": "marshal", "speaker": "civilian", "text": "Marshal Raynor. Been a long time.", "source": "paraphrase" },
+    { "id": "with", "speaker": "civilian2", "text": "We're with you, Raynor!", "source": "paraphrase" },
+    {
+      "id": "mengsk6",
+      "speaker": "mengsk",
+      "text": "Labour redistribution mandates are now in effect.",
+      "source": "paraphrase"
+    },
+    {
+      "id": "arrest",
+      "speaker": "officer",
+      "text": "This is a restricted area! You are all under arrest!",
+      "source": "paraphrase"
+    },
+    { "id": "back", "speaker": "civilian", "text": "We've got your back, Raynor!", "source": "paraphrase" },
+    { "id": "end1", "speaker": "civilian2", "text": "I never thought we could fight back.", "source": "paraphrase" },
+    {
+      "id": "end2",
+      "speaker": "raynor",
+      "text": "Now you have weapons and supplies. Mengsk only rules you if you let him.",
+      "source": "paraphrase"
+    }
+  ],
+  "triggers": [
+    {
+      "id": "intro",
+      "when": { "k": "start" },
+      "do": [
+        { "a": "camera", "to": [41, 129] },
+        {
+          "a": "sayAll",
+          "lines": ["intro1", "intro2"]
+        },
+        {
+          "a": "tutorial",
+          "id": "tut_tutorials",
+          "title": "Tutorials",
+          "text": "Tutorial videos explain the basics. Open them any time from the help menu."
+        },
+        {
+          "a": "tutorial",
+          "id": "tut_marines",
+          "title": "New Unit: Marines",
+          "text": "Marines are the backbone of your forces: cheap, fast and able to shoot at ground and air targets."
+        },
+        {
+          "a": "tutorial",
+          "id": "tut_heroes",
+          "title": "Hero Units",
+          "text": "Raynor is a hero. He is tougher than a Marine and outranges them. If he dies, the mission is lost."
+        }
+      ]
+    },
+    {
+      "id": "move",
+      "when": { "k": "time", "sec": 12 },
+      "do": [
+        { "a": "say", "line": "move" }
+      ],
+      "note": "Hard run: 0:14"
+    },
+    {
+      "id": "warn",
+      "when": { "k": "time", "sec": 20 },
+      "do": [
+        { "a": "say", "line": "warn" }
+      ],
+      "note": "Ambient civilian, 0:21"
+    },
+    {
+      "id": "contact",
+      "when": { "k": "enter", "region": "r_gp1", "who": "player" },
+      "do": [
+        { "a": "say", "line": "contact" }
+      ]
+    },
+    {
+      "id": "hb1_view",
+      "when": { "k": "enter", "region": "r_hb1", "who": "player" },
+      "do": [
+        {
+          "a": "sayAll",
+          "lines": ["mengsk1", "bonus", "blast"]
+        },
+        { "a": "objective", "id": "boards", "op": "reveal" }
+      ]
+    },
+    {
+      "id": "where",
+      "when": { "k": "enter", "region": "r_east_climb", "who": "player" },
+      "do": [
+        { "a": "say", "line": "where" }
+      ]
+    },
+    {
+      "id": "family",
+      "when": { "k": "enter", "region": "r_gp2", "who": "player" },
+      "do": [
+        {
+          "a": "sayAll",
+          "lines": ["family", "ugly"]
+        }
+      ]
+    },
+    {
+      "id": "square_approach",
+      "when": { "k": "enter", "region": "r_square_east", "who": "player" },
+      "do": [
+        { "a": "autosave" },
+        {
+          "a": "sayAll",
+          "lines": ["force", "delivery"]
+        }
+      ]
+    },
+    {
+      "id": "pods",
+      "when": { "k": "trigger", "id": "square_approach" },
+      "do": [
+        { "a": "dropPods", "group": "pods", "pods": 3, "at": [86, 85] }
+      ],
+      "delay": 6
+    },
+    {
+      "id": "pods_thanks",
+      "when": { "k": "trigger", "id": "pods" },
+      "do": [
+        { "a": "say", "line": "thanks" }
+      ],
+      "delay": 4
+    },
+    {
+      "id": "wanted",
+      "when": { "k": "enter", "region": "r_square", "who": "player" },
+      "do": [
+        { "a": "say", "line": "wanted" }
+      ]
+    },
+    {
+      "id": "hb2_line",
+      "when": { "k": "enter", "region": "r_hb2", "who": "player" },
+      "do": [
+        { "a": "say", "line": "mengsk2" }
+      ]
+    },
+    {
+      "id": "hb3_line",
+      "when": { "k": "enter", "region": "r_hb3", "who": "player" },
+      "do": [
+        { "a": "say", "line": "mengsk3" }
+      ]
+    },
+    {
+      "id": "hb4_line",
+      "when": { "k": "enter", "region": "r_hb4", "who": "player" },
+      "do": [
+        { "a": "say", "line": "mengsk4" }
+      ]
+    },
+    {
+      "id": "bad",
+      "when": { "k": "enter", "region": "r_west", "who": "player" },
+      "do": [
+        { "a": "say", "line": "bad" }
+      ]
+    },
+    {
+      "id": "camp_cutscene",
+      "when": { "k": "enter", "region": "r_camp_view", "who": "player" },
+      "do": [
+        { "a": "say", "line": "locals" },
+        {
+          "a": "cutscene",
+          "steps": [
+            { "wait": 3.5, "camera": [48, 61] },
+            { "wait": 3.5, "say": "cut1" },
+            { "wait": 3.5, "say": "cut2" },
+            {
+              "wait": 1.2,
+              "move": { "unit": "runner", "to": [58, 67] }
+            },
+            {
+              "wait": 2,
+              "say": "cut3",
+              "kill": { "unit": "runner", "by": "camp#1" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shoot",
+      "when": { "k": "trigger", "id": "camp_cutscene" },
+      "do": [
+        { "a": "say", "line": "shoot" },
+        { "a": "attackMove", "group": "camp", "to": [40, 68] }
+      ],
+      "delay": 20,
+      "note": "after the cutscene (its steps stretch to fit their lines, ~19.5 s)"
+    },
+    {
+      "id": "hb5_line",
+      "when": { "k": "enter", "region": "r_hb5", "who": "player" },
+      "do": [
+        { "a": "say", "line": "mengsk5" }
+      ]
+    },
+    {
+      "id": "camp_cleared",
+      "when": { "k": "wiped", "group": "camp" },
+      "do": [
+        {
+          "a": "sayAll",
+          "lines": ["pay", "thanksR", "seeto"]
+        },
+        { "a": "spawn", "group": "civilians" }
+      ]
+    },
+    {
+      "id": "point_of_no_return",
+      "when": { "k": "enter", "region": "r_causeway", "who": "raynor" },
+      "do": [
+        { "a": "block", "region": "r_corridor", "on": true },
+        { "a": "say", "line": "noreturn" }
+      ],
+      "if": [
+        { "k": "trigger", "id": "camp_cleared" }
+      ],
+      "note": "UNVERIFIED: where the real mission closes the way back"
+    },
+    {
+      "id": "marshal",
+      "when": { "k": "trigger", "id": "camp_cleared" },
+      "do": [
+        {
+          "a": "sayAll",
+          "lines": ["marshal", "with"]
+        }
+      ],
+      "delay": 14
+    },
+    {
+      "id": "hb6_line",
+      "when": { "k": "enter", "region": "r_hb6", "who": "player" },
+      "do": [
+        { "a": "say", "line": "mengsk6" }
+      ]
+    },
+    {
+      "id": "hq_gate",
+      "when": { "k": "enter", "region": "r_hq_gate", "who": "player" },
+      "do": [
+        {
+          "a": "sayAll",
+          "lines": ["arrest", "back"]
+        },
+        { "a": "spawn", "group": "vikings" },
+        { "a": "land", "group": "vikings", "at": [89.5, 26] }
+      ],
+      "note": "Vikings fly in and land to guard the HQ (one guide: after the statue falls; UNVERIFIED)"
+    },
+    {
+      "id": "hb1_down",
+      "when": { "k": "dies", "unit": "hb1" },
+      "do": [
+        { "a": "objective", "id": "boards", "op": "reveal" },
+        { "a": "objective", "id": "boards", "op": "add" }
+      ]
+    },
+    {
+      "id": "hb2_down",
+      "when": { "k": "dies", "unit": "hb2" },
+      "do": [
+        { "a": "objective", "id": "boards", "op": "reveal" },
+        { "a": "objective", "id": "boards", "op": "add" }
+      ]
+    },
+    {
+      "id": "hb3_down",
+      "when": { "k": "dies", "unit": "hb3" },
+      "do": [
+        { "a": "objective", "id": "boards", "op": "reveal" },
+        { "a": "objective", "id": "boards", "op": "add" }
+      ]
+    },
+    {
+      "id": "hb4_down",
+      "when": { "k": "dies", "unit": "hb4" },
+      "do": [
+        { "a": "objective", "id": "boards", "op": "reveal" },
+        { "a": "objective", "id": "boards", "op": "add" }
+      ]
+    },
+    {
+      "id": "hb5_down",
+      "when": { "k": "dies", "unit": "hb5" },
+      "do": [
+        { "a": "objective", "id": "boards", "op": "reveal" },
+        { "a": "objective", "id": "boards", "op": "add" }
+      ]
+    },
+    {
+      "id": "hb6_down",
+      "when": { "k": "dies", "unit": "hb6" },
+      "do": [
+        { "a": "objective", "id": "boards", "op": "reveal" },
+        { "a": "objective", "id": "boards", "op": "add" }
+      ]
+    },
+    {
+      "id": "hq_down",
+      "when": { "k": "dies", "unit": "hq" },
+      "do": [
+        {
+          "a": "sayAll",
+          "lines": ["end1", "end2"]
+        }
+      ]
+    },
+    {
+      "id": "victory",
+      "when": { "k": "trigger", "id": "hq_down" },
+      "do": [
+        { "a": "objective", "id": "hq", "op": "complete" }
+      ],
+      "delay": 9
+    },
+    {
+      "id": "raynor_down",
+      "when": { "k": "dies", "unit": "raynor" },
+      "do": [
+        { "a": "objective", "id": "raynor", "op": "fail" }
+      ]
+    }
+  ],
+  "stats": [
+    { "id": "civiliansLost", "label": "Civilians lost", "showOnVictory": true, "of": 61 }
+  ],
+  "testRoute": "route",
+  "unverified": [
+    "Map frame: Liquipedia image placed at world x 15..128, y 6..138 (size 144); positions are +-3-5%",
+    "Trigger radii (6-13 tiles) and dialogue timing are estimates from one Hard playthrough",
+    "Raynor 300 hp, holoboard 400 hp, civilian 40 hp / 8 molotov damage, transport 250 hp: no source",
+    "Hard enemy upgrades (Infantry Armor 1) read from a flattened table",
+    "Point of no return place (the west-side corridor) and its warning line",
+    "Which holoboard the avoidable 2-3 Marines guard (here: holoboard 3)"
+  ]
+}

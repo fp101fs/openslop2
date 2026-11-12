@@ -1,0 +1,55 @@
+Sketchfab model licenses (downloaded 2026-11-04)
+[NC] = CC Attribution-NonCommercial: NOT usable commercially and NOT covered by the project's code license. Credit the author.
+All models: StarCraft is a Blizzard Entertainment property; these are fan-made models.
+
+     protoss_probe_4bc3b7.glb | "Protoss Probe" by edusan | CC Attribution | https://sketchfab.com/3d-models/protoss-probe-4bc3b7ff6080412a8ca324d5a4b8ea0c
+[NC] adept_41acdf.glb | "Adept - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/adept-starcraft-2-41acdf61479e42ab9832d0a8f348319f
+     drone_starcraft_zerg_untextured_b2eb37.glb | "Drone Starcraft Zerg Untextured" by woodsquid | CC Attribution | https://sketchfab.com/3d-models/drone-starcraft-zerg-untextured-b2eb372d658844a99c0130cb87f4ba17
+[NC] spear_of_adun_protoss_7582ff.glb | "Spear of Adun - Protoss - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/spear-of-adun-protoss-starcraft-2-7582ff949a4844e4bbc32ea93de2b8ec
+[NC] leviathan_3cc28e.glb | "Leviathan - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/leviathan-starcraft-2-3cc28e3b6acf4211ade3cdb9bd7ebe6a
+     starcraft_2_zerg_drone_e876c5.glb | "Starcraft 2 Zerg Drone" by georgeprior321 | CC Attribution | https://sketchfab.com/3d-models/starcraft-2-zerg-drone-e876c51d29e343af99c44b3519fa1ee5
+[NC] gateway_97ed95.glb | "Gateway - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/gateway-starcraft-2-97ed959b390e4e9aa62c373f9a7cf38c
+     overlord_zerg_starcraft_uncolored_8ce546.glb | "Overlord Zerg Starcraft Uncolored" by woodsquid | CC Attribution | https://sketchfab.com/3d-models/overlord-zerg-starcraft-uncolored-8ce546e99b254da980fd23fe1670daad
+[NC] robobay_cc27b3.glb | "Robobay - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/robobay-starcraft-2-cc27b3ad877e4308bec9b8b93da7de92
+[NC] kraith_0a532c.glb | "Kraith - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/kraith-starcraft-2-0a532c7cb36e4f5080946522b4928fb9
+[NC] zealot_auir_51b1de.glb | "Zealot Auir - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/zealot-auir-starcraft-2-51b1dec6072841b1b30d00da987e54c8
+[NC] broodling_5be326.glb | "Broodling - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/broodling-starcraft-2-5be3266eefd84db99da6859dab1cd2b2
+[NC] ouros_4071f4.glb | "Ouros - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/ouros-starcraft-2-4071f4c00c134ec89ee84b2676063af7
+[NC] viper_6d8519.glb | "Viper - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/viper-starcraft-2-6d851902b5554db98a6c3725670e882e
+[NC] shackled_ultralisk_a497eb.glb | "Shackled Ultralisk - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/shackled-ultralisk-starcraft-2-a497eb69713c43c59a7e0aa9e7dcd45b
+     starcraft_2_swarm_host_63ead5.glb | "Starcraft 2 Swarm Host" by georgeprior321 | CC Attribution | https://sketchfab.com/3d-models/starcraft-2-swarm-host-63ead5ff63ac4c53a7e48707c3dc5173
+[NC] primal_roach_567de0.glb | "Primal Roach - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/primal-roach-starcraft-2-567de0735948430bad53fc29892c4aa6
+[NC] colossus_219913.glb | "Colossus - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/colossus-starcraft-2-2199135c1d06483bb30ddcdad24ad1f3
+[NC] mutalisk_f4b3e8.glb | "Mutalisk - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/mutalisk-starcraft-2-f4b3e8fb87cf44dba7a690a38fe36a5c
+[NC] immortal_e9e991.glb | "Immortal - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/immortal-starcraft-2-e9e991d010f944bbb36278b6a4f85cf9
+[NC] roach_story_var2_d2cfa4.glb | "Roach Story Var2 - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/roach-story-var2-starcraft-2-d2cfa46a99984a959f41c58f5546137c
+[NC] primal_mutalisk_8330d3.glb | "Primal Mutalisk - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/primal-mutalisk-starcraft-2-8330d396fce548b589a7c511c064a4eb
+     starcraft_baneling_760f78.glb | "StarCraft - Baneling" by zixisun51 | CC Attribution | https://sketchfab.com/3d-models/starcraft-baneling-760f785ac51445138bcd91924f7cc424
+     pylon_a52dff.glb | "Pylon" by ullaseu | CC Attribution | https://sketchfab.com/3d-models/pylon-a52dff6694d340fb8c9aaa14f9f6dbc4
+[NC] ravager_4a39c7.glb | "Ravager - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/ravager-starcraft-2-4a39c79f4e9e406da5f3e1858b928292
+[NC] primal_hydralisk_799da2.glb | "Primal Hydralisk - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/primal-hydralisk-starcraft-2-799da25ccfce4486917e3dbbd82643c0
+[NC] void_thrasher_f101b4.glb | "Void Thrasher - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/void-thrasher-starcraft-2-f101b45c44b84ea59271dfd348ef521e
+[NC] roach_story_var1_f74671.glb | "Roach Story Var1 - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/roach-story-var1-starcraft-2-f746711af15e4b05a35359ab8e1007f6
+[NC] broodlord_fb2815.glb | "Broodlord - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/broodlord-starcraft-2-fb28156811d342c8aae6a0364c246dd5
+[NC] dehaka_a1aba7.glb | "Dehaka - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/dehaka-starcraft-2-a1aba70ae99549c58b7b69f265809d48
+     tempest_from_starcraft2_6cce77.glb | "Tempest from StarCraft2" by pigmey | CC Attribution | https://sketchfab.com/3d-models/tempest-from-starcraft2-6cce771ea751477e914d0f13b6aa3c76
+[NC] hive_ee0fa3.glb | "Hive - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/hive-starcraft-2-ee0fa31a25484fbcab91d3635e84dd90
+[NC] colossus_blue_9da46c.glb | "Colossus - Blue - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/colossus-blue-starcraft-2-9da46c80d03e419181e6f70e5f9dfbb7
+[NC] infestation_pit_8bb180.glb | "Infestation Pit - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/infestation-pit-starcraft-2-8bb1805d81b34640bd727a4edad02d85
+[NC] spawning_pool_7f77f5.glb | "Spawning Pool - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/spawning-pool-starcraft-2-7f77f598b81040e98c211cfd7e452524
+[NC] probe_9aafb3.glb | "Probe - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/probe-starcraft-2-9aafb34274e2450bb2078352eabe6695
+     pylon_protoss_starcraft_2_minecraft_84b544.glb | "pylon protoss starcraft 2 minecraft" by kinoreus | CC Attribution | https://sketchfab.com/3d-models/pylon-protoss-starcraft-2-minecraft-84b5445142bc43e794109aa98fb27415
+     speedling_realistic_0e701c.glb | "Speedling realistic" by iggy-design | CC Attribution | https://sketchfab.com/3d-models/speedling-realistic-0e701c4a48f54305bb0feb69c60c560f
+[NC] primal_zerg_commander_420513.glb | "Primal Zerg Commander - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/primal-zerg-commander-starcraft-2-420513c255c744cd8c895d1078b66a30
+[NC] carrier_a74961.glb | "Carrier - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/carrier-starcraft-2-a74961144bd1467ca9a0a3bfe2cae976
+[NC] void_ray_13fabb.glb | "Void ray - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/void-ray-starcraft-2-13fabbcaa8d041d88d968f6d0675fb17
+[NC] baneling_blue_436ca4.glb | "Baneling Blue - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/baneling-blue-starcraft-2-436ca42843eb479ea461b7d37aac2328
+[NC] roach_story_base_a78117.glb | "Roach Story Base - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/roach-story-base-starcraft-2-a78117fbab494a169eb78add59bbce17
+[NC] archon_560e82.glb | "Archon - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/archon-starcraft-2-560e82f71f7d44acaac5b3131cc3e9d3
+     starcraft_ii_protoss_stalker_f1ccd9.glb | "Starcraft II Protoss Stalker" by Caoimhghin | CC Attribution | https://sketchfab.com/3d-models/starcraft-ii-protoss-stalker-f1ccd9786dcc4ec58cfca8188daffbd3
+[NC] primal_hive_bfa59e.glb | "Primal Hive - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/primal-hive-starcraft-2-bfa59e9434394fed8c9e44c193ade511
+[NC] nexus_890b24.glb | "Nexus - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/nexus-starcraft-2-890b241e15db49d7bf8eb9f2a80284fd
+     zergy_22d4d8.glb | "Zergy" by ause | CC Attribution | https://sketchfab.com/3d-models/zergy-22d4d818dd0544d38fdb0f4db7e8b1d2
+[NC] stalker_dab0b3.glb | "Stalker - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/stalker-starcraft-2-dab0b3fa2dd244d884e4a253d519b911
+[NC] queen_attack_370844.glb | "Queen attack - Starcraft 2" by Catholomew | CC Attribution-NonCommercial | https://sketchfab.com/3d-models/queen-attack-starcraft-2-3708441a27d74545a67d61e3ba5d8f47
+     zergling_zerg_starcraft_uncolored_9554f2.glb | "Zergling Zerg Starcraft Uncolored" by woodsquid | CC Attribution | https://sketchfab.com/3d-models/zergling-zerg-starcraft-uncolored-9554f29c01034f849233ef42aab92aae
