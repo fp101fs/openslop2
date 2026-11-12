@@ -5,6 +5,8 @@ Engineered to take **full advantage of Apple Silicon M1 (Metal GPU & ARM64 CPU)*
 
 > OpenSlop II is an unofficial fan project. StarCraft is a trademark of Blizzard Entertainment; OpenSlop II is not affiliated with or endorsed by Blizzard.
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ffp101fs%2Fopenslop2&project-name=openslop2&repository-name=openslop2) &nbsp;**Your own OpenSlop II server, free, in one click** ([with game list](#-deploy-your-own-server-one-click-vercel))
+
 ### Message from the Meat Proxy
 
 OpenSlop2 is..
@@ -16,10 +18,6 @@ OpenSlop2 is..
 - **modular, customizable and full of cool stuff** (like the OpenSlop2 Mission Builder) for you to build your own missions, maps, etc (maps are .slopmap, missions are .openslop2mission). easy to add on-to, mod, bla bla - just tell Claude / other agent what you wanna do with OpenSlop2
 - **playable for free, offline and online!** single / multi player (campaign, skirmish, 1v1 online matches)
 - **fully playable on any device** (single/multi player, campaign/skirmish, all units, structures & upgrades) - Desktop, Tablet, and Mobile (play-tested on M1 Macbook Air 16GB, Pixel 8, and M1 iPad Air). also available as standalone desktop app (actual Mac .app or Windows app)
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ffp101fs%2Fopenslop2&project-name=openslop2&repository-name=openslop2)
-
-One click gives you your own online server with a public URL. For the public game list too, use the [Upstash version](#-deploy-your-own-server-one-click-vercel).
 
 ### Names
 
