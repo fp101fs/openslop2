@@ -19,7 +19,7 @@ const PROBE_LIMIT = 8;
 
 const toInfo = (r: ListedRoom): RoomInfo => ({
   code: r.code, host: r.host, name: r.name, mode: r.mode, hostFaction: r.hostFaction, enemyFaction: r.enemyFaction,
-  mapId: r.mapId, status: r.status, country: r.country, createdAt: r.createdAt, quick: r.quick, ageSec: r.ageSec
+  mapId: r.mapId, status: r.status, country: r.country, createdAt: r.createdAt, quick: r.quick, version: r.version, ageSec: r.ageSec
 });
 
 /**

@@ -8,6 +8,7 @@ import { isWorkerType } from '../config';
 import { applyCommand, type NetCommand, type SimpleAbility, type StructureAction } from './commands';
 import { Lockstep, type LockstepConfig, type TurnPacket } from './Lockstep';
 import { SnapshotCodec } from './snapshot';
+import { setTeamColorsSwapped } from '../graphics/TeamColor';
 import { stateHash } from './stateHash';
 import { captureKeyframe, applyKeyframe, mirrorKeyframe, encodeKeyframe, decodeKeyframe } from './keyframe';
 import type { SaveData } from '../save/SaveState';
@@ -114,6 +115,7 @@ export class NetSync {
     this.started = mode !== 'lockstep';
     this.offMsg = client.on(m => this.onMessage(m));
     const mirror = this.pvp && role === 'guest';
+    setTeamColorsSwapped(mirror); // the host's side is blue on both screens
     const cfg = world.matchConfig;
     // a PvP guest's world is the host's mirrored: its own side (and faction) is 'player', its base is the NE one
     world.matchConfig = {
@@ -435,6 +437,8 @@ export class NetSync {
         return;
       case 'ls_off':
         if (this.role === 'guest') this.leaveLockstep();
+        return;
+      case 'lpct': // the other player's loading progress (shown by the start modal)
         return;
       case 'toast':
         if (this.role === 'guest') this.onNotice?.(String(m.msg ?? '').slice(0, 200), !!m.err);

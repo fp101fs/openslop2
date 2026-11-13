@@ -15,6 +15,8 @@ export interface CountdownOptions {
   cancellable?: boolean;
   /** Called on every visible second of the countdown. */
   onTick?: () => void;
+  /** Called with each loading progress update (multiplayer sends it to the other player). */
+  onProgress?: (frac: number | null) => void;
 }
 
 export class StartCountdown {
@@ -69,7 +71,7 @@ export class StartCountdown {
   }
 
   /** Loading progress 0..1 (null = unknown), shown once the countdown has run out. */
-  progress(frac: number | null) { this.frac = frac; this.update(); }
+  progress(frac: number | null) { this.frac = frac; this.o.onProgress?.(frac); this.update(); }
   /** Replaces the number row with a message (e.g. waiting for the other player); null goes back to the countdown. */
   status(text: string | null) { this.statusText = text; this.update(); }
 

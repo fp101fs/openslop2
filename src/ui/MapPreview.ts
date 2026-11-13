@@ -64,3 +64,51 @@ export function drawMapPreview(canvas: HTMLCanvasElement, mapId: string) {
   dot(layout.playerBase.x, layout.playerBase.y, BLUE, N * 0.03);
   dot(layout.enemyBase.x, layout.enemyBase.y, RED, N * 0.03);
 }
+
+// ---- menu previews: painted lazily and cached ----
+// Building a level raster takes ~30 ms per map (much longer on phones), so painting every preview on a screen at once froze
+// the menu for seconds. Previews are now painted only when they scroll into view, one per task, and cached per map + size,
+// so re-renders of the menu draw them instantly.
+const painted = new Map<string, HTMLCanvasElement>();
+let queue: HTMLCanvasElement[] = [];
+let pumping = false;
+let io: IntersectionObserver | null = null;
+
+const keyOf = (c: HTMLCanvasElement) => `${c.dataset.map}@${c.width}x${c.height}`;
+function blitCached(c: HTMLCanvasElement): boolean {
+  const hit = painted.get(keyOf(c));
+  if (hit) c.getContext('2d')?.drawImage(hit, 0, 0);
+  return !!hit;
+}
+function pump() {
+  if (pumping) return;
+  pumping = true;
+  const step = () => {
+    const c = queue.shift();
+    if (!c) { pumping = false; return; }
+    if (c.isConnected && !blitCached(c)) {
+      const off = document.createElement('canvas');
+      off.width = c.width; off.height = c.height;
+      drawMapPreview(off, c.dataset.map!);
+      painted.set(keyOf(c), off);
+      c.getContext('2d')?.drawImage(off, 0, 0);
+    }
+    setTimeout(step, 0); // yield between maps so taps and scrolling stay responsive
+  };
+  setTimeout(step, 0);
+}
+
+/** Paint every `canvas.mappreview[data-map]` under `root`: cached ones now, the rest as they come into view. */
+export function paintMapPreviews(root: ParentNode) {
+  const canvases = [...root.querySelectorAll<HTMLCanvasElement>('canvas.mappreview[data-map]')];
+  io?.disconnect(); // the previous screen's canvases are gone
+  queue = queue.filter(c => c.isConnected);
+  const todo = canvases.filter(c => !blitCached(c));
+  if (!todo.length) return;
+  if (typeof IntersectionObserver === 'undefined') { queue.push(...todo); pump(); return; }
+  io ??= new IntersectionObserver(entries => {
+    for (const e of entries) if (e.isIntersecting) { io!.unobserve(e.target); queue.push(e.target as HTMLCanvasElement); }
+    pump();
+  }, { rootMargin: '300px' });
+  todo.forEach(c => io!.observe(c));
+}

@@ -3,6 +3,7 @@ import { LAYOUT, MAP_LAYOUT_OF } from './maps';
 import { ensureBootSlopmapReady } from './levels/SlopmapLoader';
 import { AutoQuality } from './graphics/AutoQuality';
 import { Renderer } from './graphics/Renderer';
+import { setTeamColorsSwapped } from './graphics/TeamColor';
 import { FogOfWar } from './graphics/FogOfWar';
 import { ParticleSystem } from './graphics/ParticleSystem';
 import { Decals } from './graphics/Decals';
@@ -797,7 +798,15 @@ export class StarCraftApp {
     const f = { ...this.world.matchConfig, ...partial };
     // no countdown online: both players start together when the host's starting state arrives (the modal says what it waits for)
     this.startModal?.close();
-    const cd = this.startModal = new StartCountdown({ seconds: 0 });
+    // our loading % goes to the other player, whose modal shows it while they wait for us
+    let sentPct = -1;
+    const cd = this.startModal = new StartCountdown({
+      seconds: 0,
+      onProgress: f => {
+        const p = f === null ? -1 : Math.min(100, Math.floor(f * 100));
+        if (p !== sentPct) { sentPct = p; try { client.relay({ t: 'lpct', p }); } catch { /* not connected */ } }
+      }
+    });
     void (async () => {
       try {
         await this.prepareMatchAssets(f, cd);
@@ -840,11 +849,22 @@ export class StarCraftApp {
     // lockstep: the loading card stays up until both computers hold the same starting state and start together
     sync.onStarted = go;
     offEarly();
+    // the other player's loading %, shown next to the waiting message
+    let waitText = role === 'host' ? 'Waiting for the other player…' : 'Receiving the battlefield…';
+    let peerPct = -1;
+    for (const m of early) if ((m as any)?.t === 'lpct' && typeof (m as any).p === 'number') peerPct = (m as any).p;
+    const showWait = () => this.startModal?.status(peerPct >= 0 ? `${waitText} ${Math.min(99, peerPct)}%` : waitText);
+    const offPct = client.on(m => {
+      if ((m as any)?.t !== 'lpct' || typeof (m as any).p !== 'number') return;
+      peerPct = (m as any).p;
+      if (this.world.net === sync && !sync.isStarted) showWait();
+    });
+    sync.onStarted = () => { offPct(); go(); };
     sync.feed(early);
-    if (sync.isStarted) go();
+    if (sync.isStarted) { offPct(); go(); }
     else {
-      this.startModal?.status(role === 'host' ? 'Waiting for the other player…' : 'Receiving the battlefield…');
-      window.setTimeout(() => { if (this.world.net === sync && !sync.isStarted) this.startModal?.status('Still waiting for the other player…'); }, 20000);
+      showWait();
+      window.setTimeout(() => { if (this.world.net === sync && !sync.isStarted) { waitText = 'Still waiting for the other player…'; showWait(); } }, 20000);
     }
     if (netDebugOn()) this.startNetOverlay(sync);
   }
@@ -925,6 +945,7 @@ export class StarCraftApp {
       this.netClient = null;
     }
     this.world.matchConfig = { ...this.world.matchConfig, localPlayerSlot: 'player', isMultiplayerHost: undefined };
+    setTeamColorsSwapped(false);
   }
 
   public returnToMainMenu() {

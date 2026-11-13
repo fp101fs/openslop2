@@ -11,6 +11,12 @@ import * as THREE from 'three';
  * The original materials are never touched, so menus / portraits / anything that does not call `teamize` look exactly as before.
  */
 export const TEAM_HEX = { player: 0x3a68e0, enemy: 0xd8352e };
+/** A PvP guest's world is mirrored (its own side is 'player'): swapping keeps colours tied to the match slot, so both screens agree. */
+let swapped = false;
+export function setTeamColorsSwapped(v: boolean) { swapped = v; }
+/** True when this side wears blue (the host's slot). */
+export const wearsBlue = (isPlayer: boolean) => isPlayer !== swapped;
+export const teamHex = (isPlayer: boolean) => (wearsBlue(isPlayer) ? TEAM_HEX.player : TEAM_HEX.enemy);
 
 type Mode = { kind: 'hue'; lo: number; hi: number; shift?: number } | { kind: 'crest'; k: number } | { kind: 'mask'; k: number };
 
@@ -52,11 +58,11 @@ export const getTeamMaskMap = (mat: THREE.Material) => maskMaps.get(mat);
 function variant(src: THREE.Material, kind: string, mode: Mode, isPlayer: boolean): THREE.Material {
   const maskMap = maskMaps.get(src), maskAttr = !!src.userData.teamMaskAttr;
   if (mode.kind === 'mask' && !maskMap && !maskAttr) mode = ZERG_CREST;
-  const key = `${src.uuid}|${kind}|${isPlayer ? 'p' : 'e'}`;
+  const key = `${src.uuid}|${kind}|${wearsBlue(isPlayer) ? 'p' : 'e'}`;
   let m = cache.get(key);
   if (m) return m;
   m = src.clone();
-  const c = new THREE.Color().setHex(isPlayer ? TEAM_HEX.player : TEAM_HEX.enemy, THREE.SRGBColorSpace);
+  const c = new THREE.Color().setHex(teamHex(isPlayer), THREE.SRGBColorSpace);
   const tc = `vec3(${c.r.toFixed(4)}, ${c.g.toFixed(4)}, ${c.b.toFixed(4)})`;
   const code = mode.kind === 'mask'
     ? `

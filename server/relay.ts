@@ -16,6 +16,8 @@ interface Room {
   guest: Peer | null;
   started: boolean;
   createdAt: number;
+  /** Host's game version: guests on another version are turned away (different builds desync). */
+  version: unknown;
 }
 
 interface Peer {
@@ -29,6 +31,7 @@ interface Peer {
 }
 
 import { TOOL_VERSIONS } from '../src/version';
+import { versionMismatchError } from '../src/net/versionCheck';
 
 const PORT = Number(process.env.PORT || 8787);
 const rooms = new Map<string, Room>();
@@ -114,6 +117,7 @@ function listRooms() {
       hostFaction: r.config?.playerFaction,
       enemyFaction: r.config?.enemyFaction,
       mapId: r.config?.mapId,
+      version: typeof r.version === 'string' ? r.version : undefined,
       ageSec: Math.round((Date.now() - r.createdAt) / 1000)
     }));
 }
@@ -201,7 +205,8 @@ const server = Bun.serve({
             host: peer,
             guest: null,
             started: false,
-            createdAt: Date.now()
+            createdAt: Date.now(),
+            version: msg.v
           };
           peer.name = name;
           peer.room = room;
@@ -224,12 +229,14 @@ const server = Bun.serve({
           const room = rooms.get(code);
           if (!room) return send(peer, { t: 'error', error: `No game found with code ${code}` });
           if (room.guest || room.started) return send(peer, { t: 'error', error: 'That game is already full' });
+          const bad = versionMismatchError(room.version, 'host', msg.v);
+          if (bad) return send(peer, { t: 'error', error: bad });
           leave(peer);
           joinRoom(peer, room, name);
           break;
         }
         case 'quick': {
-          const open = [...rooms.values()].filter(r => !r.guest && !r.started && r.host !== peer);
+          const open = [...rooms.values()].filter(r => !r.guest && !r.started && r.host !== peer && r.version === msg.v);
           const room = open.sort((a, b) => a.createdAt - b.createdAt)[0];
           if (!room) return send(peer, { t: 'no_rooms' });
           leave(peer);

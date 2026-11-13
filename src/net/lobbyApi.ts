@@ -16,6 +16,8 @@ export interface ListedRoom {
   mapId: string;
   status: RoomStatus;
   quick: boolean;
+  /** Host's game version (missing on rooms from builds before version checks). */
+  version?: string;
   country?: string;
   createdAt: number;
   ageSec: number;
@@ -31,6 +33,7 @@ export interface RoomFields {
   mapId?: string;
   status?: RoomStatus;
   quick?: boolean;
+  version?: string;
 }
 
 const ENDPOINT = '/api/rooms';

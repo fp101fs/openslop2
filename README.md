@@ -125,7 +125,13 @@ Every model is listed with its author and licence in the in-game credits (`src/c
 
 ## ⚡ Starting a game
 
-There is no loading screen: the title menu paints instantly from plain HTML while the game loads behind it. Pressing Play opens a small **Starting game** modal with a 10-second countdown (a comms beep each second); Play lights up as soon as the match is ready, Cancel backs out, and past 10 s it shows "Loading… 87%". Shaders warm up in small chunks (while you sit on the menu on desktop, during the countdown on iPads and phones), so units never hitch the first time they appear. The title screen shows live counts of players in single player and multiplayer games.
+There is no loading screen: the title menu paints instantly from plain HTML while the game loads behind it. Pressing Play opens a small **Starting game** modal with a 10-second countdown (a comms beep each second); Play lights up as soon as the match is ready, Cancel backs out, and past 10 s it shows "Loading… 87%". Shaders warm up in small chunks (while you sit on the menu on desktop, during the countdown on iPads and phones), so units never hitch the first time they appear. The title screen shows live counts of players in single player and multiplayer games (from the relay, or on Vercel from `api/players` + `api/presence`, which need Upstash connected; with no server answering, the row stays hidden rather than showing a guess). In 1v1 online matches the host is always blue and the guest red, on both screens (models and minimap). While one player is still loading, the other sees their loading % next to the waiting message.
+
+The title screen keeps two big buttons, **Single Player** and **Multiplayer** (Campaign, Co-op and Custom are in the top bar once you are in). The bottom-right cog opens Settings; its icon is set once in `src/ui/uiIcons.ts` and shared with the in-game top bar. News & Community has a short "State of OpenSlop II" post that opens in place. New players are named `Human` plus two random letters or digits (e.g. `Human7K`) until they type their own.
+
+**Single Player (A.I.)** sets up a match top to bottom: Your Faction, Enemy Faction (both with Random), A.I. difficulty, then the map list. **Custom** puts your name and faction first, then Find a Game and Host a Game. Picking a map, race or difficulty keeps every list where you scrolled it, and map previews draw only as they scroll into view (cached after the first draw), so tabs with many maps open instantly.
+
+**Online games need matching versions.** Both players must run the same game version (different builds desync). Rooms carry the host's version: Open Games marks other-version rooms with a ⚠ badge instead of Join, Quick Match only pairs same-version players, and joining by code on another version shows "The host is on vX, you are on vY… refresh the page to update" (relay, P2P and `api/rooms` all check, via `src/net/versionCheck.ts`).
 
 ---
 

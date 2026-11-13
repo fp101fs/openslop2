@@ -7,6 +7,7 @@ import { applyIconImages, researchIcon } from './IconImages';
 import { entityPortrait } from './EntityPortrait';
 import { usedCredits, hasOwnWork } from '../credits/ModelCredits';
 import { parityHtml } from './parityMd';
+import { SETTINGS_ICON } from './uiIcons';
 import { ABILITIES, abilitiesOf, abilityBlocked, usesLarva } from '../simulation/Mechanics';
 import { Renderer } from '../graphics/Renderer';
 import * as THREE from 'three';
@@ -118,7 +119,7 @@ export class UIManager {
             <div id="game-fps" class="game-fps-badge" title="Realtime FPS (Click to toggle Resource Profiler)">60 FPS</div>
             <div id="game-timer" class="game-timer">00:00</div>
           </div>
-          <button id="btn-music-menu" class="sc2-btn-icon bare" title="Options & BG Music Settings (ESC)"><img class="hud-ico" src="/ui/hud/settings.svg" alt="Settings" draggable="false"></button>
+          <button id="btn-music-menu" class="sc2-btn-icon bare" title="Options & BG Music Settings (ESC)"><img class="hud-ico" src="${SETTINGS_ICON}" alt="Settings" draggable="false"></button>
           <button id="btn-profiler" class="sc2-btn-icon" title="Toggle Realtime Resource Profiler (F3)">📊</button>
           <button id="btn-audio" class="sc2-btn-icon bare" title="Toggle Sound Mute (M)"><img class="hud-ico" src="/ui/hud/speaker.svg" alt="Sound" draggable="false"></button>
         </div>

@@ -5,6 +5,7 @@ import { LAYOUT } from '../maps';
 import { themeOf } from '../levels/Themes';
 import { ProceduralGrassSystem } from '../graphics/ProceduralGrass';
 import { MAP_SIZE } from '../config';
+import { wearsBlue } from '../graphics/TeamColor';
 
 /** Default map is dressed as a space station (see Renderer STATION_MAP). */
 const STATION = !LAYOUT.level && LAYOUT.id === 'standard';
@@ -270,8 +271,10 @@ export class Minimap {
       const isVisible = b.playerId === 'player' || this.world.fog.isExplored(b.pos.x, b.pos.y);
       if (isVisible) {
         const inActiveSight = b.playerId === 'player' || this.world.fog.isVisible(b.pos.x, b.pos.y);
-        this.ctx.fillStyle = b.playerId === 'player'
-          ? '#00ffff'
+        // colours follow the match slot (host blue, guest red), like the models
+        const own = b.playerId === 'player';
+        this.ctx.fillStyle = wearsBlue(own)
+          ? (inActiveSight ? '#00ffff' : '#0a7a8a')
           : inActiveSight
             ? '#ff3333'
             : '#992222';
@@ -286,7 +289,7 @@ export class Minimap {
     this.world.units.forEach(u => {
       const isVisible = u.playerId === 'player' || this.world.fog.isVisible(u.pos.x, u.pos.y);
       if (isVisible) {
-        this.ctx.fillStyle = u.playerId === 'player' ? '#38bdf8' : '#ff2222';
+        this.ctx.fillStyle = wearsBlue(u.playerId === 'player') ? '#38bdf8' : '#ff2222';
         const ux = u.pos.x * scale;
         const uy = u.pos.y * scale;
         this.ctx.beginPath();

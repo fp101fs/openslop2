@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { buildRigged, type RigKind } from './RiggedModels';
+import { wearsBlue } from './TeamColor';
 
 /**
  * Terran add-ons modelled after the SC2 renders: the Reactor is a squat grey octagonal pedestal with a green-lit band, a red
@@ -27,6 +28,7 @@ const mats = (() => {
 /** Add-ons are built once with the red palette; each instance swaps the red armour for the owner's colour. */
 const teamMats: Record<string, THREE.MeshStandardMaterial> = {};
 function paintTeam(root: THREE.Object3D, isPlayer: boolean) {
+  isPlayer = wearsBlue(isPlayer);
   const c = new THREE.Color(isPlayer ? 0x3a68e0 : 0xd8352e);
   const mk = (k: string, mul: number) => (teamMats[k] ??= new THREE.MeshStandardMaterial({ color: c.clone().multiplyScalar(mul), roughness: 0.5, metalness: 0.3 }));
   // add-ons loaded from their GLB were exported in the player's blue: swap those two materials for the owner's colour

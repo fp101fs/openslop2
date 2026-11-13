@@ -1,4 +1,6 @@
 import { MatchConfig } from '../types';
+import { GAME_VERSION } from '../version';
+import { versionMismatchError } from './versionCheck';
 import { PREFIX, QUICK_CODES } from './p2pConfig';
 import { iceServers, prefetchIceServers } from './iceServers';
 import { lobbyApi, ListedRoom } from './lobbyApi';
@@ -112,7 +114,7 @@ export class P2PClient {
     const c = this.config || {};
     return {
       code: this.code, host: this.hostName, name: String(c.gameName || '').trim() || `${this.hostName}'s game`,
-      mode: c.mode, hostFaction: c.playerFaction, enemyFaction: c.enemyFaction, mapId: c.mapId, status, ...extra
+      mode: c.mode, hostFaction: c.playerFaction, enemyFaction: c.enemyFaction, mapId: c.mapId, status, version: GAME_VERSION, ...extra
     };
   }
 
@@ -149,7 +151,7 @@ export class P2PClient {
           // 'peek' = the Open Games list asking for this game's details without joining it
           if (d?.k === 's' && d.t === 'peek') {
             const open = !(this.conn && this.conn.open) && !this.started;
-            try { conn.send({ k: 's', t: 'info', code: this.code, hostName: this.hostName, config: this.config, open }); } catch {}
+            try { conn.send({ k: 's', t: 'info', code: this.code, hostName: this.hostName, config: this.config, open, v: GAME_VERSION }); } catch {}
             setTimeout(() => conn.close(), 400);
             return;
           }
@@ -205,7 +207,7 @@ export class P2PClient {
       conn.on('open', () => {
         opened = true;
         if (this.timer !== null) { window.clearTimeout(this.timer); this.timer = null; }
-        conn.send({ k: 's', t: 'hello', name: this.name });
+        conn.send({ k: 's', t: 'hello', name: this.name, v: GAME_VERSION });
       });
       conn.on('data', (d: any) => this.onData(d));
       conn.on('close', () => {
@@ -244,7 +246,7 @@ export class P2PClient {
     let rooms: ListedRoom[];
     try { rooms = await lobbyApi.list(); } catch { if (seq === this.seq) this.quickViaSlots(cfg); return; }
     if (seq !== this.seq) return;
-    const open = rooms.filter(r => r.status === 'open' && r.mode === cfg.mode).slice(0, 6);
+    const open = rooms.filter(r => r.status === 'open' && r.mode === cfg.mode && r.version === GAME_VERSION).slice(0, 6);
     if (open.length) {
       this.emit({ t: 'status', text: open.length === 1 ? 'Found a game, checking connection…' : `Found ${open.length} games, picking the best connection…` });
       const probed = await Promise.all(open.map(r => roomProber.probe(r.code).then(p => ({ r, p }))));
@@ -275,7 +277,7 @@ export class P2PClient {
       const me = rooms.find(r => r.code === this.code);
       if (!me) return;
       const older = rooms
-        .filter(r => r.code !== this.code && r.quick && r.status === 'open' && r.mode === cfg.mode && (r.createdAt < me.createdAt || (r.createdAt === me.createdAt && r.code < me.code)))
+        .filter(r => r.code !== this.code && r.quick && r.status === 'open' && r.mode === cfg.mode && r.version === GAME_VERSION && (r.createdAt < me.createdAt || (r.createdAt === me.createdAt && r.code < me.code)))
         .sort((a, b) => a.createdAt - b.createdAt)[0];
       if (!older) return;
       const p = await roomProber.probe(older.code);
@@ -345,7 +347,7 @@ export class P2PClient {
             if (d?.k === 's' && d.t === 'info' && d.open) { // only Quick Match / public hosts ever sit on these slot codes
               rooms.push({
                 code: d.code, host: d.hostName, mode: d.config?.mode, hostFaction: d.config?.playerFaction,
-                enemyFaction: d.config?.enemyFaction, mapId: d.config?.mapId, ageSec: 0,
+                enemyFaction: d.config?.enemyFaction, mapId: d.config?.mapId, ageSec: 0, version: typeof d.v === 'string' ? d.v : undefined,
                 pingMs: sentAt ? Math.round(performance.now() - sentAt) : undefined
               });
             }
@@ -366,11 +368,25 @@ export class P2PClient {
     if (d.k !== 's') return;
     if (this.role === 'host') {
       if (d.t === 'hello' && this.conn) {
+        // Different game builds desync: turn the guest away before the lobby pairs them
+        const bad = versionMismatchError(d.v, 'guest');
+        if (bad) {
+          const conn = this.conn;
+          this.conn = null; // free the slot without telling the host UI a guest came and went
+          this.directory.update({ status: 'open' });
+          try { conn.send({ k: 's', t: 'error', error: versionMismatchError(GAME_VERSION, 'host', d.v) }); } catch {}
+          setTimeout(() => { try { conn.close(); } catch {} }, 300);
+          return;
+        }
         const name = String(d.name || 'Commander').replace(/[^\p{L}\p{N} _.\-]/gu, '').slice(0, 20) || 'Commander';
-        try { this.conn.send({ k: 's', t: 'joined', code: this.code, hostName: this.hostName, config: this.config }); } catch {}
+        try { this.conn.send({ k: 's', t: 'joined', code: this.code, hostName: this.hostName, config: this.config, v: GAME_VERSION }); } catch {}
         this.emit({ t: 'guest_joined', name });
       }
     } else if (this.role === 'guest') {
+      if (d.t === 'joined') {
+        const bad = versionMismatchError(d.v, 'host'); // also catches older hosts that never check
+        if (bad) { this.emit({ t: 'error', error: bad }); this.teardown(); return; }
+      }
       if (d.t === 'start') this.started = true;
       this.emit(d);
     }

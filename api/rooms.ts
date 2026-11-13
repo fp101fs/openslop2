@@ -21,7 +21,7 @@ const STATUSES = ['open', 'full', 'live'] as const;
 
 const publicView = (r: RoomRecord, now: number) => ({
   code: r.code, name: r.name, host: r.host, mode: r.mode, hostFaction: r.hostFaction, enemyFaction: r.enemyFaction,
-  mapId: r.mapId, status: r.status, quick: r.quick, country: r.country, createdAt: r.createdAt,
+  mapId: r.mapId, status: r.status, quick: r.quick, version: r.version, country: r.country, createdAt: r.createdAt,
   ageSec: Math.max(0, Math.round((now - r.createdAt) / 1000))
 });
 
@@ -91,6 +91,7 @@ export async function POST(req: Request) {
       mapId: typeof body.mapId === 'string' && /^[a-z0-9_]{1,40}$/.test(body.mapId) ? body.mapId : 'sector_vanguard',
       status: pick<RoomStatus>(body.status, STATUSES, 'open'),
       quick: !!body.quick,
+      version: typeof body.version === 'string' && /^[\w.\-]{1,20}$/.test(body.version) ? body.version : undefined,
       country: /^[A-Z]{2}$/.test(req.headers.get('x-vercel-ip-country') || '') ? req.headers.get('x-vercel-ip-country')! : undefined,
       createdAt: cur?.createdAt ?? now,
       beatAt: now,

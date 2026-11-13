@@ -1,4 +1,4 @@
-import { teamize, TEAM_HEX } from './TeamColor';
+import { teamize, teamHex } from './TeamColor';
 import { buildHoloboardModel } from './CampaignModels';
 import { buildReactorModel, buildTechLabModel, buildPlanetaryArmor } from './AddonModels';
 import * as THREE from 'three';
@@ -1169,7 +1169,7 @@ export class ModelFactory {
       const m = o as THREE.Mesh;
       if (!(m as any).isMesh) return;
       const mat = (m.material as THREE.MeshStandardMaterial).clone();
-      if (/TEAMCOLOR/i.test(m.name)) { mat.color.setHex(isPlayer ? TEAM_HEX.player : TEAM_HEX.enemy, THREE.SRGBColorSpace); mat.metalness = 0.35; mat.roughness = 0.55; }
+      if (/TEAMCOLOR/i.test(m.name)) { mat.color.setHex(teamHex(isPlayer), THREE.SRGBColorSpace); mat.metalness = 0.35; mat.roughness = 0.55; }
       else if (/Lights_Green/i.test(m.name)) { mat.emissive.setHex(0x55ff22); mat.emissiveMap = mat.map; mat.emissiveIntensity = 1.6; mat.color.setHex(0x9dff6a); }
       m.material = mat;
     });

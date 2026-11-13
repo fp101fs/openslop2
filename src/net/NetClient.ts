@@ -1,4 +1,5 @@
 import { MatchConfig } from '../types';
+import { GAME_VERSION } from '../version';
 
 export interface RoomInfo {
   code: string;
@@ -16,6 +17,8 @@ export interface RoomInfo {
   country?: string;
   createdAt?: number;
   quick?: boolean;
+  /** Host's game version (undefined: unknown / older build). */
+  version?: string;
 }
 
 type Handler = (msg: any) => void;
@@ -131,13 +134,13 @@ export class NetClient implements NetTransport {
   }
 
   public host(config: Partial<MatchConfig>) {
-    this.send({ t: 'host', config });
+    this.send({ t: 'host', config, v: GAME_VERSION });
   }
   public join(code: string) {
-    this.send({ t: 'join', code });
+    this.send({ t: 'join', code, v: GAME_VERSION });
   }
   public quick(_config?: Partial<MatchConfig>) {
-    this.send({ t: 'quick' });
+    this.send({ t: 'quick', v: GAME_VERSION });
   }
   public start() {
     this.send({ t: 'start' });

@@ -1,6 +1,7 @@
 import { StarCraftApp } from '../main';
 import { LAYOUT, LAYOUTS, MAP_LAYOUT_OF } from '../maps';
-import { drawMapPreview } from './MapPreview';
+import { paintMapPreviews } from './MapPreview';
+import { SETTINGS_ICON } from './uiIcons';
 import { preferredSyncMode } from '../net/syncMode';
 import { CAMPAIGNS, campaignById } from '../campaign/registry';
 import { doneSet, isUnlocked } from '../campaign/progress';
@@ -14,6 +15,7 @@ import { creditForKind } from '../credits/ModelCredits';
 import type { RigKind } from '../graphics/RiggedModels';
 import { NetClient, NetTransport, RoomInfo, fetchRooms } from '../net/NetClient';
 import { P2PClient, useP2P } from '../net/P2PClient';
+import { GAME_VERSION } from '../version';
 import { roomBrowser, BrowserState } from '../net/RoomBrowser';
 import { fetchPlayerCounts, type PlayerCounts } from '../net/Presence';
 
@@ -71,7 +73,6 @@ export class MainMenu {
   private screen: Screen = 'home';
   private nav: Nav = 'versus';
   private sub: Sub = 'ai';
-  private rightTab: 'maps' | 'enemy' = 'maps';
   private selMission = 1;
   /** 'classic' = the three race campaigns; otherwise a pathway campaign id from src/campaign/registry. */
   private campaignPath = 'wol';
@@ -80,6 +81,9 @@ export class MainMenu {
   private campaignPicked = false;
   private pathChapter = '';
   private randomPlayer = false;
+  private randomEnemy = false;
+  /** Last rendered view: scroll positions are kept while it stays the same, so picking a map or race no longer jumps to the top. */
+  private viewKey = '';
   private clockTimer: number | null = null;
   public isOpen = true;
 
@@ -122,7 +126,16 @@ export class MainMenu {
   private roomTimer: number | null = null;
   private client: NetTransport | null = null;
   private status = '';
-  private playerName = 'Commander';
+  /** Generated once per page load, so clearing the name box always falls back to the same name. */
+  private readonly fallbackName = MainMenu.defaultName();
+  private playerName = this.fallbackName;
+
+  /** New players are "Human" plus two random letters / digits, e.g. Human7K. */
+  private static defaultName(): string {
+    const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const pick = () => abc[Math.floor(Math.random() * abc.length)];
+    return 'Human' + pick() + pick();
+  }
 
   private static loadFilters(): { sort: 'ping' | 'newest'; map: string; openOnly: boolean } {
     const d = { sort: 'ping' as 'ping' | 'newest', map: 'all', openOnly: false };
@@ -136,11 +149,7 @@ export class MainMenu {
 
   constructor(app: StarCraftApp, parent: HTMLElement) {
     this.app = app;
-    try {
-      this.playerName = localStorage.getItem('sc2_player_name') || 'Commander' + Math.floor(Math.random() * 90 + 10);
-    } catch {
-      this.playerName = 'Commander';
-    }
+    try { this.playerName = localStorage.getItem('sc2_player_name') || this.playerName; } catch { /* keep the generated name */ }
     // Map layouts are fixed per page load, so picking a map of another size reloads the page; this restores the screen afterwards
     try {
       const r = sessionStorage.getItem('sc2_resume_menu');
@@ -186,11 +195,12 @@ export class MainMenu {
 
   // ---- live "playing now" counts on the title screen (relay /api/players) ----
   private counts: PlayerCounts | null = null;
+  private refreshCounts: () => Promise<void> = async () => {};
   private pollPlayerCounts() {
-    const tick = async () => {
+    const tick = this.refreshCounts = async () => {
       if (!this.isOpen || this.screen !== 'home' || document.hidden) return;
       const c = await fetchPlayerCounts();
-      this.counts = c;
+      this.counts = c; // only the server's numbers: no answer hides the row
       this.paintCounts();
     };
     void tick();
@@ -223,6 +233,7 @@ export class MainMenu {
     this.render();
     this.app.onMenuOpened();
     this.app.sound.startMenuMusic();
+    void this.refreshCounts(); // fresh numbers when coming back from a match
   }
 
   public close() {
@@ -285,7 +296,18 @@ export class MainMenu {
     const bg = this.screen === 'home'
       ? '<div class="bgfx base"></div><div class="bgfx haze"></div>'
       : '<div class="bgfx base"></div><div class="bgfx stars"></div><div class="planet"></div><div class="bgfx"><div class="heroart"></div></div>';
+    // Re-rendering replaces every scroll box, so note where each one was and put it back afterwards (same view only;
+    // the nav strips keep their sideways scroll across views too)
+    const view = `${this.screen}|${this.nav}|${this.sub}|${this.campaignPath}|${this.campaignPicked}`;
+    const sameView = view === this.viewKey;
+    this.viewKey = view;
+    const scrolls = MainMenu.SCROLLERS.map(sel => (sameView || sel === '.topnav' || sel === '.subnav')
+      ? [...this.el.querySelectorAll<HTMLElement>(sel)].map(e => [e.scrollTop, e.scrollLeft] as const) : []);
     this.el.innerHTML = `${bg}<div class="stage">${this.screen === 'home' ? this.renderHome() : this.renderPlay()}</div>`;
+    MainMenu.SCROLLERS.forEach((sel, i) => this.el.querySelectorAll<HTMLElement>(sel).forEach((e, j) => {
+      const pos = scrolls[i]![j];
+      if (pos && (pos[0] || pos[1])) { e.scrollTop = pos[0]; e.scrollLeft = pos[1]; }
+    }));
     const heroEl = this.el.querySelector<HTMLElement>('.hero');
     if (heroEl && this.isOpen !== false) TitleHero.mount(heroEl); else TitleHero.unmount();
     const h3 = this.el.querySelector<HTMLElement>('.hero3d');
@@ -293,12 +315,15 @@ export class MainMenu {
     UnitHero.fillFigures(this.el);
     this.bindHubHover();
     this.paintCounts();
-    this.el.querySelectorAll<HTMLCanvasElement>('canvas.mappreview').forEach(c => drawMapPreview(c, c.dataset.map!));
+    paintMapPreviews(this.el);
     if (this.isMultiplayerView() && this.lobby.kind === 'browse') this.startRoomPolling();
     else this.stopRoomPolling();
     this.tickClock();
     if (this.clockTimer === null) this.clockTimer = window.setInterval(() => this.tickClock(), 20000);
   }
+
+  /** Everything on the menu that scrolls by itself (phones scroll the whole .stage). */
+  private static readonly SCROLLERS = ['.stage', '.topnav', '.subnav', '.tblscroll', '.rbody', '.mpwrap', '.cpanel', '.rl-list', '.news'];
 
   private tickClock() {
     const c = this.el.querySelector('.clock');
@@ -313,18 +338,27 @@ export class MainMenu {
       ${isPhone() ? '' : `<div class="hero"></div><div class="herolabels"><div class="hstack"><div class="hname"><span>${TITLE_HERO.race}</span> ${TITLE_HERO.name}</div>${this.modelBy(TITLE_HERO.kind)}</div></div>`}
       <div class="logo" role="img" aria-label="OpenSlop II"><div class="lgimg"></div></div>
       <div class="homenav">
-        ${btn('Campaign', 'campaign')}
         ${btn('Single Player', 'versus', 'ai')}
         ${btn('Multiplayer', 'versus', '1v1')}
-        ${btn('Co-op', 'coop')}
-        ${btn('Custom Games', 'custom')}
         ${this.countsHtml()}
-        ${resume ? '<button class="sbtn chat green" data-act="resume">▶ Resume Match</button>' : '<button class="sbtn chat" data-act="help">? Game Guide</button>'}
-        <button class="sbtn chat" data-act="parity">How Close Are We?</button>
+        ${resume ? '<button class="sbtn chat green" data-act="resume">▶ Resume Match</button>' : ''}
         <button class="sbtn chat" data-act="attrib">Attributions</button>
       </div>
       <div class="news">
         <div class="nh">News &amp; Community</div>
+        <details class="nbox npost">
+          <summary>
+            <div class="nban state"><span>THE STATE OF OPENSLOP II</span></div>
+            <div class="nbody"><b>What works today, and what's next</b><p>A free StarCraft II-style strategy game that runs in your browser, on any device. Here's a quick tour.</p><span class="nmore"></span></div>
+          </summary>
+          <div class="nbody nfull">
+            <p><b>What it is.</b> OpenSlop II is a free, open-source fan game inspired by StarCraft II. It runs right in your web browser: no install, no download, no account. It works on a computer, a tablet or a phone.</p>
+            <p><b>What you can play.</b> Single player battles against the computer on six difficulty levels, online 1v1 matches against other players, and campaign missions from Wings of Liberty and Nova Covert Ops. Terran, Zerg and Protoss are all playable, with their units, buildings and upgrades.</p>
+            <p><b>Who made it.</b> One fan, with a lot of help from AI, because they wanted to play StarCraft II in a browser. Most of the 3D models were made by human artists and are credited on the Attributions page. It is an unofficial project and not made by Blizzard.</p>
+            <p><b>It's unfinished.</b> Some things are missing or don't match StarCraft II exactly yet. If something is broken, or you'd like to help, open an issue on GitHub.</p>
+            <p><b>Make it yours.</b> All the code is on GitHub at <a href="https://github.com/fp101fs/openslop2" target="_blank" rel="noopener">fp101fs/openslop2</a>. You can build your own missions with the Mission Builder, add maps, or start your own game from it. You can even host your own copy for free on Vercel in one click.</p>
+          </div>
+        </details>
         <div class="nbox">
           <div class="nban"><span>NEW: LOST TEMPLE</span></div>
           <div class="nbody"><b>240×240 four-corner classic</b><p>Fight across the new 2x map in Skirmish - corner high-ground mains, a ring of naturals and a central temple of mesas.</p></div>
@@ -332,7 +366,7 @@ export class MainMenu {
         <div class="nfoot">Now with touch controls for iPad - drag to pan, two fingers to box-select.</div>
       </div>
       <div class="profbar"><div class="avatar"></div><div><div class="pn">${this.escape(this.playerName)}</div><div class="ps">Ready for battle</div></div></div>
-      <div class="botright"><span class="menubtn" data-act="loadgame">LOAD GAME</span><span class="menubtn" data-act="options">MENU</span></div>`;
+      <div class="botright"><span class="menubtn ld" data-act="loadgame"><span>LOAD</span> <span>GAME</span></span><button type="button" class="menubtn cog" data-act="options" title="Settings" aria-label="Settings"><img src="${SETTINGS_ICON}" alt="" draggable="false"></button></div>`;
   }
 
   // ---- PLAY (versus / campaign / co-op / custom ...) ----
@@ -370,17 +404,17 @@ export class MainMenu {
   }
 
   /** Shared Terran / Zerg / Protoss / Random picker (A.I. and 1v1 screens). */
-  private raceCards(group: string, selected: FactionType | 'random') {
+  private raceCards(group: string, selected: FactionType | 'random', cls = '') {
     const items: { id: FactionType | 'random'; label: string }[] = [
       { id: 'terran', label: 'Terran' }, { id: 'zerg', label: 'Zerg' }, { id: 'protoss', label: 'Protoss' }, { id: 'random', label: 'Random' }
     ];
-    return `<div class="cards">${items.map(it =>
+    return `<div class="cards ${cls}">${items.map(it =>
       `<div class="card ${it.id === selected ? 'on' : ''}" data-act="pick" data-g="${group}" data-v="${it.id}">${MainMenu.ICONS[it.id]}${it.label}</div>`).join('')}</div>`;
   }
 
   /** Shared emblem + details panel (A.I., 1v1, Training, Campaign). */
-  private infoPanel(o: { emblem: string; title: string; sub: string; rows?: [string, string][]; desc?: string; style?: string }) {
-    return `<div class="info" ${o.style ? `style="${o.style}"` : ''}>
+  private infoPanel(o: { emblem: string; title: string; sub: string; rows?: [string, string][]; desc?: string; style?: string; cls?: string }) {
+    return `<div class="info ${o.cls ?? ''}" ${o.style ? `style="${o.style}"` : ''}>
       <div class="emb">${o.emblem}</div>
       <div class="it"><h3>${o.title}</h3><div class="isub">${o.sub}</div>
         ${(o.rows ?? []).map(([k, v]) => `<div class="irow"><span>${k}</span><b>${v}</b></div>`).join('')}
@@ -396,14 +430,6 @@ export class MainMenu {
         const n = id === 'lost_temple' ? 4 : 2;
         return `<tr class="${this.skirmish.mapId === id ? 'on' : ''}" data-act="pick" data-g="skMap" data-v="${id}"><td class="mut">${i + 1}</td><td>${m.name}</td><td class="mut">${this.mapSize(id)}×${this.mapSize(id)}</td><td class="mut">${n} slots · 1v1</td></tr>`;
       }).join('')}</tbody></table></div>`;
-  }
-
-  private enemyRows() {
-    return `<table class="tbl"><thead><tr><th style="width:12%"></th><th>Enemy A.I. race</th><th>Style</th></tr></thead><tbody>${
-      FACTIONS.map(f => {
-        const t = FACTION_TECH[f];
-        return `<tr class="${this.skirmish.enemyFaction === f ? 'on' : ''}" data-act="pick" data-g="skEnemy" data-v="${f}"><td class="mut">${FACTION_ICON[f]}</td><td>${t.name}</td><td class="mut">${t.blurb.slice(0, 46)}…</td></tr>`;
-      }).join('')}</tbody></table>`;
   }
 
   // ---- A.I. (single player skirmish) ----
@@ -422,19 +448,24 @@ export class MainMenu {
     const map = MAP_CONFIGS[s.mapId];
     const lvl = diffIds.indexOf(s.difficulty) + 1;
     const you = this.randomPlayer ? 'Random' : FACTION_TECH[s.playerFaction].name;
+    const foe = this.randomEnemy ? 'Random' : FACTION_TECH[s.enemyFaction].name;
     const tabs = diffIds.map(id => `<div class="dtab ${s.difficulty === id ? 'on' : ''}" data-act="pick" data-g="skDiff" data-v="${id}">${DIFFICULTY_CONFIGS[id].name.replace(/\s*\(.*\)/, '')}</div>`).join('');
     return `
       <div class="ptitle">A.I.</div>
       <div class="psub">Face off against computer opponents of increasing difficulty</div>
-      ${this.raceCards('skPlayer', this.randomPlayer ? 'random' : this.skirmish.playerFaction)}
-      <div class="tabstrip">${tabs}</div>
-      ${this.infoPanel({ emblem: this.emblem(lvl, d.badgeColor), title: d.name.replace(/\s*\(.*\)/, ''), sub: `${you} vs ${FACTION_TECH[s.enemyFaction].name} A.I. · ${d.name.match(/\((.*)\)/)?.[1] ?? ''}`,
-        rows: [['Map', map.name], ['A.I. income', `×${d.incomeMultiplier}`]], desc: `${aiTraits[s.difficulty] ?? ''} ${map.description}` })}
-      <div class="botbtns"><button class="sbtn gold chev" data-act="skirmish">Play</button><button class="sbtn" data-act="rtab" data-v="maps">Maps</button></div>
+      <div class="flabel yf">Your Faction</div>
+      ${this.raceCards('skPlayer', this.randomPlayer ? 'random' : s.playerFaction, 'cmp yf')}
+      <div class="flabel ef">Enemy Faction</div>
+      ${this.raceCards('skEnemy', this.randomEnemy ? 'random' : s.enemyFaction, 'cmp ef')}
+      <div class="flabel df">A.I. Difficulty</div>
+      <div class="tabstrip ai">${tabs}</div>
+      ${this.infoPanel({ emblem: this.emblem(lvl, d.badgeColor), title: d.name.replace(/\s*\(.*\)/, ''), sub: `${you} vs ${foe} A.I. · ${d.name.match(/\((.*)\)/)?.[1] ?? ''}`,
+        rows: [['Map', map.name], ['A.I. income', `×${d.incomeMultiplier}`]], desc: `${aiTraits[s.difficulty] ?? ''} ${map.description}`, cls: 'ai' })}
+      <div class="botbtns"><button class="sbtn gold chev" data-act="skirmish">Play</button><button class="sbtn" data-act="tomaps">Maps</button></div>
       <div class="rpanel">
-        <div class="rtabs"><div class="rtab ${this.rightTab === 'maps' ? 'on' : ''}" data-act="rtab" data-v="maps">Maps</div><div class="rtab ${this.rightTab === 'enemy' ? 'on' : ''}" data-act="rtab" data-v="enemy">Enemy</div></div>
-        <div class="rbody">${this.rightTab === 'maps' ? this.mapRows() : this.enemyRows()}
-          <div class="rdesc">${this.rightTab === 'maps' ? `<canvas class="mappreview" width="220" height="220" data-map="${s.mapId}"></canvas>` : ''}<div class="rtxt"><h4>${map.name}</h4>${map.subtitle}<br>${map.description}</div></div></div>
+        <div class="rtabs"><div class="rtab on">Maps</div></div>
+        <div class="rbody">${this.mapRows()}
+          <div class="rdesc"><canvas class="mappreview" width="220" height="220" data-map="${s.mapId}"></canvas><div class="rtxt"><h4>${map.name}</h4>${map.subtitle}<br>${map.description}</div></div></div>
       </div>`;
   }
 
@@ -734,7 +765,10 @@ export class MainMenu {
       const region = r.country ? `<span class="rl-flag" title="${this.escape(r.country)}">${this.flag(r.country)}</span>${this.escape(r.country)} ` : '';
       const race = FACTION_TECH[(r.hostFaction || 'terran') as FactionType]?.name ?? '';
       const map = MAP_CONFIGS[(r.mapId || 'sector_vanguard') as MapId]?.name ?? '';
-      const action = open
+      const sameVersion = r.version === GAME_VERSION;
+      const action = open && !sameVersion
+        ? `<span class="rl-lock" title="The host is on ${r.version ? 'v' + this.escape(r.version) : 'an older version'}, you are on v${GAME_VERSION}. Both players need the same version.">⚠ ${r.version ? 'v' + this.escape(r.version) : 'Old version'}</span>`
+        : open
         ? `<button class="mm-btn primary" data-act="join-room" data-v="${r.code}" ${this.busy ? 'disabled' : ''}>Join</button>`
         : `<span class="rl-lock" title="${r.status === 'live' ? 'This match already started' : 'Waiting for the match to start'}">🔒 ${r.status === 'live' ? 'In game' : 'Full'}</span>`;
       // line 1: name + ping; line 2: host, race, map, players. Both lines ellipsize, so nothing ever forces a horizontal scrollbar.
@@ -875,6 +909,8 @@ export class MainMenu {
 
     return `
       ${nameRow}
+      <div class="mm-section">Your Faction</div>
+      ${this.raceCards('oneRace', this.oneRandom ? 'random' : this.mp.faction, 'cmp')}
       <div class="mm-split">
         <div class="mm-pane">
           <div class="mm-section">Find a Game</div>
@@ -888,7 +924,6 @@ export class MainMenu {
             <button class="mm-chip ${this.mp.mode === 'multiplayer_pvp' ? 'sel' : ''}" data-act="pick" data-g="mpMode" data-v="multiplayer_pvp">1v1 PvP</button>
             <button class="mm-chip ${this.mp.mode === 'multiplayer_coop' ? 'sel' : ''}" data-act="pick" data-g="mpMode" data-v="multiplayer_coop">Co-op vs AI</button>
           </div>
-          <div class="mm-card-sub">Your faction</div>${this.factionPicker('mpFaction', this.mp.faction)}
           ${this.mp.mode === 'multiplayer_coop' ? `<div class="mm-card-sub">AI enemy faction</div>${this.factionPicker('mpEnemy', this.mp.enemyFaction)}<div class="mm-card-sub">AI difficulty</div>${this.diffPicker('mpDiff', this.mp.difficulty)}` : ''}
           <div class="mm-card-sub">Map</div>${this.mapPicker('mpMap', this.mp.mapId)}
           ${useP2P() ? `<div class="mm-card-sub">Game name (shown in Open Games)</div><input class="mm-input" data-chg="gname" maxlength="24" placeholder="${this.escape(this.playerName)}'s game" value="${this.escape(this.mp.gameName)}" />` : ''}
@@ -902,7 +937,7 @@ export class MainMenu {
   private onInput(e: Event) {
     const t = e.target as HTMLInputElement;
     if (t.id === 'mm-name') {
-      this.playerName = t.value.trim().slice(0, 20) || 'Commander';
+      this.playerName = t.value.trim().slice(0, 20) || this.fallbackName;
       try { localStorage.setItem('sc2_player_name', this.playerName); } catch {}
     } else if (t.id === 'mm-code') {
       t.value = t.value.toUpperCase().replace(/[^A-Z]/g, '');
@@ -961,10 +996,7 @@ export class MainMenu {
         this.applyNavDefaults();
         this.render();
         break;
-      case 'rtab':
-        this.rightTab = v as 'maps' | 'enemy';
-        this.render();
-        break;
+      case 'tomaps': this.el.querySelector('.rpanel')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); break;
       case 'ctab': this.coopTab = v as 'info' | 'units' | 'lobby'; this.render(); break;
       case 'otab': this.oneTab = v as 'games' | 'code' | 'maps'; this.render(); break;
       case 'cdiff': this.mp.difficulty = this.mp.difficulty === 'hard' ? 'normal' : 'hard'; this.render(); break;
@@ -996,9 +1028,7 @@ export class MainMenu {
         break;
       case 'options': this.app.ui.openMenuOverlay('options'); break;
       case 'loadgame': this.app.ui.openMenuOverlay('load'); break;
-      case 'help': this.app.ui.openMenuOverlay('help'); break;
       case 'attrib': this.app.ui.openMenuOverlay('attributions'); break;
-      case 'parity': this.app.ui.openMenuOverlay('parity'); break;
       case 'train':
         this.close();
         this.app.startMatch({ mode: 'skirmish', campaignMissionId: undefined, playerFaction: 'terran', enemyFaction: 'zerg', mapId: 'sector_vanguard', difficulty: 'easy' });
@@ -1034,6 +1064,7 @@ export class MainMenu {
         this.close();
         const cfg = { ...this.skirmish };
         if (this.randomPlayer) cfg.playerFaction = FACTIONS[Math.floor(Math.random() * FACTIONS.length)]!;
+        if (this.randomEnemy) cfg.enemyFaction = FACTIONS[Math.floor(Math.random() * FACTIONS.length)]!;
         this.app.startMatch({ mode: 'skirmish', campaignMissionId: undefined, ...cfg });
         break;
       }
@@ -1080,12 +1111,14 @@ export class MainMenu {
         this.oneRandom = v === 'random';
         if (!this.oneRandom) this.mp.faction = v as FactionType;
         break;
-      case 'skEnemy': this.skirmish.enemyFaction = v as FactionType; break;
+      case 'skEnemy':
+        this.randomEnemy = v === 'random';
+        if (!this.randomEnemy) this.skirmish.enemyFaction = v as FactionType;
+        break;
       case 'skMap': this.skirmish.mapId = v as MapId; break;
       case 'skDiff': this.skirmish.difficulty = v as DifficultyLevel; break;
       case 'campaignDiff': this.campaignDifficulty = v as DifficultyLevel | 'default'; break;
       case 'mpMode': this.mp.mode = v as GameModeType; break;
-      case 'mpFaction': this.mp.faction = v as FactionType; break;
       case 'mpEnemy': this.mp.enemyFaction = v as FactionType; break;
       case 'mpMap':
         this.mp.mapId = v as MapId;
@@ -1134,7 +1167,7 @@ export class MainMenu {
 
   /** 1v1 "Random" race: roll it once when the game is created, so the lobby, the guest and the match all agree. */
   private rollRandomRace() {
-    if (this.oneRandom && this.nav === 'versus') this.mp.faction = FACTIONS[Math.floor(Math.random() * FACTIONS.length)]!;
+    if (this.oneRandom && (this.nav === 'versus' || this.nav === 'custom')) this.mp.faction = FACTIONS[Math.floor(Math.random() * FACTIONS.length)]!;
   }
 
   private hostConfig(): Partial<MatchConfig> {

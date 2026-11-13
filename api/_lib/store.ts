@@ -20,6 +20,7 @@ export interface RoomRecord {
   mapId: string;
   status: RoomStatus;
   quick: boolean;
+  version?: string;
   country?: string;
   createdAt: number;
   beatAt: number;
